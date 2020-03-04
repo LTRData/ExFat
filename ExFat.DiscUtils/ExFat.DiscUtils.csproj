@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -38,6 +38,14 @@
     <AssemblyOriginatorKeyFile>..\ExFat.Core\Properties\ExFat.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiscUtils.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscUtils.Streams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Streams.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,7 +91,7 @@
   <PropertyGroup>
     <PostBuildEvent>if not "$(ConfigurationName)"=="Release" goto :noRelease
 
-NuGet pack "$(ProjectDir)\ExFat.DiscUtils.nuspec" -Verbosity detailed -NonInteractive -IncludeReferencedProjects -NonInteractive -Tool -Properties ConfigurationName=$(ConfigurationName)
+::: NuGet pack "$(ProjectDir)\ExFat.DiscUtils.nuspec" -Verbosity detailed -NonInteractive -IncludeReferencedProjects -NonInteractive -Tool -Properties ConfigurationName=$(ConfigurationName)
 
 :noRelease
 </PostBuildEvent>

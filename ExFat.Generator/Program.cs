@@ -15,7 +15,7 @@ namespace ExFat.Generator
 
     public static class Program
     {
-        public static void Main(string[] args)
+        public static void Main(params string[] _)
         {
             using (var diskStream = File.OpenRead("D:\\rozina-pascal.localcopy.vhdx"))
             {

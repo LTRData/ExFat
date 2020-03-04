@@ -1,9 +1,7 @@
 ﻿{
   "dependencies": {
-    "DiscUtils.Core": "0.13.0-alpha",
-    "DiscUtils.Vhdx": "0.13.0-alpha",
-    "MSTest.TestAdapter": "1.1.18",
-    "MSTest.TestFramework": "1.1.18"
+    "MSTest.TestAdapter": "2.0.0",
+    "MSTest.TestFramework": "2.0.0"
   },
   "frameworks": {
     "net45": {}
