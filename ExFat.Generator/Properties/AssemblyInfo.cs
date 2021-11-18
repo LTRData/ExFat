@@ -4,6 +4,3 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("ExFat generator")]
-[assembly: AssemblyDescription("Internal application to generate test disk")]
-

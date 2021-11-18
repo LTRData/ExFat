@@ -86,9 +86,9 @@ namespace ExFat.DiscUtils
         /// <inheritdoc />
         public override void CopyFile(string sourceFile, string destinationFile, bool overwrite)
         {
-            using (var reader = _filesystem.Open(sourceFile, FileMode.Open, FileAccess.Read))
-            using (var writer = _filesystem.Open(destinationFile, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.Write))
-                reader.CopyTo(writer);
+            using var reader = _filesystem.Open(sourceFile, FileMode.Open, FileAccess.Read);
+            using var writer = _filesystem.Open(destinationFile, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.Write);
+            reader.CopyTo(writer);
         }
 
         /// <inheritdoc />

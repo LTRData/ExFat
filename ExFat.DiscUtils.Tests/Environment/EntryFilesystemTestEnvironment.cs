@@ -33,7 +33,7 @@ namespace ExFat.DiscUtils.Environment
         private void CreateVhdx(bool allowKeepDebug, long length)
         {
             var diskStream = CreateVhdxStream(allowKeepDebug);
-            Disk = Disk.InitializeDynamic(diskStream, Ownership.Dispose, length, 128 << 20);
+            Disk = Disk.InitializeDynamic(diskStream, Ownership.Dispose, length, Geometry.FromCapacity(128 << 20));
             var gpt = GuidPartitionTable.Initialize(Disk);
             gpt.Create(gpt.FirstUsableSector, gpt.LastUsableSector, GuidPartitionTypes.WindowsBasicData, 0, null);
             var volume = VolumeManager.GetPhysicalVolumes(Disk).First();

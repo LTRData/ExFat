@@ -1,84 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{38AFE1E7-0F63-4D05-A9A9-FC8ED2C9B8DC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ExFat.Generator</RootNamespace>
     <AssemblyName>ExFat.Generator</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworks>net46</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup>
+    <Company>picrap</Company>
+    <Decription>Internal application to generate test disk</Decription>
+    <Title>ExFat generator</Title>
+    <Configuration>Release</Configuration>
+    <Copyright>MIT license https://opensource.org/licenses/MIT</Copyright>
+    <FileVersion>0.9.16</FileVersion>
+    <InformationalVersion>0.9.16</InformationalVersion>
+    <Product>ExFat</Product>
+    <Title>ExFat.Generator</Title>
+    <Version>0.9.16.0</Version>
+
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+  
   <ItemGroup>
-    <Reference Include="DiscUtils.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Core.dll</HintPath>
+    <ProjectReference Include="..\ExFat.Core\ExFat.Core.csproj" />
+    <ProjectReference Include="..\ExFat.DiscUtils.Tests\ExFat.DiscUtils.Tests.csproj" />
+    <ProjectReference Include="..\ExFat.DiscUtils\ExFat.DiscUtils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DiscUtils.Core">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DiscUtils.Streams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Streams.dll</HintPath>
+    <Reference Include="DiscUtils.Streams">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Streams.dll</HintPath>
     </Reference>
-    <Reference Include="DiscUtils.Vhdx, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Vhdx.dll</HintPath>
+    <Reference Include="DiscUtils.Vhdx">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Vhdx.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\ExFat.Core\Properties\ProductInfo.cs">
-      <Link>Properties\ProductInfo.cs</Link>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExFat.Core\ExFat.Core.csproj">
-      <Project>{694BBB9A-204F-41A3-927E-2BCB8AA9DADE}</Project>
-      <Name>ExFat.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExFat.DiscUtils.Tests\ExFat.DiscUtils.Tests.csproj">
-      <Project>{14CB35EF-DC35-4DCD-87DA-C18515F82900}</Project>
-      <Name>ExFat.DiscUtils.Tests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExFat.DiscUtils\ExFat.DiscUtils.csproj">
-      <Project>{D3FE0435-345E-4BDE-A22E-AD923638275C}</Project>
-      <Name>ExFat.DiscUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="project.json" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

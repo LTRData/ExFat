@@ -1,0 +1,34 @@
+<Project>
+
+  <PropertyGroup>
+
+    <OutputPath Condition="'$(MSBuildProjectExtension)' != '.shfbproj'">..\bin\$(Configuration)\</OutputPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DisableWinExeOutputInference>true</DisableWinExeOutputInference>
+    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">9.0</LangVersion>
+    <DebugType>portable</DebugType>
+    <Deterministic>false</Deterministic>
+    <TargetFrameworks>net46;net40;netstandard2.0</TargetFrameworks>
+
+    <DiscUtilsPath Condition="'$(TargetFramework)' == 'net40'">$(SolutionDir)..\..\DiscUtils\Library\DiscUtils\bin\Release\net40</DiscUtilsPath>
+    <DiscUtilsPath Condition="'$(TargetFramework)' == 'net46'">$(SolutionDir)..\..\DiscUtils\Library\DiscUtils\bin\Release\net46</DiscUtilsPath>
+    <DiscUtilsPath Condition="'$(TargetFramework)' == 'netstandard2.0'">$(SolutionDir)..\..\DiscUtils\Library\DiscUtils\bin\Release\netstandard2.0</DiscUtilsPath>
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+
+    <Company>picrap</Company>
+    <Product>ExFat</Product>
+    <Copyright>MIT license https://opensource.org/licenses/MIT</Copyright>
+    <Trademark></Trademark>
+    <Culture></Culture>
+
+    <Version>0.9.16</Version>
+    <FileVersion>0.9.16</FileVersion>
+
+  </PropertyGroup>
+  
+</Project>

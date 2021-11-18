@@ -4,6 +4,4 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("ExFat Core")]
-[assembly: AssemblyDescription("exFAT core module for basic I/O")]
 

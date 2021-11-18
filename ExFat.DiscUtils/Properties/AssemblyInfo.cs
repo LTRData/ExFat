@@ -4,6 +4,4 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("ExFat DiscUtils")]
-[assembly: AssemblyDescription("DiscUtils wrapper for ExFAT")]
 
