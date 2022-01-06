@@ -14,5 +14,13 @@
     <Description>exFAT core module for basic I/O</Description>
 
   </PropertyGroup>
+
+  <ItemGroup>
+
+    <Reference Include="DiscUtils.Streams">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Streams.dll</HintPath>
+    </Reference>
+
+  </ItemGroup>
   
 </Project>

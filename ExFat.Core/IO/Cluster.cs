@@ -115,6 +115,18 @@ namespace ExFat.IO
         /// Adds an offset to a cluster.
         /// </summary>
         /// <param name="cluster">The cluster.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static Cluster operator ++(Cluster cluster)
+        {
+            return cluster + 1L;
+        }
+
+        /// <summary>
+        /// Adds an offset to a cluster.
+        /// </summary>
+        /// <param name="cluster">The cluster.</param>
         /// <param name="offset">The offset.</param>
         /// <returns>
         /// The result of the operator.
@@ -154,6 +166,21 @@ namespace ExFat.IO
             if (!cluster.IsData)
                 throw new InvalidOperationException();
             return new Cluster(cluster.Value - offset);
+        }
+
+        /// <summary>
+        /// Subtracts an offset to a cluster.
+        /// </summary>
+        /// <param name="cluster">The cluster.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        public static Cluster operator --(Cluster cluster)
+        {
+            if (!cluster.IsData)
+                throw new InvalidOperationException();
+            return new Cluster(cluster.Value - 1);
         }
 
         /// <summary>
