@@ -126,29 +126,29 @@ public partial class ExFatFileSystem : DiscFileSystem
     }
 
     /// <inheritdoc />
-    public override string[] GetDirectories(string path, string searchPattern, SearchOption searchOption)
+    public override IEnumerable<string> GetDirectories(string path, string searchPattern, SearchOption searchOption)
     {
         return GetEntries(path, searchPattern, searchOption)
-            .Where(e => e.Attributes.HasAny(FileAttributes.Directory)).Select(e => e.Path).ToArray();
+            .Where(e => e.Attributes.HasAny(FileAttributes.Directory)).Select(e => e.Path);
     }
 
     /// <inheritdoc />
-    public override string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+    public override IEnumerable<string> GetFiles(string path, string searchPattern, SearchOption searchOption)
     {
         var entries = GetEntries(path, searchPattern, searchOption);
-        return entries.Where(e => !e.Attributes.HasAny(FileAttributes.Directory)).Select(e => e.Path).ToArray();
+        return entries.Where(e => !e.Attributes.HasAny(FileAttributes.Directory)).Select(e => e.Path);
     }
 
     /// <inheritdoc />
-    public override string[] GetFileSystemEntries(string path)
+    public override IEnumerable<string> GetFileSystemEntries(string path)
     {
-        return GetEntries(path, null, SearchOption.TopDirectoryOnly).Select(e => e.Path).ToArray();
+        return GetEntries(path, null, SearchOption.TopDirectoryOnly).Select(e => e.Path);
     }
 
     /// <inheritdoc />
-    public override string[] GetFileSystemEntries(string path, string searchPattern)
+    public override IEnumerable<string> GetFileSystemEntries(string path, string searchPattern)
     {
-        return GetEntries(path, searchPattern, SearchOption.TopDirectoryOnly).Select(e => e.Path).ToArray();
+        return GetEntries(path, searchPattern, SearchOption.TopDirectoryOnly).Select(e => e.Path);
     }
 
     private static Regex ConvertWildcardsToRegEx(string pattern)

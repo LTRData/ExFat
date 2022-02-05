@@ -5,6 +5,7 @@
 namespace ExFat.DiscUtils;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using global::DiscUtils;
 using global::DiscUtils.Vfs;
@@ -21,16 +22,12 @@ public class ExFatFilesystemFactory : VfsFileSystemFactory
     /// <param name="stream"></param>
     /// <param name="volume"></param>
     /// <returns></returns>
-    public override FileSystemInfo[] Detect(Stream stream, VolumeInfo volume)
+    public override IEnumerable<FileSystemInfo> Detect(Stream stream, VolumeInfo volume)
     {
         if (ExFatFileSystem.Detect(stream))
-            return new FileSystemInfo[] { new VfsFileSystemInfo("exFAT", ExFatFileSystem.Name, Open) };
-
-#if NET461_OR_GREATER || NETSTANDARD || NETCOREAPP
-        return Array.Empty<FileSystemInfo>();
-#else
-        return new FileSystemInfo[0];
-#endif
+        {
+            yield return new VfsFileSystemInfo("exFAT", ExFatFileSystem.Name, Open);
+        }
     }
 
     private static DiscFileSystem Open(Stream stream, VolumeInfo volumeInfo, FileSystemParameters parameters) => new ExFatFileSystem(stream);
