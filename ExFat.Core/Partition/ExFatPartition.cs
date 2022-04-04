@@ -22,7 +22,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
 {
     private readonly Stream _partitionStream;
     private readonly ExFatOptions _options;
-    private readonly SemaphoreSlim _streamLock = new(0, 1);
+    private readonly SemaphoreSlim _streamLock = new(1, 1);
     private readonly object _fatLock = new();
 
     /// <summary>
