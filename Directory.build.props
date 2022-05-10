@@ -10,7 +10,7 @@
     <LangVersion>Latest</LangVersion>
     <DebugType>portable</DebugType>
     <Deterministic>false</Deterministic>
-    <TargetFrameworks>net45;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net45;net48;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
 
     <DiscUtilsPath>$(SolutionDir)..\..\DiscUtils\Library\DiscUtils\bin\$(Configuration)\$(TargetFramework)</DiscUtilsPath>
 
