@@ -2,53 +2,52 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries
+namespace ExFat.Partition.Entries;
+
+using System;
+using Buffers;
+
+/// <inheritdoc />
+/// <summary>
+/// Provides <see cref="T:System.DateTimeOffset" /> based on <see cref="T:System.DateTime" /> and <see cref="T:System.TimeSpan" /> sources
+/// </summary>
+/// <seealso cref="DateTimeOffset" />
+public class EntryDateTimeOffset : IValueProvider<DateTimeOffset>
 {
-    using System;
-    using Buffers;
+    private readonly IValueProvider<DateTime> _dateTimeProvider;
+    private readonly IValueProvider<TimeSpan> _offsetProvider;
 
-    /// <inheritdoc />
     /// <summary>
-    /// Provides <see cref="T:System.DateTimeOffset" /> based on <see cref="T:System.DateTime" /> and <see cref="T:System.TimeSpan" /> sources
+    /// Gets or sets the value.
     /// </summary>
-    /// <seealso cref="DateTimeOffset" />
-    public class EntryDateTimeOffset : IValueProvider<DateTimeOffset>
+    /// <value>
+    /// The value.
+    /// </value>
+    public DateTimeOffset Value
     {
-        private readonly IValueProvider<DateTime> _dateTimeProvider;
-        private readonly IValueProvider<TimeSpan> _offsetProvider;
-
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        public DateTimeOffset Value
+        get
         {
-            get
-            {
-                var offset = _offsetProvider.Value;
-                // the provided date is local, so first, we shift it to UTC, then add the offset
-                var dateTime = new DateTime((_dateTimeProvider.Value - offset).Ticks, DateTimeKind.Utc);
-                return dateTime.ToDateTimeOffset(offset);
-            }
-            set
-            {
-                // DateTime member is the local, and this is what we expect
-                _dateTimeProvider.Value = value.DateTime;
-                _offsetProvider.Value = value.Offset;
-            }
+            var offset = _offsetProvider.Value;
+            // the provided date is local, so first, we shift it to UTC, then add the offset
+            var dateTime = new DateTime((_dateTimeProvider.Value - offset).Ticks, DateTimeKind.Utc);
+            return dateTime.ToDateTimeOffset(offset);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntryDateTimeOffset"/> class.
-        /// </summary>
-        /// <param name="dateTimeProvider">The date time provider.</param>
-        /// <param name="offsetProvider">The offset provider.</param>
-        public EntryDateTimeOffset(IValueProvider<DateTime> dateTimeProvider, IValueProvider<TimeSpan> offsetProvider)
+        set
         {
-            _dateTimeProvider = dateTimeProvider;
-            _offsetProvider = offsetProvider;
+            // DateTime member is the local, and this is what we expect
+            _dateTimeProvider.Value = value.DateTime;
+            _offsetProvider.Value = value.Offset;
         }
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntryDateTimeOffset"/> class.
+    /// </summary>
+    /// <param name="dateTimeProvider">The date time provider.</param>
+    /// <param name="offsetProvider">The offset provider.</param>
+    public EntryDateTimeOffset(IValueProvider<DateTime> dateTimeProvider, IValueProvider<TimeSpan> offsetProvider)
+    {
+        _dateTimeProvider = dateTimeProvider;
+        _offsetProvider = offsetProvider;
     }
 }

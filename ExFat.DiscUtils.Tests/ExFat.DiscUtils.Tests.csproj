@@ -40,15 +40,15 @@
   <ItemGroup>
     <Reference Include="DiscUtils.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Core.dll</HintPath>
+      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net48\DiscUtils.Core.dll</HintPath>
     </Reference>
     <Reference Include="DiscUtils.Streams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Streams.dll</HintPath>
+      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net48\DiscUtils.Streams.dll</HintPath>
     </Reference>
     <Reference Include="DiscUtils.Vhdx, Version=0.13.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net40\DiscUtils.Vhdx.dll</HintPath>
+      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net48\DiscUtils.Vhdx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,6 +80,9 @@
     <EmbeddedResource Include="Environment\exFAT.vhdx.gz" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>

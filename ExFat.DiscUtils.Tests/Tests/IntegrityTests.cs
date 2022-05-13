@@ -2,23 +2,22 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests
-{
-    using Environment;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+namespace ExFat.DiscUtils.Tests;
 
-    [TestClass]
-    [TestCategory("Partition")]
-    public class IntegrityTests
+using Environment;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+[TestClass]
+[TestCategory("Partition")]
+public class IntegrityTests
+{
+    [TestMethod]
+    [TestCategory("Detection")]
+    public void ValidVolume()
     {
-        [TestMethod]
-        [TestCategory("Detection")]
-        public void ValidVolume()
+        using (var testEnvironment = StreamTestEnvironment.FromExistingVhdx())
         {
-            using (var testEnvironment = StreamTestEnvironment.FromExistingVhdx())
-            {
-                Assert.IsTrue(ExFatFileSystem.Detect(testEnvironment.PartitionStream));
-            }
+            Assert.IsTrue(ExFatFileSystem.Detect(testEnvironment.PartitionStream));
         }
     }
 }

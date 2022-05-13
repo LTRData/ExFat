@@ -2,21 +2,20 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.IO
-{
-    using Partition.Entries;
+namespace ExFat.IO;
 
+using Partition.Entries;
+
+/// <summary>
+/// When implemented by <see cref="ExFatDirectoryEntry"/>-derived classes, provides information about how to handle data streams
+/// </summary>
+public interface IDataProvider
+{
     /// <summary>
-    /// When implemented by <see cref="ExFatDirectoryEntry"/>-derived classes, provides information about how to handle data streams
+    /// Gets the data descriptor.
     /// </summary>
-    public interface IDataProvider
-    {
-        /// <summary>
-        /// Gets the data descriptor.
-        /// </summary>
-        /// <value>
-        /// The data descriptor or null if none found.
-        /// </value>
-        DataDescriptor DataDescriptor { get; }
-    }
+    /// <value>
+    /// The data descriptor or null if none found.
+    /// </value>
+    DataDescriptor DataDescriptor { get; }
 }

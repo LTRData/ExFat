@@ -1,18 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExFat.Core", "ExFat.Core\ExFat.Core.csproj", "{694BBB9A-204F-41A3-927E-2BCB8AA9DADE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExFat.Core", "ExFat.Core\ExFat.Core.csproj", "{694BBB9A-204F-41A3-927E-2BCB8AA9DADE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExFat.DiscUtils", "ExFat.DiscUtils\ExFat.DiscUtils.csproj", "{D3FE0435-345E-4BDE-A22E-AD923638275C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExFat.DiscUtils", "ExFat.DiscUtils\ExFat.DiscUtils.csproj", "{D3FE0435-345E-4BDE-A22E-AD923638275C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExFat.DiscUtils.Tests", "ExFat.DiscUtils.Tests\ExFat.DiscUtils.Tests.csproj", "{14CB35EF-DC35-4DCD-87DA-C18515F82900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExFat.Generator", "ExFat.Generator\ExFat.Generator.csproj", "{38AFE1E7-0F63-4D05-A9A9-FC8ED2C9B8DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExFat.Generator", "ExFat.Generator\ExFat.Generator.csproj", "{38AFE1E7-0F63-4D05-A9A9-FC8ED2C9B8DC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7EBD92BC-3964-4F67-A640-41DF9A53D984}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml

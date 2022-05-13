@@ -2,85 +2,84 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Environment
+namespace ExFat.DiscUtils.Environment;
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Security.Principal;
+using global::DiscUtils.Vhdx;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+internal class TestEnvironment : IDisposable
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Security.Principal;
-    using global::DiscUtils.Vhdx;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    protected string VhdxPath;
+    protected Disk Disk;
 
-    internal class TestEnvironment : IDisposable
+    protected TestEnvironment()
     {
-        protected string VhdxPath;
-        protected Disk Disk;
+    }
 
-        protected TestEnvironment()
+    private static bool IsElevated
+    {
+        get
         {
+            var id = WindowsIdentity.GetCurrent();
+            return id.Owner != id.User;
         }
+    }
 
-        private static bool IsElevated
+    public virtual void Dispose()
+    {
+        Disk?.Dispose();
+        // a check when required
+        if (VhdxPath != null && File.Exists(VhdxPath))
         {
-            get
+            try
             {
-                var id = WindowsIdentity.GetCurrent();
-                return id.Owner != id.User;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Disk?.Dispose();
-            // a check when required
-            if (VhdxPath != null && File.Exists(VhdxPath))
-            {
-                try
+                if (IsElevated)
                 {
-                    if (IsElevated)
-                    {
-                        var t = CheckDisk();
-                        if (!t.Item1)
-                            Assert.Fail("VHDX filesystem is found corrupted by CHKDSK: " + t.Item2);
-                    }
-                    else
-                        Assert.Inconclusive("Not elevated");
+                    var t = CheckDisk();
+                    if (!t.Item1)
+                        Assert.Fail("VHDX filesystem is found corrupted by CHKDSK: " + t.Item2);
                 }
-                finally
-                {
-                    File.Delete(VhdxPath);
-                }
+                else
+                    Assert.Inconclusive("Not elevated");
             }
-        }
-
-        private Tuple<bool, string> CheckDisk()
-        {
-            var previousDrives = DriveInfo.GetDrives();
-            RunDiskPart("attach", VhdxPath);
-            var newDrives = DriveInfo.GetDrives();
-            var mountedDrive = newDrives.FirstOrDefault(d => previousDrives.All(p => p.Name != d.Name));
-            bool success = true;
-            string checkResult = null;
-            if (mountedDrive != null)
+            finally
             {
-                var result = ProcessUtility.Run("chkdsk", mountedDrive.Name.TrimEnd('\\'));
-                success = result.Item1 == 0;
-                checkResult = result.Item2;
+                File.Delete(VhdxPath);
             }
-            RunDiskPart("detach", VhdxPath);
-            return Tuple.Create(success, checkResult);
         }
+    }
 
-        private static void RunDiskPart(string action, string vdiskPath)
+    private Tuple<bool, string> CheckDisk()
+    {
+        var previousDrives = DriveInfo.GetDrives();
+        RunDiskPart("attach", VhdxPath);
+        var newDrives = DriveInfo.GetDrives();
+        var mountedDrive = newDrives.FirstOrDefault(d => previousDrives.All(p => p.Name != d.Name));
+        bool success = true;
+        string checkResult = null;
+        if (mountedDrive != null)
         {
-            var scriptPath = Path.GetTempFileName();
-            using (var scriptStream = File.CreateText(scriptPath))
-            {
-                scriptStream.WriteLine($"select vdisk file=\"{vdiskPath}\"");
-                scriptStream.WriteLine($"{action} vdisk");
-            }
-            ProcessUtility.Run("diskpart", $"/s {scriptPath}");
-            File.Delete(scriptPath);
+            var result = ProcessUtility.Run("chkdsk", mountedDrive.Name.TrimEnd('\\'));
+            success = result.Item1 == 0;
+            checkResult = result.Item2;
         }
+        RunDiskPart("detach", VhdxPath);
+        return Tuple.Create(success, checkResult);
+    }
+
+    private static void RunDiskPart(string action, string vdiskPath)
+    {
+        var scriptPath = Path.GetTempFileName();
+        using (var scriptStream = File.CreateText(scriptPath))
+        {
+            scriptStream.WriteLine($"select vdisk file=\"{vdiskPath}\"");
+            scriptStream.WriteLine($"{action} vdisk");
+        }
+        ProcessUtility.Run("diskpart", $"/s {scriptPath}");
+        File.Delete(scriptPath);
     }
 }

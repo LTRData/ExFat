@@ -2,19 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries
-{
-    using System;
+namespace ExFat.Partition.Entries;
 
+using System;
+
+/// <summary>
+/// Flags for <see cref="ExFatAllocationBitmap"/>
+/// </summary>
+[Flags]
+public enum AllocationBitmapFlags : Byte
+{
     /// <summary>
-    /// Flags for <see cref="ExFatAllocationBitmap"/>
+    /// Indicates this bitmap is the second allocation bitmap
     /// </summary>
-    [Flags]
-    public enum AllocationBitmapFlags : Byte
-    {
-        /// <summary>
-        /// Indicates this bitmap is the second allocation bitmap
-        /// </summary>
-        SecondClusterBitmap = 0x01,
-    }
+    SecondClusterBitmap = 0x01,
 }

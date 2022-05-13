@@ -2,35 +2,34 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat
+namespace ExFat;
+
+using System;
+using Partition;
+
+/// <summary>
+/// Partition management flags
+/// </summary>
+[Flags]
+public enum ExFatOptions
 {
-    using System;
-    using Partition;
+    // ------------ partition flags ---------------
 
     /// <summary>
-    /// Partition management flags
+    /// Allows <see cref="ExFatPartition"/> to delay some writes (such as cluster chain update=
+    /// This is disabled by default (in Default member below)
     /// </summary>
-    [Flags]
-    public enum ExFatOptions
-    {
-        // ------------ partition flags ---------------
+    DelayWrite = 0x0001,
 
-        /// <summary>
-        /// Allows <see cref="ExFatPartition"/> to delay some writes (such as cluster chain update=
-        /// This is disabled by default (in Default member below)
-        /// </summary>
-        DelayWrite = 0x0001,
+    // ------------ file system flags -------------
 
-        // ------------ file system flags -------------
+    /// <summary>
+    /// When set, all reads update the last access time
+    /// </summary>
+    UpdateLastAccessTime = 0x0100,
 
-        /// <summary>
-        /// When set, all reads update the last access time
-        /// </summary>
-        UpdateLastAccessTime = 0x0100,
-
-        /// <summary>
-        /// Default value
-        /// </summary>
-        Default = UpdateLastAccessTime,
-    }
+    /// <summary>
+    /// Default value
+    /// </summary>
+    Default = UpdateLastAccessTime,
 }

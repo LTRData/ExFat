@@ -2,41 +2,40 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers
+namespace ExFat.Buffers;
+
+using System;
+using System.Diagnostics;
+
+/// <summary>
+/// 8-bit unsigned int buffer (in other words, a byte)
+/// </summary>
+/// <seealso cref="byte" />
+[DebuggerDisplay("{" + nameof(Value) + "}")]
+public class BufferUInt8 : IValueProvider<Byte>
 {
-    using System;
-    using System.Diagnostics;
+    private readonly Buffer _buffer;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
+    /// <value>
+    /// The value.
+    /// </value>
+    public Byte Value
+    {
+        get => _buffer[0];
+        set => _buffer[0] = value;
+    }
 
     /// <summary>
-    /// 8-bit unsigned int buffer (in other words, a byte)
+    /// Initializes a new instance of the <see cref="BufferUInt8"/> class.
     /// </summary>
-    /// <seealso cref="byte" />
-    [DebuggerDisplay("{" + nameof(Value) + "}")]
-    public class BufferUInt8 : IValueProvider<Byte>
+    /// <param name="buffer">The buffer.</param>
+    /// <param name="offset">The offset.</param>
+    public BufferUInt8(Buffer buffer, int offset)
     {
-        private readonly Buffer _buffer;
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        public Byte Value
-        {
-            get { return _buffer[0]; }
-            set { _buffer[0] = value; }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BufferUInt8"/> class.
-        /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        /// <param name="offset">The offset.</param>
-        public BufferUInt8(Buffer buffer, int offset)
-        {
-            _buffer = new Buffer(buffer, offset, 1);
-        }
+        _buffer = new Buffer(buffer, offset, 1);
     }
 }

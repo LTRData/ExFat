@@ -73,8 +73,8 @@ public class ClusterStream : Stream
     /// </summary>
     public override long Position
     {
-        get { return Seek(0, SeekOrigin.Current); }
-        set { Seek(value, SeekOrigin.Begin); }
+        get => Seek(0, SeekOrigin.Current);
+        set => Seek(value, SeekOrigin.Begin);
     }
 
     /// <summary>
