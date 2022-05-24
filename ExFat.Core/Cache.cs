@@ -101,10 +101,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
     /// </returns>
-    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
-    {
-        return _dictionary.GetEnumerator();
-    }
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _dictionary.GetEnumerator();
 
     /// <inheritdoc />
     /// <summary>
@@ -113,10 +110,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
     /// </returns>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <inheritdoc />
     /// <summary>
@@ -147,10 +141,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.
     /// </returns>
-    public bool Contains(KeyValuePair<TKey, TValue> item)
-    {
-        return _dictionary.Contains(item);
-    }
+    public bool Contains(KeyValuePair<TKey, TValue> item) => _dictionary.Contains(item);
 
     /// <inheritdoc />
     /// <summary>
@@ -158,10 +149,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// </summary>
     /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
     /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-    public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-    {
-        _dictionary.CopyTo(array, arrayIndex);
-    }
+    public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => _dictionary.CopyTo(array, arrayIndex);
 
     /// <inheritdoc />
     /// <summary>
@@ -185,10 +173,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// true if the <see cref="T:System.Collections.Generic.IDictionary`2" /> contains an element with the key; otherwise, false.
     /// </returns>
-    public bool ContainsKey(TKey key)
-    {
-        return _dictionary.ContainsKey(key);
-    }
+    public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
 
     /// <inheritdoc />
     /// <summary>

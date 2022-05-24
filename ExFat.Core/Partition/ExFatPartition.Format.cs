@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using Entries;
 using IO;
-using Buffer = Buffers.Buffer;
+
 
 partial class ExFatPartition
 {
@@ -156,7 +156,7 @@ partial class ExFatPartition
             return;
         }
 
-        var volumeLabelEntry = new VolumeLabelExFatDirectoryEntry(new Buffer(new byte[32]));
+        var volumeLabelEntry = new VolumeLabelExFatDirectoryEntry(new(new byte[32]));
         volumeLabelEntry.EntryType.Value = ExFatDirectoryEntryType.VolumeLabel | ExFatDirectoryEntryType.InUse;
         volumeLabelEntry.VolumeLabel = volumeLabel;
         volumeLabelEntry.Write(directoryStream);
@@ -174,7 +174,7 @@ partial class ExFatPartition
             allocationBitmap.Write(allocationBitmapStream);
         }
 
-        var allocationBitmapEntry = new AllocationBitmapExFatDirectoryEntry(new Buffer(new byte[32]));
+        var allocationBitmapEntry = new AllocationBitmapExFatDirectoryEntry(new(new byte[32]));
         allocationBitmapEntry.EntryType.Value = ExFatDirectoryEntryType.AllocationBitmap | ExFatDirectoryEntryType.InUse;
         allocationBitmapEntry.BitmapFlags.Value = 0;
         allocationBitmapEntry.FirstCluster.Value = (uint)dataDescriptor.FirstCluster.Value;
@@ -196,7 +196,7 @@ partial class ExFatPartition
             length = upCaseStream.Position;
         }
 
-        var upCaseTableEntry = new UpCaseTableExFatDirectoryEntry(new Buffer(new byte[32]));
+        var upCaseTableEntry = new UpCaseTableExFatDirectoryEntry(new(new byte[32]));
         upCaseTableEntry.EntryType.Value = ExFatDirectoryEntryType.UpCaseTable | ExFatDirectoryEntryType.InUse;
         upCaseTableEntry.TableChecksum.Value = checksum;
         upCaseTableEntry.FirstCluster.Value = (uint)upCaseTableDataDescriptor.FirstCluster.Value;

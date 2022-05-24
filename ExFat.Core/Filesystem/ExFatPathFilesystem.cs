@@ -45,10 +45,7 @@ public class ExFatPathFilesystem : IDisposable
             return new Path(_allParts, Length - 1);
         }
 
-        public string ToLiteral(char separator)
-        {
-            return string.Join(separator.ToString(), _allParts.Take(Length));
-        }
+        public string ToLiteral(char separator) => string.Join(separator.ToString(), _allParts.Take(Length));
     }
 
     /// <summary>
@@ -131,7 +128,7 @@ public class ExFatPathFilesystem : IDisposable
     }
 
     private readonly ExFatEntryFilesystem _entryFilesystem;
-    private readonly object _entriesLock = new object();
+    private readonly object _entriesLock = new();
 
     /// <summary>
     /// Gets or sets the path separators.
@@ -209,23 +206,14 @@ public class ExFatPathFilesystem : IDisposable
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
-    public void Dispose()
-    {
-        _entryFilesystem.Dispose();
-    }
+    public void Dispose() => _entryFilesystem.Dispose();
 
     private long _generation;
     private readonly int _generationExpiry = Environment.ProcessorCount * (8 + 100);
 
-    private long GetNextGeneration()
-    {
-        return ++_generation;
-    }
+    private long GetNextGeneration() => ++_generation;
 
-    private bool HasExpired(long generation)
-    {
-        return _generation - generation > _generationExpiry;
-    }
+    private bool HasExpired(long generation) => _generation - generation > _generationExpiry;
 
     /// <summary>
     /// Gets the node from the given path.
@@ -271,10 +259,7 @@ public class ExFatPathFilesystem : IDisposable
         return new Path(parts, parts.Length);
     }
 
-    private string GetLiteralPath(Path parentPath, ExFatFilesystemEntry entry)
-    {
-        return GetLiteralPath(parentPath.ToLiteral(PathSeparators[0]), entry);
-    }
+    private string GetLiteralPath(Path parentPath, ExFatFilesystemEntry entry) => GetLiteralPath(parentPath.ToLiteral(PathSeparators[0]), entry);
 
     private string GetLiteralPath(string literalParentPath, ExFatFilesystemEntry entry)
     {
@@ -444,10 +429,7 @@ public class ExFatPathFilesystem : IDisposable
     /// Creates a directory under the given path.
     /// </summary>
     /// <param name="literalPath">The path.</param>
-    public void CreateDirectory(string literalPath)
-    {
-        CreateDirectoryNode(ParsePath(literalPath));
-    }
+    public void CreateDirectory(string literalPath) => CreateDirectoryNode(ParsePath(literalPath));
 
     /// <summary>
     /// Deletes the specified entry at given path.

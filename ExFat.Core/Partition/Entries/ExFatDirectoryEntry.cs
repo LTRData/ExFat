@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Buffers;
-using Buffer = Buffers.Buffer;
+using DiscUtils.Streams.Compatibility;
+
 
 /// <summary>
 /// Simple (raw) directory entry
@@ -21,7 +22,7 @@ public class ExFatDirectoryEntry
     /// <value>
     /// The buffer.
     /// </value>
-    protected internal Buffer Buffer { get; }
+    protected internal Memory<byte> Buffer { get; }
 
     /// <summary>
     /// Gets or sets the type of the entry.
@@ -80,10 +81,10 @@ public class ExFatDirectoryEntry
     /// Initializes a new instance of the <see cref="ExFatDirectoryEntry"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    protected ExFatDirectoryEntry(Buffer buffer)
+    protected ExFatDirectoryEntry(Memory<byte> buffer)
     {
         Buffer = buffer;
-        EntryType = new EnumValueProvider<ExFatDirectoryEntryType, Byte>(new BufferUInt8(buffer, 0));
+        EntryType = new EnumValueProvider<ExFatDirectoryEntryType, byte>(new BufferUInt8(buffer));
     }
 
     /// <summary>
@@ -93,7 +94,7 @@ public class ExFatDirectoryEntry
     /// <param name="directoryPosition">The directory position.</param>
     /// <returns></returns>
     /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-    public static ExFatDirectoryEntry Create(Buffer buffer, long directoryPosition)
+    public static ExFatDirectoryEntry Create(Memory<byte> buffer, long directoryPosition)
     {
         var entry = Create(buffer);
         if (entry != null)
@@ -104,9 +105,9 @@ public class ExFatDirectoryEntry
         return entry;
     }
 
-    private static ExFatDirectoryEntry Create(Buffer buffer)
+    private static ExFatDirectoryEntry Create(Memory<byte> buffer)
     {
-        switch ((ExFatDirectoryEntryType)(buffer[0] & (byte)~ExFatDirectoryEntryType.InUse))
+        switch ((ExFatDirectoryEntryType)(buffer.Span[0] & (byte)~ExFatDirectoryEntryType.InUse))
         {
             case 0:
                 return null;
@@ -143,6 +144,6 @@ public class ExFatDirectoryEntry
     public void Write(Stream stream)
     {
         DirectoryPosition = stream.Position;
-        stream.Write(Buffer.Bytes, 0, Buffer.Bytes.Length);
+        stream.Write(Buffer.Span);
     }
 }

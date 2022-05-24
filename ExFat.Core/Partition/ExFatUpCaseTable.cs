@@ -4,6 +4,7 @@
 
 namespace ExFat.Partition;
 
+using DiscUtils.Streams;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,7 +51,7 @@ public class ExFatUpCaseTable
                 break;
             }
 
-            var c = (char)LittleEndian.ToUInt16(pairBytes);
+            var c = (char)EndianUtilities.ToUInt16LittleEndian(pairBytes);
             // short form: FFFF <char> sets the next char to be set
             // otherwise this is indexed
             if (c == 0xFFFF)
@@ -78,26 +79,29 @@ public class ExFatUpCaseTable
     /// Writes the table to specified stream.
     /// </summary>
     /// <param name="stream">The stream.</param>
-    public UInt32 Write(Stream stream)
+    public uint Write(Stream stream)
     {
-        UInt32 checksum = 0;
+        uint checksum = 0;
         var current = 0;
-        var skip = LittleEndian.GetBytes((UInt16)0xFFFF);
+        Span<byte> buffer = stackalloc byte[sizeof(ushort)];
+        EndianUtilities.WriteBytesLittleEndian((ushort)0xFFFF, buffer);
         foreach (var lc in _table.Keys.OrderBy(c => c))
         {
             // something to skip
             if (lc != current)
             {
-                Write(stream, skip, ref checksum);
-                Write(stream, LittleEndian.GetBytes((UInt16)(lc - current)), ref checksum);
+                Write(stream, buffer, ref checksum);
+                EndianUtilities.WriteBytesLittleEndian((ushort)(lc - current), buffer);
+                Write(stream, buffer, ref checksum);
             }
-            Write(stream, LittleEndian.GetBytes(_table[lc]), ref checksum);
+            EndianUtilities.WriteBytesLittleEndian(_table[lc], buffer);
+            Write(stream, buffer, ref checksum);
             current = lc + 1;
         }
         return checksum;
     }
 
-    private void Write(Stream stream, byte[] bs, ref UInt32 c)
+    private static void Write(Stream stream, ReadOnlySpan<byte> bs, ref uint c)
     {
         foreach (var b in bs)
         {
@@ -105,7 +109,7 @@ public class ExFatUpCaseTable
         }
     }
 
-    private void Write(Stream stream, byte b, ref UInt32 c)
+    private static void Write(Stream stream, byte b, ref uint c)
     {
         stream.WriteByte(b);
         c = c.RotateRight() + b;

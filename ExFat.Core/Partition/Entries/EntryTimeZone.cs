@@ -13,7 +13,7 @@ using Buffers;
 /// <seealso cref="TimeSpan" />
 public class EntryTimeZone : IValueProvider<TimeSpan>
 {
-    private readonly IValueProvider<Byte> _timeZoneOffsetProvider;
+    private readonly IValueProvider<byte> _timeZoneOffsetProvider;
 
     /// <summary>
     /// Gets or sets the value.
@@ -31,7 +31,7 @@ public class EntryTimeZone : IValueProvider<TimeSpan>
     /// Initializes a new instance of the <see cref="EntryTimeZone"/> class.
     /// </summary>
     /// <param name="timeZoneOffsetProvider">The time zone offset provider.</param>
-    public EntryTimeZone(IValueProvider<Byte> timeZoneOffsetProvider)
+    public EntryTimeZone(IValueProvider<byte> timeZoneOffsetProvider)
     {
         _timeZoneOffsetProvider = timeZoneOffsetProvider;
     }

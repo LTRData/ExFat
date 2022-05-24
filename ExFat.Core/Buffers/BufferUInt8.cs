@@ -12,9 +12,9 @@ using System.Diagnostics;
 /// </summary>
 /// <seealso cref="byte" />
 [DebuggerDisplay("{" + nameof(Value) + "}")]
-public class BufferUInt8 : IValueProvider<Byte>
+public readonly struct BufferUInt8 : IValueProvider<byte>
 {
-    private readonly Buffer _buffer;
+    private readonly Memory<byte> _buffer;
 
     /// <inheritdoc />
     /// <summary>
@@ -23,19 +23,18 @@ public class BufferUInt8 : IValueProvider<Byte>
     /// <value>
     /// The value.
     /// </value>
-    public Byte Value
+    public byte Value
     {
-        get => _buffer[0];
-        set => _buffer[0] = value;
+        get => _buffer.Span[0];
+        set => _buffer.Span[0] = value;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BufferUInt8"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    /// <param name="offset">The offset.</param>
-    public BufferUInt8(Buffer buffer, int offset)
+    public BufferUInt8(Memory<byte> buffer)
     {
-        _buffer = new Buffer(buffer, offset, 1);
+        _buffer = buffer.Slice(0, sizeof(byte));
     }
 }

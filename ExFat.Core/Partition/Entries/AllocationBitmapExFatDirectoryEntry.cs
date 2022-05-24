@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using Buffers;
 using IO;
-using Buffer = Buffers.Buffer;
 
 /// <summary>
 /// Allocation bitmap directory entry
@@ -32,14 +31,14 @@ public class AllocationBitmapExFatDirectoryEntry : ExFatDirectoryEntry, IDataPro
     /// <value>
     /// The first cluster.
     /// </value>
-    public IValueProvider<UInt32> FirstCluster { get; }
+    public IValueProvider<uint> FirstCluster { get; }
     /// <summary>
     /// Gets the length of the data.
     /// </summary>
     /// <value>
     /// The length of the data.
     /// </value>
-    public IValueProvider<UInt64> DataLength { get; }
+    public IValueProvider<ulong> DataLength { get; }
 
     /// <inheritdoc />
     /// <summary>
@@ -48,17 +47,17 @@ public class AllocationBitmapExFatDirectoryEntry : ExFatDirectoryEntry, IDataPro
     /// <value>
     /// The data descriptor or null if none found.
     /// </value>
-    public DataDescriptor DataDescriptor => new DataDescriptor(FirstCluster.Value, false, DataLength.Value, DataLength.Value);
+    public DataDescriptor DataDescriptor => new(FirstCluster.Value, false, DataLength.Value, DataLength.Value);
 
     /// <inheritdoc />
     /// <summary>
     /// Initializes a new instance of the <see cref="T:ExFat.Partition.Entries.AllocationBitmapExFatDirectoryEntry" /> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    public AllocationBitmapExFatDirectoryEntry(Buffer buffer) : base(buffer)
+    public AllocationBitmapExFatDirectoryEntry(Memory<byte> buffer) : base(buffer)
     {
-        BitmapFlags = new EnumValueProvider<AllocationBitmapFlags, Byte>(new BufferUInt8(buffer, 1));
-        FirstCluster = new BufferUInt32(buffer, 20);
-        DataLength = new BufferUInt64(buffer, 24);
+        BitmapFlags = new EnumValueProvider<AllocationBitmapFlags, byte>(new BufferUInt8(buffer.Slice(1)));
+        FirstCluster = new BufferUInt32(buffer.Slice(20));
+        DataLength = new BufferUInt64(buffer.Slice(24));
     }
 }

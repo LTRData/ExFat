@@ -5,19 +5,17 @@
 namespace ExFat.DiscUtils.Tests;
 
 using Environment;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
-[TestClass]
+
 [TestCategory("Partition")]
 public class IntegrityTests
 {
-    [TestMethod]
+    [Fact]
     [TestCategory("Detection")]
     public void ValidVolume()
     {
-        using (var testEnvironment = StreamTestEnvironment.FromExistingVhdx())
-        {
-            Assert.IsTrue(ExFatFileSystem.Detect(testEnvironment.PartitionStream));
-        }
+        using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
+        Assert.True(ExFatFileSystem.Detect(testEnvironment.PartitionStream));
     }
 }

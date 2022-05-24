@@ -4,6 +4,7 @@
 
 namespace ExFat.Buffers;
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,16 +14,16 @@ using System.Linq;
 /// </summary>
 /// <seealso cref="string" />
 [DebuggerDisplay("{" + nameof(Value) + "}")]
-public class BufferWideString : IValueProvider<string>
+public readonly struct BufferWideString : IValueProvider<string>
 {
-    private readonly Buffer _buffer;
+    private readonly Memory<byte> _buffer;
 
     private IEnumerable<char> GetChars()
     {
-        var all = _buffer.GetBytes();
+        var all = _buffer;
         for (var index = 0; index < all.Length; index += 2)
         {
-            yield return ToChar(all[index], all[index + 1]);
+            yield return ToChar(all.Span[index], all.Span[index + 1]);
         }
     }
 
@@ -39,15 +40,9 @@ public class BufferWideString : IValueProvider<string>
         }
     }
 
-    private static char ToChar(byte first, byte second)
-    {
-        return (char)(first | second << 8);
-    }
+    private static char ToChar(byte first, byte second) => (char)(first | second << 8);
 
-    private static byte[] ToBytes(char c)
-    {
-        return new[] { (byte)(c & 0xFF), (byte)(c >> 8) };
-    }
+    private static byte[] ToBytes(char c) => new[] { (byte)(c & 0xFF), (byte)(c >> 8) };
 
     /// <inheritdoc />
     /// <summary>
@@ -58,7 +53,7 @@ public class BufferWideString : IValueProvider<string>
     /// </value>
     public string Value
     {
-        get => new string(GetZeroChars().ToArray());
+        get => new(GetZeroChars().ToArray());
         set
         {
             for (int byteIndex = 0, charIndex = 0; byteIndex < _buffer.Length; byteIndex += 2, charIndex++)
@@ -66,13 +61,13 @@ public class BufferWideString : IValueProvider<string>
                 if (charIndex < value.Length)
                 {
                     var t = ToBytes(value[charIndex]);
-                    _buffer[byteIndex] = t[0];
-                    _buffer[byteIndex + 1] = t[1];
+                    _buffer.Span[byteIndex] = t[0];
+                    _buffer.Span[byteIndex + 1] = t[1];
                 }
                 else
                 {
-                    _buffer[byteIndex] = 0;
-                    _buffer[byteIndex + 1] = 0;
+                    _buffer.Span[byteIndex] = 0;
+                    _buffer.Span[byteIndex + 1] = 0;
                 }
             }
         }
@@ -82,10 +77,9 @@ public class BufferWideString : IValueProvider<string>
     /// Initializes a new instance of the <see cref="BufferByteString" /> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    /// <param name="offset">The offset.</param>
     /// <param name="charsLength">The length.</param>
-    public BufferWideString(Buffer buffer, int offset, int charsLength)
+    public BufferWideString(Memory<byte> buffer, int charsLength)
     {
-        _buffer = new Buffer(buffer, offset, charsLength * 2);
+        _buffer = buffer.Slice(0, charsLength * 2);
     }
 }

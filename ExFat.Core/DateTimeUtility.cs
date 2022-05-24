@@ -18,7 +18,7 @@ public static class DateTimeUtility
     /// <param name="timeStamp">The time stamp.</param>
     /// <param name="tenMs">The ten ms.</param>
     /// <returns></returns>
-    public static DateTime FromTimeStamp(UInt32 timeStamp, Byte tenMs)
+    public static DateTime FromTimeStamp(uint timeStamp, byte tenMs)
     {
         var twoSeconds = (int)timeStamp & 0x1F; // 0-4 - 5 bits
         var minute = (int)(timeStamp >> 5) & 0x3F; // 5-10 - 6 bits
@@ -36,7 +36,7 @@ public static class DateTimeUtility
     /// </summary>
     /// <param name="dateTime">The date time.</param>
     /// <returns></returns>
-    public static Tuple<UInt32, Byte> ToTimeStamp(this DateTime dateTime)
+    public static Tuple<uint, byte> ToTimeStamp(this DateTime dateTime)
     {
         var timeStamp = (dateTime.Year - 1980) << 25
                         | dateTime.Month << 21
@@ -45,7 +45,7 @@ public static class DateTimeUtility
                         | dateTime.Minute << 5
                         | dateTime.Second >> 1;
         var tenMs = dateTime.Millisecond / 10 + dateTime.Second % 2 * 100;
-        return Tuple.Create((UInt32)timeStamp, (Byte)tenMs);
+        return Tuple.Create((uint)timeStamp, (byte)tenMs);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public static class DateTimeUtility
     /// </summary>
     /// <param name="offset">The offset.</param>
     /// <returns></returns>
-    public static TimeSpan FromTimeZoneOffset(Byte offset)
+    public static TimeSpan FromTimeZoneOffset(byte offset)
     {
         if (offset < 0x80)
         {
@@ -79,7 +79,7 @@ public static class DateTimeUtility
     /// </summary>
     /// <param name="timeSpanOffset">The time span offset.</param>
     /// <returns></returns>
-    public static Byte ToTimeZoneOffset(this TimeSpan timeSpanOffset)
+    public static byte ToTimeZoneOffset(this TimeSpan timeSpanOffset)
     {
         var quartersOffset = (int)timeSpanOffset.TotalHours * 4;
         if (quartersOffset < 0)

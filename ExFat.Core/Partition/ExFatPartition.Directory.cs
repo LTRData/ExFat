@@ -8,11 +8,11 @@ using System.Collections.Generic;
 using System.IO;
 using Entries;
 using IO;
-using Buffer = Buffers.Buffer;
+
 
 partial class ExFatPartition
 {
-    private readonly object _directoryLock = new object();
+    private readonly object _directoryLock = new();
 
     /// <summary>
     /// Gets the entries, totally raw (includes the deleted entries).
@@ -22,22 +22,20 @@ partial class ExFatPartition
     {
         lock (_directoryLock)
         {
-            using (var readerStream = OpenDataStream(dataDescriptor, FileAccess.Read))
+            using var readerStream = OpenDataStream(dataDescriptor, FileAccess.Read);
+            for (var offset = 0L; ; offset += 32)
             {
-                for (var offset = 0L; ; offset += 32)
+                var entryBytes = new byte[32];
+                // cluster offset before reading data, since it's the start
+                if (readerStream.Read(entryBytes, 0, entryBytes.Length) != 32)
                 {
-                    var entryBytes = new byte[32];
-                    // cluster offset before reading data, since it's the start
-                    if (readerStream.Read(entryBytes, 0, entryBytes.Length) != 32)
-                    {
-                        break;
-                    }
+                    break;
+                }
 
-                    var directoryEntry = ExFatDirectoryEntry.Create(new Buffer(entryBytes), offset);
-                    if (directoryEntry != null)
-                    {
-                        yield return directoryEntry;
-                    }
+                var directoryEntry = ExFatDirectoryEntry.Create(new(entryBytes), offset);
+                if (directoryEntry != null)
+                {
+                    yield return directoryEntry;
                 }
             }
         }
@@ -138,17 +136,15 @@ partial class ExFatPartition
         var r = targetDirectoryDataDescriptor;
         lock (_directoryLock)
         {
-            using (var directoryStream = OpenDataStream(targetDirectoryDataDescriptor, FileAccess.ReadWrite, d => r = d))
+            using var directoryStream = OpenDataStream(targetDirectoryDataDescriptor, FileAccess.ReadWrite, d => r = d);
+            var availableSlot = FindAvailableSlot(directoryStream, metaEntry.Entries.Count);
+            directoryStream.Seek(availableSlot, SeekOrigin.Begin);
+            foreach (var entry in metaEntry.Entries)
             {
-                var availableSlot = FindAvailableSlot(directoryStream, metaEntry.Entries.Count);
-                directoryStream.Seek(availableSlot, SeekOrigin.Begin);
-                foreach (var entry in metaEntry.Entries)
-                {
-                    entry.EntryType.Value |= ExFatDirectoryEntryType.InUse;
-                }
-
-                metaEntry.Write(directoryStream);
+                entry.EntryType.Value |= ExFatDirectoryEntryType.InUse;
             }
+
+            metaEntry.Write(directoryStream);
         }
         return r;
     }
@@ -163,11 +159,9 @@ partial class ExFatPartition
     {
         lock (_directoryLock)
         {
-            using (var directoryStream = OpenDataStream(dataDescriptor, FileAccess.ReadWrite))
-            {
-                directoryStream.Seek(metaEntry.Primary.DirectoryPosition, SeekOrigin.Begin);
-                metaEntry.Write(directoryStream);
-            }
+            using var directoryStream = OpenDataStream(dataDescriptor, FileAccess.ReadWrite);
+            directoryStream.Seek(metaEntry.Primary.DirectoryPosition, SeekOrigin.Begin);
+            metaEntry.Write(directoryStream);
         }
     }
 }

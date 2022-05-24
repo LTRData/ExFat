@@ -12,19 +12,38 @@ using System;
 public static class BytesExtension
 {
     /// <summary>
+    /// Writes the specified bytes to a buffer, clearing any remaining
+    /// bytes in target buffer.
+    /// </summary>
+    /// <param name="memory">Memory buffer to modify</param>
+    /// <param name="bytes">The new bytes.</param>
+    /// <exception cref="ArgumentException">bytes</exception>
+    public static void Set(this Memory<byte> memory, ReadOnlySpan<byte> bytes)
+    {
+        bytes.CopyTo(memory.Span);
+        memory.Span.Slice(bytes.Length).Clear();
+    }
+
+    /// <summary>
     /// Gets the checksum of the given buffer.
     /// </summary>
     /// <param name="bytes">The bytes.</param>
-    /// <param name="offset">The offset.</param>
-    /// <param name="count">The count.</param>
     /// <param name="checksum">The checksum.</param>
     /// <returns></returns>
-    public static UInt16 GetChecksum16(this byte[] bytes, int offset, int count, UInt16 checksum = 0)
+    public static ushort GetChecksum16(this Span<byte> bytes, ushort checksum = 0)
+        => GetChecksum16((ReadOnlySpan<byte>)bytes, checksum);
+
+    /// <summary>
+    /// Gets the checksum of the given buffer.
+    /// </summary>
+    /// <param name="bytes">The bytes.</param>
+    /// <param name="checksum">The checksum.</param>
+    /// <returns></returns>
+    public static ushort GetChecksum16(this ReadOnlySpan<byte> bytes, ushort checksum = 0)
     {
-        count += offset;
-        for (var index = offset; index < count; index++)
+        foreach (var b in bytes)
         {
-            checksum = (UInt16)(checksum.RotateRight() + bytes[index]);
+            checksum = (ushort)(checksum.RotateRight() + b);
         }
 
         return checksum;
@@ -38,7 +57,7 @@ public static class BytesExtension
     /// <param name="count">The count.</param>
     /// <param name="checksum">The checksum.</param>
     /// <returns></returns>
-    public static UInt32 GetChecksum32(this byte[] bytes, int offset, int count, UInt32 checksum = 0)
+    public static uint GetChecksum32(this byte[] bytes, int offset, int count, uint checksum = 0)
     {
         count += offset;
         for (var index = offset; index < count; index++)

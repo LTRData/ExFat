@@ -16,18 +16,12 @@ public static class IntegerExtensions
     /// </summary>
     /// <param name="v">The v.</param>
     /// <returns></returns>
-    public static UInt16 RotateRight(this UInt16 v)
-    {
-        return (UInt16)((v << 15) | (v >> 1));
-    }
+    public static ushort RotateRight(this ushort v) => (ushort)((v << 15) | (v >> 1));
 
     /// <summary>
     /// Rotates 1 bit right.
     /// </summary>
     /// <param name="v">The v.</param>
     /// <returns></returns>
-    public static UInt32 RotateRight(this UInt32 v)
-    {
-        return (v << 31) | (v >> 1);
-    }
+    public static uint RotateRight(this uint v) => (v << 31) | (v >> 1);
 }

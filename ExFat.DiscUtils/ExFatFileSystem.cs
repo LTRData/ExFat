@@ -99,22 +99,13 @@ public partial class ExFatFileSystem : DiscFileSystem
     }
 
     /// <inheritdoc />
-    public override void CreateDirectory(string path)
-    {
-        _filesystem.CreateDirectory(path);
-    }
+    public override void CreateDirectory(string path) => _filesystem.CreateDirectory(path);
 
     /// <inheritdoc />
-    public override void DeleteDirectory(string path)
-    {
-        _filesystem.DeleteTree(path);
-    }
+    public override void DeleteDirectory(string path) => _filesystem.DeleteTree(path);
 
     /// <inheritdoc />
-    public override void DeleteFile(string path)
-    {
-        _filesystem.Delete(path);
-    }
+    public override void DeleteFile(string path) => _filesystem.Delete(path);
 
     /// <inheritdoc />
     public override bool DirectoryExists(string path)
@@ -145,16 +136,10 @@ public partial class ExFatFileSystem : DiscFileSystem
     }
 
     /// <inheritdoc />
-    public override IEnumerable<string> GetFileSystemEntries(string path)
-    {
-        return GetEntries(path, null, SearchOption.TopDirectoryOnly).Select(e => e.Path);
-    }
+    public override IEnumerable<string> GetFileSystemEntries(string path) => GetEntries(path, null, SearchOption.TopDirectoryOnly).Select(e => e.Path);
 
     /// <inheritdoc />
-    public override IEnumerable<string> GetFileSystemEntries(string path, string searchPattern)
-    {
-        return GetEntries(path, searchPattern, SearchOption.TopDirectoryOnly).Select(e => e.Path);
-    }
+    public override IEnumerable<string> GetFileSystemEntries(string path, string searchPattern) => GetEntries(path, searchPattern, SearchOption.TopDirectoryOnly).Select(e => e.Path);
 
     private static Regex ConvertWildcardsToRegEx(string pattern)
     {
@@ -193,11 +178,7 @@ public partial class ExFatFileSystem : DiscFileSystem
         return regex.IsMatch(fileName);
     }
 
-#if NET461_OR_GREATER || NETSTANDARD || NETCOREAPP
     private readonly ExFatEntryInformation[] _noEntry = Array.Empty<ExFatEntryInformation>();
-#else
-        private readonly ExFatEntryInformation[] _noEntry = new ExFatEntryInformation[0];
-#endif
 
     private IEnumerable<ExFatEntryInformation> GetEntries(ExFatEntryInformation entryInformation, int depth)
     {
@@ -210,10 +191,7 @@ public partial class ExFatFileSystem : DiscFileSystem
     }
 
     /// <inheritdoc />
-    public override void MoveDirectory(string sourceDirectoryName, string destinationDirectoryName)
-    {
-        _filesystem.Move(sourceDirectoryName, GetDirectoryName(destinationDirectoryName), GetFileName(destinationDirectoryName));
-    }
+    public override void MoveDirectory(string sourceDirectoryName, string destinationDirectoryName) => _filesystem.Move(sourceDirectoryName, GetDirectoryName(destinationDirectoryName), GetFileName(destinationDirectoryName));
 
     /// <inheritdoc />
     public override void MoveFile(string sourceName, string destinationName, bool overwrite)
@@ -246,10 +224,7 @@ public partial class ExFatFileSystem : DiscFileSystem
     }
 
     /// <inheritdoc />
-    public override SparseStream OpenFile(string path, FileMode mode, FileAccess access)
-    {
-        return SparseStream.FromStream(_filesystem.Open(path, mode, access), Ownership.Dispose);
-    }
+    public override SparseStream OpenFile(string path, FileMode mode, FileAccess access) => SparseStream.FromStream(_filesystem.Open(path, mode, access), Ownership.Dispose);
 
     /// <inheritdoc />
     public override FileAttributes GetAttributes(string path)
@@ -276,40 +251,22 @@ public partial class ExFatFileSystem : DiscFileSystem
     }
 
     /// <inheritdoc />
-    public override DateTime GetCreationTimeUtc(string path)
-    {
-        return _filesystem.GetCreationTimeUtc(path);
-    }
+    public override DateTime GetCreationTimeUtc(string path) => _filesystem.GetCreationTimeUtc(path);
 
     /// <inheritdoc />
-    public override void SetCreationTimeUtc(string path, DateTime newTime)
-    {
-        _filesystem.SetCreationTimeUtc(path, newTime);
-    }
+    public override void SetCreationTimeUtc(string path, DateTime newTime) => _filesystem.SetCreationTimeUtc(path, newTime);
 
     /// <inheritdoc />
-    public override DateTime GetLastAccessTimeUtc(string path)
-    {
-        return _filesystem.GetLastAccessTimeUtc(path);
-    }
+    public override DateTime GetLastAccessTimeUtc(string path) => _filesystem.GetLastAccessTimeUtc(path);
 
     /// <inheritdoc />
-    public override void SetLastAccessTimeUtc(string path, DateTime newTime)
-    {
-        _filesystem.SetLastAccessTimeUtc(path, newTime);
-    }
+    public override void SetLastAccessTimeUtc(string path, DateTime newTime) => _filesystem.SetLastAccessTimeUtc(path, newTime);
 
     /// <inheritdoc />
-    public override DateTime GetLastWriteTimeUtc(string path)
-    {
-        return _filesystem.GetLastWriteTimeUtc(path);
-    }
+    public override DateTime GetLastWriteTimeUtc(string path) => _filesystem.GetLastWriteTimeUtc(path);
 
     /// <inheritdoc />
-    public override void SetLastWriteTimeUtc(string path, DateTime newTime)
-    {
-        _filesystem.SetLastWriteTimeUtc(path, newTime);
-    }
+    public override void SetLastWriteTimeUtc(string path, DateTime newTime) => _filesystem.SetLastWriteTimeUtc(path, newTime);
 
     /// <inheritdoc />
     public override long GetFileLength(string path)

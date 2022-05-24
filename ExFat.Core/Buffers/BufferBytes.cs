@@ -9,20 +9,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 /// <summary>
 /// Represents bytes in the buffer
 /// </summary>
 [DebuggerDisplay("{" + nameof(DebugLiteral) + "}")]
-public class BufferBytes : IEnumerable<byte>
+public readonly struct BufferBytes : IEnumerable<byte>
 {
-    private readonly Buffer _buffer;
+    private readonly Memory<byte> _buffer;
 
     /// <summary>
-    /// Gets or sets the <see cref="System.Byte"/> at the specified index.
+    /// Gets or sets the <see cref="byte"/> at the specified index.
     /// </summary>
     /// <value>
-    /// The <see cref="System.Byte"/>.
+    /// The <see cref="byte"/>.
     /// </value>
     /// <param name="index">The index.</param>
     /// <returns></returns>
@@ -30,17 +31,16 @@ public class BufferBytes : IEnumerable<byte>
     /// </exception>
     public byte this[int index]
     {
-        get => _buffer[index];
-        set => _buffer[index] = value;
+        get => _buffer.Span[index];
+        set => _buffer.Span[index] = value;
     }
 
     private string DebugLiteral
     {
         get
         {
-            var bytes = _buffer.GetBytes();
-            var s = string.Join(", ", bytes.Take(10).Select(b => $"0x{b:X2}"));
-            if (bytes.Length > 10)
+            var s = string.Join(", ", this.Take(10).Select(b => $"0x{b:X2}"));
+            if (_buffer.Length > 10)
             {
                 s += " ...";
             }
@@ -53,22 +53,20 @@ public class BufferBytes : IEnumerable<byte>
     /// Initializes a new instance of the <see cref="BufferBytes"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    /// <param name="offset">The offset.</param>
-    /// <param name="length">The length.</param>
-    public BufferBytes(Buffer buffer, int offset, int length)
+    public BufferBytes(Memory<byte> buffer)
     {
-        _buffer = new Buffer(buffer, offset, length);
+        _buffer = buffer;
     }
 
     /// <summary>
     /// Sets the specified bytes.
     /// </summary>
     /// <param name="bytes">The bytes.</param>
-    public void Set(IList<byte> bytes)
+    public void Set(ReadOnlySpan<byte> bytes)
     {
         for (var offset = 0; offset < _buffer.Length; offset++)
         {
-            _buffer[offset] = bytes[offset];
+            _buffer.Span[offset] = bytes[offset];
         }
     }
 
@@ -78,10 +76,7 @@ public class BufferBytes : IEnumerable<byte>
     /// <returns>
     /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
     /// </returns>
-    public IEnumerator<byte> GetEnumerator()
-    {
-        return ((IEnumerable<byte>) _buffer.GetBytes()).GetEnumerator();
-    }
+    public IEnumerator<byte> GetEnumerator() => MemoryMarshal.ToEnumerable<byte>(_buffer).GetEnumerator();
 
     /// <summary>
     /// Returns an enumerator that iterates through a collection.
@@ -89,8 +84,5 @@ public class BufferBytes : IEnumerable<byte>
     /// <returns>
     /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
     /// </returns>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

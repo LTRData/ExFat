@@ -7,7 +7,7 @@ namespace ExFat.Partition.Entries;
 using System;
 using System.Diagnostics;
 using Buffers;
-using Buffer = Buffers.Buffer;
+
 
 /// <summary>
 /// Volume label
@@ -22,7 +22,7 @@ public class VolumeLabelExFatDirectoryEntry : ExFatDirectoryEntry
     /// <value>
     /// The character count.
     /// </value>
-    public IValueProvider<Byte> CharacterCount { get; }
+    public IValueProvider<byte> CharacterCount { get; }
 
     /// <summary>
     /// Full length volume label.
@@ -52,9 +52,9 @@ public class VolumeLabelExFatDirectoryEntry : ExFatDirectoryEntry
     /// Initializes a new instance of the <see cref="VolumeLabelExFatDirectoryEntry"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    public VolumeLabelExFatDirectoryEntry(Buffer buffer) : base(buffer)
+    public VolumeLabelExFatDirectoryEntry(Memory<byte> buffer) : base(buffer)
     {
-        CharacterCount = new BufferUInt8(buffer, 1);
-        AllVolumeLabel = new BufferWideString(buffer, 2, 11);
+        CharacterCount = new BufferUInt8(buffer.Slice(1));
+        AllVolumeLabel = new BufferWideString(buffer.Slice(2), 11);
     }
 }

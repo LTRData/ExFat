@@ -31,7 +31,6 @@ public interface IClusterReader
     /// <param name="length"></param>
     void ReadCluster(Cluster cluster, byte[] clusterBuffer, int offset, int length);
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <summary>
     /// Reads one cluster.
     /// </summary>
@@ -40,8 +39,7 @@ public interface IClusterReader
     /// <param name="offset"></param>
     /// <param name="length"></param>
     /// <param name="cancellationToken"></param>
-    Task ReadClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken);
-#endif
+    ValueTask ReadClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken);
 
     /// <summary>
     /// Gets the next item for a given cluster.

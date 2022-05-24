@@ -10,7 +10,7 @@ using System;
 /// File attributes. Here are the only attributes supported by exFAT
 /// </summary>
 [Flags]
-public enum ExFatFileAttributes : UInt16
+public enum ExFatFileAttributes : ushort
 {
     /// <summary>
     /// Read-only file

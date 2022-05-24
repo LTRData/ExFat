@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Buffers;
-using Buffer = Buffers.Buffer;
+using DiscUtils.Streams;
 
 /// <summary>
 /// exFAT boot sector
@@ -48,7 +48,7 @@ public class ExFatBootSector
     /// <value>
     /// The length of the volume.
     /// </value>
-    public IValueProvider<UInt64> VolumeLengthSectors { get; }
+    public IValueProvider<ulong> VolumeLengthSectors { get; }
 
     /// <summary>
     /// Sector address of 1st FAT.
@@ -56,7 +56,7 @@ public class ExFatBootSector
     /// <value>
     /// The fat offset.
     /// </value>
-    public IValueProvider<UInt32> FatOffsetSector { get; }
+    public IValueProvider<uint> FatOffsetSector { get; }
 
     /// <summary>
     /// Size of FAT in sectors.
@@ -64,7 +64,7 @@ public class ExFatBootSector
     /// <value>
     /// The length of the fat.
     /// </value>
-    public IValueProvider<UInt32> FatLengthSectors { get; }
+    public IValueProvider<uint> FatLengthSectors { get; }
 
     /// <summary>
     /// Starting sector of cluster heap
@@ -72,7 +72,7 @@ public class ExFatBootSector
     /// <value>
     /// The cluster offset.
     /// </value>
-    public IValueProvider<UInt32> ClusterOffsetSector { get; }
+    public IValueProvider<uint> ClusterOffsetSector { get; }
 
     /// <summary>
     /// Number of clusters.
@@ -80,7 +80,7 @@ public class ExFatBootSector
     /// <value>
     /// The cluster count.
     /// </value>
-    public IValueProvider<UInt32> ClusterCount { get; }
+    public IValueProvider<uint> ClusterCount { get; }
 
     /// <summary>
     /// First cluster of root directory.
@@ -88,7 +88,7 @@ public class ExFatBootSector
     /// <value>
     /// The root directory.
     /// </value>
-    public IValueProvider<UInt32> RootDirectoryCluster { get; }
+    public IValueProvider<uint> RootDirectoryCluster { get; }
 
     /// <summary>
     /// Gets or sets the volume serial number.
@@ -96,7 +96,7 @@ public class ExFatBootSector
     /// <value>
     /// The volume serial number.
     /// </value>
-    public IValueProvider<UInt32> VolumeSerialNumber { get; }
+    public IValueProvider<uint> VolumeSerialNumber { get; }
 
     /// <summary>
     /// Gets the file system revision (currently 256).
@@ -104,7 +104,7 @@ public class ExFatBootSector
     /// <value>
     /// The file system revision.
     /// </value>
-    public IValueProvider<UInt16> FileSystemRevision { get; }
+    public IValueProvider<ushort> FileSystemRevision { get; }
 
     /// <summary>
     /// Gets the volume flags.
@@ -118,7 +118,7 @@ public class ExFatBootSector
     /// <value>
     /// The volume flags.
     /// </value>
-    public IValueProvider<UInt16> VolumeFlags { get; }
+    public IValueProvider<ushort> VolumeFlags { get; }
 
     /// <summary>
     /// This is power of 2; Minimal value is 9; 2^9=512 bytes
@@ -127,7 +127,7 @@ public class ExFatBootSector
     /// <value>
     /// The bytes per sector.
     /// </value>
-    public IValueProvider<UInt32> BytesPerSector { get; }
+    public IValueProvider<uint> BytesPerSector { get; }
 
     /// <summary>
     /// This is power of 2; Minimal value is 1; 2^0=1
@@ -137,7 +137,7 @@ public class ExFatBootSector
     /// <value>
     /// The sectors per cluster.
     /// </value>
-    public IValueProvider<UInt32> SectorsPerCluster { get; }
+    public IValueProvider<uint> SectorsPerCluster { get; }
 
     /// <summary>
     /// Either 1 or 2; if TexFAT is supported then it will be 2
@@ -185,23 +185,23 @@ public class ExFatBootSector
     internal ExFatBootSector(byte[] bytes)
     {
         _bytes = bytes;
-        var buffer = new Buffer(_bytes);
-        JmpBoot = new BufferBytes(buffer, 0, 3);
-        OemName = new BufferByteString(buffer, 3, 8);
-        VolumeLengthSectors = new BufferUInt64(buffer, 72);
-        FatOffsetSector = new BufferUInt32(buffer, 80);
-        FatLengthSectors = new BufferUInt32(buffer, 84);
-        ClusterOffsetSector = new BufferUInt32(buffer, 88);
-        ClusterCount = new BufferUInt32(buffer, 92);
-        RootDirectoryCluster = new BufferUInt32(buffer, 96);
-        VolumeSerialNumber = new BufferUInt32(buffer, 100);
-        FileSystemRevision = new BufferUInt16(buffer, 104);
-        VolumeFlags = new BufferUInt16(buffer, 106);
-        BytesPerSector = new CacheValueProvider<uint>(new ShiftValueProvider(new BufferUInt8(buffer, 108)));
-        SectorsPerCluster = new ShiftValueProvider(new BufferUInt8(buffer, 109));
-        NumberOfFats = new BufferUInt8(buffer, 110);
-        DriveSelect = new BufferUInt8(buffer, 111);
-        PercentInUse = new BufferUInt8(buffer, 112);
+        var buffer = new Memory<byte>(_bytes);
+        JmpBoot = new BufferBytes(buffer.Slice(0, 3));
+        OemName = new BufferByteString(buffer.Slice(3, 8));
+        VolumeLengthSectors = new BufferUInt64(buffer.Slice(72));
+        FatOffsetSector = new BufferUInt32(buffer.Slice(80));
+        FatLengthSectors = new BufferUInt32(buffer.Slice(84));
+        ClusterOffsetSector = new BufferUInt32(buffer.Slice(88));
+        ClusterCount = new BufferUInt32(buffer.Slice(92));
+        RootDirectoryCluster = new BufferUInt32(buffer.Slice(96));
+        VolumeSerialNumber = new BufferUInt32(buffer.Slice(100));
+        FileSystemRevision = new BufferUInt16(buffer.Slice(104));
+        VolumeFlags = new BufferUInt16(buffer.Slice(106));
+        BytesPerSector = new CacheValueProvider<uint>(new ShiftValueProvider(new BufferUInt8(buffer.Slice(108))));
+        SectorsPerCluster = new ShiftValueProvider(new BufferUInt8(buffer.Slice(109)));
+        NumberOfFats = new BufferUInt8(buffer.Slice(110));
+        DriveSelect = new BufferUInt8(buffer.Slice(111));
+        PercentInUse = new BufferUInt8(buffer.Slice(112));
     }
 
     /// <summary>
@@ -213,7 +213,9 @@ public class ExFatBootSector
         var checksum = _bytes.GetChecksum32(0, 106);
         checksum = _bytes.GetChecksum32(108, 4, checksum);
         checksum = _bytes.GetChecksum32(113, (int)(BytesPerSector.Value * 11 - 113), checksum);
-        return LittleEndian.GetBytes(checksum);
+        var buffer = new byte[sizeof(uint)];
+        EndianUtilities.WriteBytesLittleEndian(checksum, buffer);
+        return buffer;
     }
 
     private bool IsChecksumValid()
@@ -238,8 +240,5 @@ public class ExFatBootSector
     /// Reads boot sector from specified stream.
     /// </summary>
     /// <param name="stream">The stream.</param>
-    public void Read(Stream stream)
-    {
-        stream.Read(_bytes, 0, _bytes.Length);
-    }
+    public void Read(Stream stream) => stream.Read(_bytes, 0, _bytes.Length);
 }

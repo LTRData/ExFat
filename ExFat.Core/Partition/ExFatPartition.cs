@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DiscUtils.Streams;
 using Entries;
 using IO;
 
@@ -120,10 +121,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// <summary>
     /// Disposes the allocation bitmap.
     /// </summary>
-    private void DisposeAllocationBitmap()
-    {
-        _allocationBitmap?.Dispose();
-    }
+    private void DisposeAllocationBitmap() => _allocationBitmap?.Dispose();
 
     /// <summary>
     /// Flushes all pending changes.
@@ -157,10 +155,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// <summary>
     /// Flushes the allocation bitmap.
     /// </summary>
-    private void FlushAllocationBitmap()
-    {
-        _allocationBitmap?.Flush();
-    }
+    private void FlushAllocationBitmap() => _allocationBitmap?.Flush();
 
     /// <summary>
     /// Reads the boot sector.
@@ -193,10 +188,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// </summary>
     /// <param name="cluster">The cluster.</param>
     /// <returns></returns>
-    public long GetClusterOffset(Cluster cluster)
-    {
-        return (BootSector.ClusterOffsetSector.Value + (cluster.Value - 2) * BootSector.SectorsPerCluster.Value) * BootSector.BytesPerSector.Value;
-    }
+    public long GetClusterOffset(Cluster cluster) => (BootSector.ClusterOffsetSector.Value + (cluster.Value - 2) * BootSector.SectorsPerCluster.Value) * BootSector.BytesPerSector.Value;
 
     /// <summary>
     /// Seeks the cluster.
@@ -204,30 +196,21 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// <param name="cluster">The cluster.</param>
     /// <param name="offset">The offset.</param>
     // locked on _streamLock
-    private void SeekCluster(Cluster cluster, long offset = 0)
-    {
-        _partitionStream.Seek(GetClusterOffset(cluster) + offset, SeekOrigin.Begin);
-    }
+    private void SeekCluster(Cluster cluster, long offset = 0) => _partitionStream.Seek(GetClusterOffset(cluster) + offset, SeekOrigin.Begin);
 
     /// <summary>
     /// Gets the sector offset.
     /// </summary>
     /// <param name="sectorIndex">Index of the sector.</param>
     /// <returns></returns>
-    public long GetSectorOffset(long sectorIndex)
-    {
-        return sectorIndex * (int)BootSector.BytesPerSector.Value;
-    }
+    public long GetSectorOffset(long sectorIndex) => sectorIndex * (int)BootSector.BytesPerSector.Value;
 
     /// <summary>
     /// Seeks the sector.
     /// </summary>
     /// <param name="sectorIndex">Index of the sector.</param>
     // locked on _streamLock
-    private void SeekSector(long sectorIndex)
-    {
-        _partitionStream.Seek(GetSectorOffset(sectorIndex), SeekOrigin.Begin);
-    }
+    private void SeekSector(long sectorIndex) => _partitionStream.Seek(GetSectorOffset(sectorIndex), SeekOrigin.Begin);
 
     private long _fatPageIndex = -1;
     private byte[] _fatPage;
@@ -296,7 +279,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
         {
             var fatPage = GetFatPage(cluster);
             var clusterIndex = (int)(cluster.Value % ClustersPerFatPage);
-            var nextCluster = LittleEndian.ToUInt32(fatPage, clusterIndex * sizeof(Int32));
+            var nextCluster = EndianUtilities.ToUInt32LittleEndian(fatPage, clusterIndex * sizeof(int));
             return nextCluster;
         }
     }
@@ -346,14 +329,15 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             // the only point is to avoid writing to virtual hard disk, which may be sparse and handle sparseness more or less efficiently...
             var fatPage = GetFatPage(cluster);
             var clusterIndex = (int)(cluster.Value % ClustersPerFatPage);
-            var b = LittleEndian.GetBytes((UInt32)nextCluster.Value);
-            var fatPageOffset = clusterIndex * sizeof(UInt32);
+            Span<byte> b = stackalloc byte[sizeof(uint)];
+            EndianUtilities.WriteBytesLittleEndian((uint)nextCluster.Value, b);
+            var fatPageOffset = clusterIndex * sizeof(uint);
             if (b[0] == fatPage[fatPageOffset] && b[1] == fatPage[fatPageOffset + 1] && b[2] == fatPage[fatPageOffset + 2] && b[3] == fatPage[fatPageOffset + 3])
             {
                 return;
             }
 
-            Buffer.BlockCopy(b, 0, fatPage, fatPageOffset, sizeof(Int32));
+            b.CopyTo(fatPage.AsSpan(fatPageOffset));
             _fatPageDirty = true;
             if (!_options.HasAny(ExFatOptions.DelayWrite))
             {
@@ -412,11 +396,9 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// Frees the cluster.
     /// </summary>
     /// <param name="cluster">The cluster.</param>
-    public void FreeCluster(Cluster cluster)
-    {
+    public void FreeCluster(Cluster cluster) =>
         // ExFatAllocationBitmap is thread-safe, so no need to lock here
         GetAllocationBitmap().Free(cluster);
-    }
 
     /// <inheritdoc />
     /// <summary>
@@ -462,7 +444,6 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
         }
     }
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Reads one cluster.
@@ -479,7 +460,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// or
     /// offset
     /// </exception>
-    public async Task ReadClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken)
+    public async ValueTask ReadClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken)
     {
         if (length + offset > BytesPerCluster)
         {
@@ -507,7 +488,6 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             _streamLock.Release();
         }
     }
-#endif
 
     /// <inheritdoc />
     /// <summary>
@@ -553,7 +533,6 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
         }
     }
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Writes the cluster.
@@ -570,7 +549,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// or
     /// offset
     /// </exception>
-    public async Task WriteClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken)
+    public async ValueTask WriteClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken)
     {
         if (length + offset > BytesPerCluster)
         {
@@ -598,7 +577,6 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             _streamLock.Release();
         }
     }
-#endif
 
     /// <summary>
     /// Reads the sectors.
@@ -645,15 +623,15 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// </summary>
     /// <param name="name">The name.</param>
     /// <returns></returns>
-    public UInt16 ComputeNameHash(string name)
+    public ushort ComputeNameHash(string name)
     {
-        UInt16 hash = 0;
+        ushort hash = 0;
         var upCaseTable = GetUpCaseTable();
         foreach (var c in name)
         {
             var uc = upCaseTable.ToUpper(c);
-            hash = (UInt16)(hash.RotateRight() + (uc & 0xFF));
-            hash = (UInt16)(hash.RotateRight() + (uc >> 8));
+            hash = (ushort)(hash.RotateRight() + (uc & 0xFF));
+            hash = (ushort)(hash.RotateRight() + (uc >> 8));
         }
         return hash;
     }
@@ -697,16 +675,10 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// </summary>
     /// <param name="onDisposed">The on disposed.</param>
     /// <returns></returns>
-    public ClusterStream CreateDataStream(Action<DataDescriptor> onDisposed = null)
-    {
-        return OpenClusterStream(new DataDescriptor(0, true, 0, 0), FileAccess.ReadWrite, onDisposed);
-    }
+    public ClusterStream CreateDataStream(Action<DataDescriptor> onDisposed = null) => OpenClusterStream(new DataDescriptor(0, true, 0, 0), FileAccess.ReadWrite, onDisposed);
 
     private IEnumerable<TDirectoryEntry> FindRootDirectoryEntries<TDirectoryEntry>()
-        where TDirectoryEntry : ExFatDirectoryEntry
-    {
-        return GetEntries(RootDirectoryDataDescriptor).OfType<TDirectoryEntry>();
-    }
+        where TDirectoryEntry : ExFatDirectoryEntry => GetEntries(RootDirectoryDataDescriptor).OfType<TDirectoryEntry>();
 
     private ExFatUpCaseTable _upCaseTable;
 
@@ -762,8 +734,5 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// Gets the used clusters.
     /// </summary>
     /// <returns></returns>
-    private long GetUsedClusters()
-    {
-        return GetAllocationBitmap().GetUsedClusters();
-    }
+    private long GetUsedClusters() => GetAllocationBitmap().GetUsedClusters();
 }

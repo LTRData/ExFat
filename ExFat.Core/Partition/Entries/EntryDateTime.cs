@@ -14,8 +14,8 @@ using Buffers;
 /// <seealso cref="T:System.DateTime" />
 public class EntryDateTime : IValueProvider<DateTime>
 {
-    private readonly IValueProvider<UInt32> _dateTimeProvider;
-    private readonly IValueProvider<Byte> _tenMsProvider;
+    private readonly IValueProvider<uint> _dateTimeProvider;
+    private readonly IValueProvider<byte> _tenMsProvider;
 
     /// <inheritdoc />
     /// <summary>
@@ -43,7 +43,7 @@ public class EntryDateTime : IValueProvider<DateTime>
     /// </summary>
     /// <param name="dateTimeProvider">The date time provider.</param>
     /// <param name="tenMsProvider">The ten ms provider.</param>
-    public EntryDateTime(IValueProvider<UInt32> dateTimeProvider, IValueProvider<Byte> tenMsProvider = null)
+    public EntryDateTime(IValueProvider<uint> dateTimeProvider, IValueProvider<byte> tenMsProvider = null)
     {
         _dateTimeProvider = dateTimeProvider;
         _tenMsProvider = tenMsProvider;

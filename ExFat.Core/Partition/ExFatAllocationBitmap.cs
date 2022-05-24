@@ -18,7 +18,7 @@ public class ExFatAllocationBitmap
     private Stream _dataStream;
     private uint _firstCluster;
     private bool _delayWrite;
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
 
     /// <summary>
     /// Gets the length.
@@ -245,7 +245,7 @@ public class ExFatAllocationBitmap
             return null;
         }
 
-        UInt32 freeCluster = 0;
+        uint freeCluster = 0;
         var unallocatedCount = 0;
         for (var cluster = first.ToUInt32(); cluster < Length;)
         {

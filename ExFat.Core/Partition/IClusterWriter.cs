@@ -23,7 +23,6 @@ public interface IClusterWriter : IClusterReader
     /// <param name="length"></param>
     void WriteCluster(Cluster cluster, byte[] clusterBuffer, int offset, int length);
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <summary>
     /// Writes the cluster.
     /// </summary>
@@ -32,8 +31,7 @@ public interface IClusterWriter : IClusterReader
     /// <param name="offset"></param>
     /// <param name="length"></param>
     /// <param name="cancellationToken"></param>
-    Task WriteClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken);
-#endif
+    ValueTask WriteClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken);
 
     /// <summary>
     /// Sets the next cluster.

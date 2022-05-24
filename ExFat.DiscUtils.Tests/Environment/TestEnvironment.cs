@@ -7,9 +7,11 @@ namespace ExFat.DiscUtils.Environment;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Security.Principal;
 using global::DiscUtils.Vhdx;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 internal class TestEnvironment : IDisposable
 {
@@ -20,11 +22,12 @@ internal class TestEnvironment : IDisposable
     {
     }
 
+    [SupportedOSPlatform("windows")]
     private static bool IsElevated
     {
         get
         {
-            var id = WindowsIdentity.GetCurrent();
+            using var id = WindowsIdentity.GetCurrent();
             return id.Owner != id.User;
         }
     }
@@ -37,17 +40,20 @@ internal class TestEnvironment : IDisposable
         {
             try
             {
-                if (IsElevated)
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    var t = CheckDisk();
-                    if (!t.Item1)
+                    if (IsElevated)
                     {
-                        Assert.Fail("VHDX filesystem is found corrupted by CHKDSK: " + t.Item2);
+                        var t = CheckDisk();
+                        if (!t.Item1)
+                        {
+                            throw new Exception("VHDX filesystem is found corrupted by CHKDSK: " + t.Item2);
+                        }
                     }
-                }
-                else
-                {
-                    Assert.Inconclusive("Not elevated");
+                    else
+                    {
+                        throw new Exception("Not elevated");
+                    }
                 }
             }
             finally

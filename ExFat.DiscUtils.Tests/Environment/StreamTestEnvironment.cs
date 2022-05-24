@@ -32,23 +32,14 @@ internal class StreamTestEnvironment : TestEnvironment
     {
         VhdxPath = Path.Combine(Path.GetTempPath(), $"exFAT test (to be removed) {Guid.NewGuid():N}.vhdx");
 
-        using (var gzStream = GetType().Assembly.GetManifestResourceStream(GetType(), "exFAT.vhdx.gz"))
-        using (var gzipStream = new GZipStream(gzStream, CompressionMode.Decompress))
-        {
-            FileOptions fileOptions = 0;
-            //                var fileOptions = FileOptions.DeleteOnClose;
-            //#if DEBUG
-            //                if (allowDebugKeep)
-            //                    fileOptions &= ~FileOptions.DeleteOnClose;
-            //#endif
-            var vhdxStream = allowDebugKeep
-                ? (Stream) File.Create(VhdxPath, 1 << 20, fileOptions)
-                : new MemoryStream();
-            gzipStream.CopyTo(vhdxStream);
+        using var gzStream = GetType().Assembly.GetManifestResourceStream(GetType(), "exFAT.vhdx.gz");
+        using var gzipStream = new GZipStream(gzStream, CompressionMode.Decompress);
+        var fileOptions = allowDebugKeep ? 0 : FileOptions.DeleteOnClose;
+        var vhdxStream = File.Create(VhdxPath, 1 << 20, fileOptions);
+        gzipStream.CopyTo(vhdxStream);
 
-            Disk = new Disk(vhdxStream, Ownership.Dispose);
-            var volume = VolumeManager.GetPhysicalVolumes(Disk)[1];
-            PartitionStream = volume.Open();
-        }
+        Disk = new Disk(vhdxStream, Ownership.Dispose);
+        var volume = VolumeManager.GetPhysicalVolumes(Disk)[1];
+        PartitionStream = volume.Open();
     }
 }

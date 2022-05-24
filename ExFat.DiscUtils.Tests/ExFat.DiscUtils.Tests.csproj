@@ -1,100 +1,58 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{14CB35EF-DC35-4DCD-87DA-C18515F82900}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExFat.DiscUtils</RootNamespace>
-    <AssemblyName>ExFat.DiscUtils.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="DiscUtils.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net48\DiscUtils.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Streams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net48\DiscUtils.Streams.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Vhdx, Version=0.13.0.0, Culture=neutral, PublicKeyToken=5fa5b410cc9c6289, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DiscUtils\Library\DiscUtils\bin\Release\net48\DiscUtils.Vhdx.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <None Remove="Environment\exFAT.vhdx.gz" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\ExFat.Core\Properties\ProductInfo.cs">
-      <Link>Properties\ProductInfo.cs</Link>
-    </Compile>
-    <Compile Include="Environment\EntryFilesystemTestEnvironment.cs" />
-    <Compile Include="ProcessUtility.cs" />
-    <Compile Include="Environment\TestEnvironment.cs" />
-    <Compile Include="Tests\DiscFilesystemTests.cs" />
-    <Compile Include="Tests\PartitionClustersTests.cs" />
-    <Compile Include="DiskContent.cs" />
-    <Compile Include="Tests\DateTests.cs" />
-    <Compile Include="Tests\EntryFilesystemReadTests.cs" />
-    <Compile Include="Tests\EntryFilesystemStructureTests.cs" />
-    <Compile Include="Tests\EntryFilesystemWriteTests.cs" />
-    <Compile Include="Tests\PathFilesystemReadTests.cs" />
-    <Compile Include="Tests\PathFilesystemWriteTests.cs" />
-    <Compile Include="Tests\PartitionReadTests.cs" />
-    <Compile Include="Tests\PartitionStructureTests.cs" />
-    <Compile Include="Environment\StreamTestEnvironment.cs" />
-    <Compile Include="Tests\IntegrityTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\PartitionWriteTests.cs" />
+    <Compile Include="..\ExFat.Core\Properties\ProductInfo.cs" Link="Properties\ProductInfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Environment\exFAT.vhdx.gz" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="..\.editorconfig">
-      <Link>.editorconfig</Link>
-    </None>
-    <None Include="project.json" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ExFat.Core\ExFat.Core.csproj">
-      <Project>{694BBB9A-204F-41A3-927E-2BCB8AA9DADE}</Project>
-      <Name>ExFat.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExFat.DiscUtils\ExFat.DiscUtils.csproj">
-      <Project>{D3FE0435-345E-4BDE-A22E-AD923638275C}</Project>
-      <Name>ExFat.DiscUtils</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\ExFat.Core\ExFat.Core.csproj" />
+    <ProjectReference Include="..\ExFat.DiscUtils\ExFat.DiscUtils.csproj" />
   </ItemGroup>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <ItemGroup>
+    <Reference Include="DiscUtils.Core">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscUtils.Streams">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscUtils.Vhdx">
+      <HintPath>$(DiscUtilsPath)\DiscUtils.Vhdx.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  
 </Project>

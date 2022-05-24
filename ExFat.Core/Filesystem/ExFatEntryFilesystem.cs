@@ -10,7 +10,6 @@ using System.IO;
 using IO;
 using Partition;
 using Partition.Entries;
-using Buffer = Buffers.Buffer;
 
 /// <summary>
 /// Filesystem access at low-level: entry manipulation
@@ -215,10 +214,7 @@ public class ExFatEntryFilesystem : IDisposable
         return OpenData(fileEntry, FileAccess.ReadWrite);
     }
 
-    private Stream OpenData(ExFatFilesystemEntry fileEntry, FileAccess access)
-    {
-        return _partition.OpenDataStream(fileEntry.DataDescriptor, access, d => UpdateEntry(fileEntry, access, d));
-    }
+    private Stream OpenData(ExFatFilesystemEntry fileEntry, FileAccess access) => _partition.OpenDataStream(fileEntry.DataDescriptor, access, d => UpdateEntry(fileEntry, access, d));
 
     private void UpdateEntry(ExFatFilesystemEntry entry, FileAccess fileAccess, DataDescriptor dataDescriptor)
     {
@@ -277,7 +273,7 @@ public class ExFatEntryFilesystem : IDisposable
         var now = DateTimeOffset.Now;
         var entries = new List<ExFatDirectoryEntry>
             {
-                new FileExFatDirectoryEntry(new Buffer(new byte[32]))
+                new FileExFatDirectoryEntry(new(new byte[32]))
                 {
                     EntryType = {Value = ExFatDirectoryEntryType.File},
                     FileAttributes = {Value = (ExFatFileAttributes) attributes},
@@ -285,7 +281,7 @@ public class ExFatEntryFilesystem : IDisposable
                     LastWriteDateTimeOffset = {Value = now},
                     LastAccessDateTimeOffset = {Value = now},
                 },
-                new StreamExtensionExFatDirectoryEntry(new Buffer(new byte[32]))
+                new StreamExtensionExFatDirectoryEntry(new(new byte[32]))
                 {
                     FirstCluster = {Value = 0},
                     EntryType = {Value = ExFatDirectoryEntryType.Stream},
@@ -297,7 +293,7 @@ public class ExFatEntryFilesystem : IDisposable
         for (var nameIndex = 0; nameIndex < name.Length; nameIndex += 15)
         {
             var namePart = name.Substring(nameIndex, Math.Min(15, name.Length - nameIndex));
-            entries.Add(new FileNameExtensionExFatDirectoryEntry(new Buffer(new byte[32]))
+            entries.Add(new FileNameExtensionExFatDirectoryEntry(new(new byte[32]))
             {
                 EntryType = { Value = ExFatDirectoryEntryType.FileName },
                 FileName = { Value = namePart }

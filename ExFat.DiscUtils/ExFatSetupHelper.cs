@@ -9,8 +9,5 @@ using global::DiscUtils.Setup;
 
 public static class ExFatSetupHelper
 {
-    public static void SetupFileSystems()
-    {
-        SetupHelper.RegisterAssembly(Assembly.GetExecutingAssembly());
-    }
+    public static void SetupFileSystems() => SetupHelper.RegisterAssembly(Assembly.GetExecutingAssembly());
 }

@@ -10,7 +10,7 @@ using System;
 /// Flags for secondary entries (common flags)
 /// </summary>
 [Flags]
-public enum ExFatGeneralSecondaryFlags : Byte
+public enum ExFatGeneralSecondaryFlags : byte
 {
     /// <summary>
     /// Indicates that allocation is possible (unofficial specs says it must always be set)

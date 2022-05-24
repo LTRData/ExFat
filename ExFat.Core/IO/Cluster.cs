@@ -48,32 +48,32 @@ public readonly struct Cluster
     /// <summary>
     /// The first data cluster
     /// </summary>
-    public static Cluster First = new Cluster(2);
+    public static Cluster First = new(2);
     /// <summary>
     /// Free cluster instance
     /// </summary>
-    public static Cluster Free = new Cluster(0);
+    public static Cluster Free = new(0);
     /// <summary>
     /// Last cluster of chain
     /// </summary>
-    public static Cluster Last = new Cluster(0xFFFFFFFF);
+    public static Cluster Last = new(0xFFFFFFFF);
     /// <summary>
     /// Cluster marked bad
     /// </summary>
-    public static Cluster Bad = new Cluster(0xFFFFFFF7);
+    public static Cluster Bad = new(0xFFFFFFF7);
     /// <summary>
     /// The marker
     /// </summary>
-    public static Cluster Marker = new Cluster(0xFFFFFFF8);
+    public static Cluster Marker = new(0xFFFFFFF8);
 
     private static long MinLast = -8;
-    private static UInt32 Reserved32 = 0xFFFFFFF0;
+    private static uint Reserved32 = 0xFFFFFFF0;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Cluster"/> struct.
     /// </summary>
     /// <param name="cluster">The cluster.</param>
-    public Cluster(UInt32 cluster)
+    public Cluster(uint cluster)
     {
         if (cluster >= Reserved32)
         {
@@ -98,19 +98,16 @@ public readonly struct Cluster
     /// Converts value to <see cref="uint"/>.
     /// </summary>
     /// <returns></returns>
-    public UInt32 ToUInt32()
-    {
-        return (UInt32)Value;
-    }
+    public uint ToUInt32() => (uint)Value;
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="UInt32"/> to <see cref="Cluster"/>.
+    /// Performs an implicit conversion from <see cref="uint"/> to <see cref="Cluster"/>.
     /// </summary>
     /// <param name="cluster">The cluster.</param>
     /// <returns>
     /// The result of the conversion.
     /// </returns>
-    public static implicit operator Cluster(UInt32 cluster)
+    public static implicit operator Cluster(uint cluster)
     {
         return new Cluster(cluster);
     }
@@ -223,11 +220,11 @@ public readonly struct Cluster
     }
 
     /// <summary>
-    /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+    /// Determines whether the specified <see cref="object" />, is equal to this instance.
     /// </summary>
-    /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+    /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
     /// <returns>
-    ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+    ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
     public override bool Equals(object obj)
     {
@@ -245,8 +242,5 @@ public readonly struct Cluster
     /// <returns>
     /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
     /// </returns>
-    public override int GetHashCode()
-    {
-        return (int)Value;
-    }
+    public override int GetHashCode() => (int)Value;
 }

@@ -4,6 +4,7 @@
 
 namespace ExFat.Buffers;
 
+using DiscUtils.Streams;
 using System;
 using System.Diagnostics;
 
@@ -12,9 +13,9 @@ using System.Diagnostics;
 /// </summary>
 /// <seealso cref="ulong" />
 [DebuggerDisplay("{" + nameof(Value) + "}")]
-public class BufferUInt64 : IValueProvider<UInt64>
+public readonly struct BufferUInt64 : IValueProvider<ulong>
 {
-    private readonly Buffer _buffer;
+    private readonly Memory<byte> _buffer;
 
     /// <summary>
     /// Gets or sets the value.
@@ -22,19 +23,18 @@ public class BufferUInt64 : IValueProvider<UInt64>
     /// <value>
     /// The value.
     /// </value>
-    public UInt64 Value
+    public ulong Value
     {
-        get => LittleEndian.ToUInt64(_buffer);
-        set => LittleEndian.GetBytes(value, _buffer);
+        get => EndianUtilities.ToUInt64LittleEndian(_buffer.Span);
+        set => EndianUtilities.WriteBytesLittleEndian(value, _buffer.Span);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BufferUInt64"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    /// <param name="offset">The offset.</param>
-    public BufferUInt64(Buffer buffer, int offset)
+    public BufferUInt64(Memory<byte> buffer)
     {
-        _buffer = new Buffer(buffer, offset, sizeof(UInt64));
+        _buffer = buffer.Slice(0, sizeof(ulong));
     }
 }

@@ -4,9 +4,11 @@
 
 namespace ExFat.Buffers;
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 /// <summary>
@@ -14,14 +16,14 @@ using System.Text;
 /// </summary>
 /// <seealso cref="string" />
 [DebuggerDisplay("{" + nameof(Value) + "}")]
-public class BufferByteString : IValueProvider<string>
+public readonly struct BufferByteString : IValueProvider<string>
 {
     private readonly Encoding _encoding;
-    private readonly Buffer _buffer;
+    private readonly Memory<byte> _buffer;
 
     private IEnumerable<byte> GetZeroBytes()
     {
-        foreach (var b in _buffer.GetBytes())
+        foreach (var b in MemoryMarshal.ToEnumerable<byte>(_buffer))
         {
             if (b == 0)
             {
@@ -50,7 +52,7 @@ public class BufferByteString : IValueProvider<string>
             // then pad
             for (var index = stringBytes.Length; index < _buffer.Length; index++)
             {
-                _buffer[index] = 0;
+                _buffer.Span[index] = 0;
             }
         }
     }
@@ -59,12 +61,10 @@ public class BufferByteString : IValueProvider<string>
     /// Initializes a new instance of the <see cref="BufferByteString" /> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    /// <param name="offset">The offset.</param>
-    /// <param name="length">The length.</param>
     /// <param name="encoding">The encoding (defaults to ASCII).</param>
-    public BufferByteString(Buffer buffer, int offset, int length, Encoding encoding = null)
+    public BufferByteString(Memory<byte> buffer, Encoding encoding = null)
     {
-        _buffer = new Buffer(buffer, offset, length);
+        _buffer = buffer;
         _encoding = encoding ?? Encoding.ASCII;
     }
 }

@@ -10,7 +10,7 @@ using System;
 /// Converts a log2 value to its integer representation
 /// </summary>
 /// <seealso cref="uint" />
-public class ShiftValueProvider : IValueProvider<UInt32>
+public class ShiftValueProvider : IValueProvider<uint>
 {
     private readonly IValueProvider<byte> _shift;
 
@@ -21,7 +21,7 @@ public class ShiftValueProvider : IValueProvider<UInt32>
     /// The value.
     /// </value>
     /// <exception cref="System.ArgumentException">value must be a power of 2</exception>
-    public UInt32 Value
+    public uint Value
     {
         get => 1u << _shift.Value;
         set

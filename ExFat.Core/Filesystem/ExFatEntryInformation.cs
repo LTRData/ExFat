@@ -131,8 +131,5 @@ public class ExFatEntryInformation
         _entry = entry;
     }
 
-    private void Update()
-    {
-        _entryFilesystem.Update(_entry);
-    }
+    private void Update() => _entryFilesystem.Update(_entry);
 }

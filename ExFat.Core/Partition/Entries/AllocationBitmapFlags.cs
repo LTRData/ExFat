@@ -10,7 +10,7 @@ using System;
 /// Flags for <see cref="ExFatAllocationBitmap"/>
 /// </summary>
 [Flags]
-public enum AllocationBitmapFlags : Byte
+public enum AllocationBitmapFlags : byte
 {
     /// <summary>
     /// Indicates this bitmap is the second allocation bitmap

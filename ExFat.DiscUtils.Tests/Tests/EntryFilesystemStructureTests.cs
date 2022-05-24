@@ -7,21 +7,19 @@ namespace ExFat.DiscUtils.Tests;
 using System.Linq;
 using Environment;
 using Filesystem;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
-[TestClass]
+
 [TestCategory("EntryFilesystem")]
 public class EntryFilesystemStructureTests
 {
-    [TestMethod]
+    [Fact]
     [TestCategory("Read")]
     public void ReadFile()
     {
-        using (var testEnvironment = StreamTestEnvironment.FromExistingVhdx())
-        using (var filesystem = new ExFatEntryFilesystem(testEnvironment.PartitionStream))
-        {
-            var files = filesystem.EnumerateFileSystemEntries(filesystem.RootDirectory).ToArray();
-            Assert.IsTrue(files.Any(f => f.Name == DiskContent.LongContiguousFileName));
-        }
+        using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
+        using var filesystem = new ExFatEntryFilesystem(testEnvironment.PartitionStream);
+        var files = filesystem.EnumerateFileSystemEntries(filesystem.RootDirectory).ToArray();
+        Assert.Contains(files, f => f.Name == DiskContent.LongContiguousFileName);
     }
 }

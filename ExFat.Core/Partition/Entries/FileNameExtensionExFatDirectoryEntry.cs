@@ -7,7 +7,7 @@ namespace ExFat.Partition.Entries;
 using System;
 using System.Diagnostics;
 using Buffers;
-using Buffer = Buffers.Buffer;
+
 
 /// <inheritdoc />
 /// <summary>
@@ -37,9 +37,9 @@ public class FileNameExtensionExFatDirectoryEntry : ExFatDirectoryEntry
     /// Initializes a new instance of the <see cref="T:ExFat.Partition.Entries.FileNameExtensionExFatDirectoryEntry" /> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    public FileNameExtensionExFatDirectoryEntry(Buffer buffer) : base(buffer)
+    public FileNameExtensionExFatDirectoryEntry(Memory<byte> buffer) : base(buffer)
     {
-        GeneralSecondaryFlags = new EnumValueProvider<ExFatGeneralSecondaryFlags, Byte>(new BufferUInt8(buffer, 1));
-        FileName = new BufferWideString(buffer, 2, 15);
+        GeneralSecondaryFlags = new EnumValueProvider<ExFatGeneralSecondaryFlags, byte>(new BufferUInt8(buffer.Slice(1)));
+        FileName = new BufferWideString(buffer.Slice(2), 15);
     }
 }

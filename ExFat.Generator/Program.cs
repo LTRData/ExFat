@@ -79,15 +79,19 @@ public static class Program
             VolumeLabel = DiskContent.VolumeLabel
         };
 
+        Span<byte> b1 = stackalloc byte[sizeof(ulong)];
+
         // long contiguous file
         using (var fc = File.Create(Path.Combine(drive, DiskContent.LongContiguousFileName)))
         {
             for (ulong offset = 0; offset < DiskContent.LongFileSize; offset += sizeof(ulong))
             {
-                var b = LittleEndian.GetBytes(DiskContent.GetLongContiguousFileNameOffsetValue(offset));
-                fc.Write(b, 0, b.Length);
+                EndianUtilities.WriteBytesLittleEndian(DiskContent.GetLongContiguousFileNameOffsetValue(offset), b1);
+                fc.Write(b1);
             }
         }
+
+        Span<byte> b2 = stackalloc byte[sizeof(ulong)];
 
         // long sparse files
         const uint chunks = 1u << 10;
@@ -100,10 +104,10 @@ public static class Program
             for (ulong subOffset = 0; subOffset < chunks; subOffset += sizeof(ulong))
             {
                 var offset = offsetBase + subOffset;
-                var b1 = LittleEndian.GetBytes(DiskContent.GetLongSparseFile1NameOffsetValue(offset));
-                fs1.Write(b1, 0, b1.Length);
-                var b2 = LittleEndian.GetBytes(DiskContent.GetLongSparseFile2NameOffsetValue(offset));
-                fs2.Write(b2, 0, b2.Length);
+                EndianUtilities.WriteBytesLittleEndian(DiskContent.GetLongSparseFile1NameOffsetValue(offset), b1);
+                fs1.Write(b1);
+                EndianUtilities.WriteBytesLittleEndian(DiskContent.GetLongSparseFile2NameOffsetValue(offset), b2);
+                fs2.Write(b2);
             }
         }
 

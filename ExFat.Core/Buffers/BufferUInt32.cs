@@ -4,6 +4,7 @@
 
 namespace ExFat.Buffers;
 
+using DiscUtils.Streams;
 using System;
 using System.Diagnostics;
 
@@ -12,9 +13,9 @@ using System.Diagnostics;
 /// </summary>
 /// <seealso cref="uint" />
 [DebuggerDisplay("{" + nameof(Value) + "}")]
-public class BufferUInt32 : IValueProvider<UInt32>
+public readonly struct BufferUInt32 : IValueProvider<uint>
 {
-    private readonly Buffer _buffer;
+    private readonly Memory<byte> _buffer;
 
     /// <summary>
     /// Gets or sets the value.
@@ -22,19 +23,18 @@ public class BufferUInt32 : IValueProvider<UInt32>
     /// <value>
     /// The value.
     /// </value>
-    public UInt32 Value
+    public uint Value
     {
-        get => LittleEndian.ToUInt32(_buffer);
-        set => LittleEndian.GetBytes(value, _buffer);
+        get => EndianUtilities.ToUInt32LittleEndian(_buffer.Span);
+        set => EndianUtilities.WriteBytesLittleEndian(value, _buffer.Span);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BufferUInt32"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    /// <param name="offset">The offset.</param>
-    public BufferUInt32(Buffer buffer, int offset)
+    public BufferUInt32(Memory<byte> buffer)
     {
-        _buffer = new Buffer(buffer, offset, sizeof(UInt32));
+        _buffer = buffer.Slice(0, sizeof(uint));
     }
 }

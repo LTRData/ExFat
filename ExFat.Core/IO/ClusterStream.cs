@@ -137,18 +137,13 @@ public class ClusterStream : CompatibilityStream
     /// <summary>
     /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
     /// </summary>
-    public override Task FlushAsync(CancellationToken cancellationToken)
+    public override async Task FlushAsync(CancellationToken cancellationToken)
     {
         if (!CanWrite)
         {
             throw new NotSupportedException();
         }
 
-        return FlushCurrentClusterAsync(cancellationToken);
-    }
-
-    private async Task FlushCurrentClusterAsync(CancellationToken cancellationToken)
-    {
         if (_currentClusterDirty)
         {
             await _clusterWriter.WriteClusterAsync(_currentCluster, _currentClusterBuffer, 0, _currentClusterBuffer.Length, cancellationToken).ConfigureAwait(false);
@@ -345,7 +340,7 @@ public class ClusterStream : CompatibilityStream
         return _currentClusterBuffer;
     }
 
-    private async Task<byte[]> GetSeekedClusterAsync(CancellationToken cancellationToken)
+    private async ValueTask<byte[]> GetSeekedClusterAsync(CancellationToken cancellationToken)
     {
         if (!_currentCluster.IsData)
         {

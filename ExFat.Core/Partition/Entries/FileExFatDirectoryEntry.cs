@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Buffers;
 using Filesystem;
-using Buffer = Buffers.Buffer;
+
 
 /// <summary>
 /// Represents a directory entry for <see cref="ExFatEntryFilesystem"/>
@@ -24,14 +24,14 @@ public class FileExFatDirectoryEntry : ExFatDirectoryEntry
     /// <value>
     /// The secondary count.
     /// </value>
-    public IValueProvider<Byte> SecondaryCount { get; }
+    public IValueProvider<byte> SecondaryCount { get; }
     /// <summary>
     /// Gets or sets the set checksum.
     /// </summary>
     /// <value>
     /// The set checksum.
     /// </value>
-    public IValueProvider<UInt16> SetChecksum { get; }
+    public IValueProvider<ushort> SetChecksum { get; }
     /// <summary>
     /// Gets or sets the file attributes.
     /// </summary>
@@ -45,56 +45,56 @@ public class FileExFatDirectoryEntry : ExFatDirectoryEntry
     /// <value>
     /// The creation time stamp.
     /// </value>
-    public IValueProvider<UInt32> CreationTimeStamp { get; }
+    public IValueProvider<uint> CreationTimeStamp { get; }
     /// <summary>
     /// Gets or sets the last write time stamp.
     /// </summary>
     /// <value>
     /// The last write time stamp.
     /// </value>
-    public IValueProvider<UInt32> LastWriteTimeStamp { get; }
+    public IValueProvider<uint> LastWriteTimeStamp { get; }
     /// <summary>
     /// Gets or sets the last access time stamp.
     /// </summary>
     /// <value>
     /// The last access time stamp.
     /// </value>
-    public IValueProvider<UInt32> LastAccessTimeStamp { get; }
+    public IValueProvider<uint> LastAccessTimeStamp { get; }
     /// <summary>
     /// Gets or sets the creation time 10ms increment.
     /// </summary>
     /// <value>
     /// The creation10ms increment.
     /// </value>
-    public IValueProvider<Byte> Creation10msIncrement { get; }
+    public IValueProvider<byte> Creation10msIncrement { get; }
     /// <summary>
     /// Gets or sets the last write time 10ms increment.
     /// </summary>
     /// <value>
     /// The last write10ms increment.
     /// </value>
-    public IValueProvider<Byte> LastWrite10msIncrement { get; }
+    public IValueProvider<byte> LastWrite10msIncrement { get; }
     /// <summary>
     /// Gets or the creation time zone offset.
     /// </summary>
     /// <value>
     /// The creation time zone offset.
     /// </value>
-    public IValueProvider<Byte> CreationTimeZoneOffset { get; }
+    public IValueProvider<byte> CreationTimeZoneOffset { get; }
     /// <summary>
     /// Gets or sets the last write time zone offset.
     /// </summary>
     /// <value>
     /// The last write time zone offset.
     /// </value>
-    public IValueProvider<Byte> LastWriteTimeZoneOffset { get; }
+    public IValueProvider<byte> LastWriteTimeZoneOffset { get; }
     /// <summary>
     /// Gets or sets the last access time zone offset.
     /// </summary>
     /// <value>
     /// The last access time zone offset.
     /// </value>
-    public IValueProvider<Byte> LastAccessTimeZoneOffset { get; }
+    public IValueProvider<byte> LastAccessTimeZoneOffset { get; }
 
     /// <summary>
     /// Gets or sets the creation time.
@@ -166,20 +166,20 @@ public class FileExFatDirectoryEntry : ExFatDirectoryEntry
     /// Initializes a new instance of the <see cref="FileExFatDirectoryEntry"/> class.
     /// </summary>
     /// <param name="buffer">The buffer.</param>
-    public FileExFatDirectoryEntry(Buffer buffer) : base(buffer)
+    public FileExFatDirectoryEntry(Memory<byte> buffer) : base(buffer)
     {
         // the raw
-        SecondaryCount = new BufferUInt8(buffer, 1);
-        SetChecksum = new BufferUInt16(buffer, 2);
-        FileAttributes = new EnumValueProvider<ExFatFileAttributes, UInt16>(new BufferUInt16(buffer, 4));
-        CreationTimeStamp = new BufferUInt32(buffer, 8);
-        LastWriteTimeStamp = new BufferUInt32(buffer, 12);
-        LastAccessTimeStamp = new BufferUInt32(buffer, 16);
-        Creation10msIncrement = new BufferUInt8(buffer, 20);
-        LastWrite10msIncrement = new BufferUInt8(buffer, 21);
-        CreationTimeZoneOffset = new BufferUInt8(buffer, 22);
-        LastWriteTimeZoneOffset = new BufferUInt8(buffer, 23);
-        LastAccessTimeZoneOffset = new BufferUInt8(buffer, 24);
+        SecondaryCount = new BufferUInt8(buffer.Slice(1));
+        SetChecksum = new BufferUInt16(buffer.Slice(2));
+        FileAttributes = new EnumValueProvider<ExFatFileAttributes, ushort>(new BufferUInt16(buffer.Slice(4)));
+        CreationTimeStamp = new BufferUInt32(buffer.Slice(8));
+        LastWriteTimeStamp = new BufferUInt32(buffer.Slice(12));
+        LastAccessTimeStamp = new BufferUInt32(buffer.Slice(16));
+        Creation10msIncrement = new BufferUInt8(buffer.Slice(20));
+        LastWrite10msIncrement = new BufferUInt8(buffer.Slice(21));
+        CreationTimeZoneOffset = new BufferUInt8(buffer.Slice(22));
+        LastWriteTimeZoneOffset = new BufferUInt8(buffer.Slice(23));
+        LastAccessTimeZoneOffset = new BufferUInt8(buffer.Slice(24));
 
         // the cooked
         CreationTime = new EntryDateTime(CreationTimeStamp, Creation10msIncrement);
@@ -201,7 +201,7 @@ public class FileExFatDirectoryEntry : ExFatDirectoryEntry
     /// <param name="secondaryEntries">The secondary entries.</param>
     public override void Update(ICollection<ExFatDirectoryEntry> secondaryEntries)
     {
-        SecondaryCount.Value = (Byte)secondaryEntries.Count;
+        SecondaryCount.Value = (byte)secondaryEntries.Count;
         SetChecksum.Value = ComputeChecksum(secondaryEntries);
     }
 
@@ -210,13 +210,13 @@ public class FileExFatDirectoryEntry : ExFatDirectoryEntry
     /// </summary>
     /// <param name="secondaryEntries">The secondary entries.</param>
     /// <returns></returns>
-    public UInt16 ComputeChecksum(IEnumerable<ExFatDirectoryEntry> secondaryEntries)
+    public ushort ComputeChecksum(IEnumerable<ExFatDirectoryEntry> secondaryEntries)
     {
-        var checksum = Buffer.Bytes.GetChecksum16(0, 2);
-        checksum = Buffer.Bytes.GetChecksum16(4, 28, checksum);
+        var checksum = Buffer.Span.Slice(0, 2).GetChecksum16();
+        checksum = Buffer.Span.Slice(4, 28).GetChecksum16(checksum);
         foreach (var secondaryEntry in secondaryEntries)
         {
-            checksum = secondaryEntry.Buffer.Bytes.GetChecksum16(0, 32, checksum);
+            checksum = secondaryEntry.Buffer.Span.Slice(0, 32).GetChecksum16(checksum);
         }
 
         return checksum;
