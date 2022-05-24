@@ -32,7 +32,9 @@ public class EntryDateTime : IValueProvider<DateTime>
             var t = value.ToTimeStamp();
             _dateTimeProvider.Value = t.Item1;
             if (_tenMsProvider != null)
+            {
                 _tenMsProvider.Value = t.Item2;
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
-    "MSTest.TestAdapter": "2.0.0",
-    "MSTest.TestFramework": "2.0.0"
+    "MSTest.TestAdapter": "2.2.10",
+    "MSTest.TestFramework": "2.2.10"
   },
   "frameworks": {
     "net48": {}

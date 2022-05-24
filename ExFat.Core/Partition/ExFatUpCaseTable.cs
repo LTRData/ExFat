@@ -23,11 +23,13 @@ public class ExFatUpCaseTable
     {
         _table.Clear();
         //for (var c = 'a'; c <= 'z'; c++)
-        for (char c = (char)0; c < (char)0xFFFF; c++)
+        for (var c = (char)0; c < (char)0xFFFF; c++)
         {
             var uc = char.ToUpper(c);
             if (uc != c)
+            {
                 _table[c] = uc;
+            }
         }
     }
 
@@ -38,18 +40,23 @@ public class ExFatUpCaseTable
     public void Read(Stream upcaseTableStream)
     {
         _table.Clear();
-        byte[] pairBytes = new byte[2];
-        char currentChar = '\0';
-        bool settingCurrentChar = false;
+        var pairBytes = new byte[2];
+        var currentChar = '\0';
+        var settingCurrentChar = false;
         for (; ; )
         {
             if (upcaseTableStream.Read(pairBytes, 0, pairBytes.Length) == 0)
+            {
                 break;
+            }
+
             var c = (char)LittleEndian.ToUInt16(pairBytes);
             // short form: FFFF <char> sets the next char to be set
             // otherwise this is indexed
             if (c == 0xFFFF)
+            {
                 settingCurrentChar = true;
+            }
             else if (settingCurrentChar)
             {
                 currentChar += c;
@@ -58,7 +65,10 @@ public class ExFatUpCaseTable
             else
             {
                 if (currentChar != c)
+                {
                     _table[currentChar] = c;
+                }
+
                 ++currentChar;
             }
         }
@@ -90,7 +100,9 @@ public class ExFatUpCaseTable
     private void Write(Stream stream, byte[] bs, ref UInt32 c)
     {
         foreach (var b in bs)
+        {
             Write(stream, b, ref c);
+        }
     }
 
     private void Write(Stream stream, byte b, ref UInt32 c)
@@ -106,8 +118,11 @@ public class ExFatUpCaseTable
     /// <returns></returns>
     public char ToUpper(char c)
     {
-        if (_table.TryGetValue(c, out char uc))
+        if (_table.TryGetValue(c, out var uc))
+        {
             return uc;
+        }
+
         return c;
     }
 }

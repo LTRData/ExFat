@@ -54,13 +54,19 @@ public class Buffer
         get
         {
             if (index < 0 || index >= Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
             return Bytes[Offset + index];
         }
         set
         {
             if (index < 0 || index >= Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
             Bytes[Offset + index] = value;
         }
     }
@@ -84,9 +90,14 @@ public class Buffer
     public void Set(IList<byte> bytes)
     {
         if (bytes.Count > Length)
+        {
             throw new ArgumentException(nameof(bytes));
-        for (int index = 0; index < bytes.Count; index++)
+        }
+
+        for (var index = 0; index < bytes.Count; index++)
+        {
             Bytes[Offset + index] = bytes[index];
+        }
     }
 
     /// <summary>
@@ -113,9 +124,15 @@ public class Buffer
     public Buffer(Buffer buffer, int offset, int length)
     {
         if (offset < 0 || offset >= buffer.Length)
+        {
             throw new ArgumentOutOfRangeException(nameof(offset));
+        }
+
         if (offset + length > buffer.Length)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         Bytes = buffer.Bytes;
         Offset = buffer.Offset + offset;
         Length = length;

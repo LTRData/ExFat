@@ -82,7 +82,9 @@ public class EntryFilesystemWriteTests
             using (var filesystem = new ExFatEntryFilesystem(testEnvironment.PartitionStream))
             {
                 using (var s = filesystem.CreateFile(filesystem.RootDirectory, "a.txt"))
+                {
                     s.WriteByte(65);
+                }
 
                 var f = filesystem.FindChild(filesystem.RootDirectory, "a.txt");
                 using (var s2 = filesystem.OpenFile(f, FileAccess.Read))
@@ -218,11 +220,11 @@ public class EntryFilesystemWriteTests
                 var random = new Random(0);
                 var fileIndex = 0;
                 var catalogCache = new List<string>();
-                for (int loop = 0; loop < 10; loop++)
+                for (var loop = 0; loop < 10; loop++)
                 {
                     // delete some
                     var existingFiles = filesystem.EnumerateFileSystemEntries(testFolder).ToArray();
-                    for (int index = 0; index < existingFiles.Length; index++)
+                    for (var index = 0; index < existingFiles.Length; index++)
                     {
                         if (random.Next(0, 2) == 0)
                         {
@@ -232,7 +234,7 @@ public class EntryFilesystemWriteTests
                     }
                     // add some
                     var newFilesCount = random.Next(100, 300);
-                    for (int index = 0; index < newFilesCount; index++)
+                    for (var index = 0; index < newFilesCount; index++)
                     {
                         ++fileIndex;
                         var fileName = fileIndex.ToString();
@@ -240,8 +242,10 @@ public class EntryFilesystemWriteTests
                         {
                             var l = random.Next(0, 1000);
                             var b = BitConverter.GetBytes(fileIndex);
-                            for (int i = 0; i < l; i++)
+                            for (var i = 0; i < l; i++)
+                            {
                                 s.Write(b, 0, b.Length);
+                            }
                         }
                         catalogCache.Add(fileName);
                     }

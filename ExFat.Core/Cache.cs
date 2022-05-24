@@ -228,7 +228,10 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     public bool TryGetValue(TKey key, out TValue value)
     {
         if (!_dictionary.TryGetValue(key, out value))
+        {
             return false;
+        }
+
         Touch(key);
         return true;
     }

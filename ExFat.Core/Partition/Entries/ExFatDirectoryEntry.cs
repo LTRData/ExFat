@@ -51,9 +51,13 @@ public class ExFatDirectoryEntry
         set
         {
             if (value)
+            {
                 EntryType.Value |= ExFatDirectoryEntryType.InUse;
+            }
             else
+            {
                 EntryType.Value &= ~ExFatDirectoryEntryType.InUse;
+            }
         }
     }
 
@@ -93,7 +97,10 @@ public class ExFatDirectoryEntry
     {
         var entry = Create(buffer);
         if (entry != null)
+        {
             entry.DirectoryPosition = directoryPosition;
+        }
+
         return entry;
     }
 

@@ -29,10 +29,15 @@ partial class ExFatPartition
                     var entryBytes = new byte[32];
                     // cluster offset before reading data, since it's the start
                     if (readerStream.Read(entryBytes, 0, entryBytes.Length) != 32)
+                    {
                         break;
+                    }
+
                     var directoryEntry = ExFatDirectoryEntry.Create(new Buffer(entryBytes), offset);
                     if (directoryEntry != null)
+                    {
                         yield return directoryEntry;
+                    }
                 }
             }
         }
@@ -48,20 +53,29 @@ partial class ExFatPartition
         foreach (var directoryEntry in GetEntries(dataDescriptor)) // locked on _directoryLock
         {
             if (!directoryEntry.InUse)
+            {
                 continue;
+            }
 
             if (directoryEntry.IsSecondary)
+            {
                 entriesStack.Add(directoryEntry);
+            }
             else
             {
                 if (entriesStack.Count > 0)
+                {
                     yield return new ExFatMetaDirectoryEntry(entriesStack);
+                }
+
                 entriesStack.Clear();
                 entriesStack.Add(directoryEntry);
             }
         }
         if (entriesStack.Count > 0)
+        {
             yield return new ExFatMetaDirectoryEntry(entriesStack);
+        }
     }
 
     /// <summary>
@@ -76,7 +90,7 @@ partial class ExFatPartition
         lock (_directoryLock)
         {
             long availableSlot = -1;
-            int availableCount = 0;
+            var availableCount = 0;
             for (var offset = 0L; ; offset += 32)
             {
                 directoryStream.Seek(offset, SeekOrigin.Begin);
@@ -85,7 +99,10 @@ partial class ExFatPartition
                 if (typeByte == -1)
                 {
                     if (availableSlot == -1)
+                    {
                         availableSlot = offset;
+                    }
+
                     return availableSlot;
                 }
 
@@ -102,7 +119,9 @@ partial class ExFatPartition
                         availableCount = 0;
                     }
                     if (++availableCount == entriesCount)
+                    {
                         return availableSlot;
+                    }
                 }
             }
         }
@@ -124,7 +143,10 @@ partial class ExFatPartition
                 var availableSlot = FindAvailableSlot(directoryStream, metaEntry.Entries.Count);
                 directoryStream.Seek(availableSlot, SeekOrigin.Begin);
                 foreach (var entry in metaEntry.Entries)
+                {
                     entry.EntryType.Value |= ExFatDirectoryEntryType.InUse;
+                }
+
                 metaEntry.Write(directoryStream);
             }
         }

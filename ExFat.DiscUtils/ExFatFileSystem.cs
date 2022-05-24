@@ -58,7 +58,10 @@ public partial class ExFatFileSystem : DiscFileSystem
         PathSeparators = pathSeparators ?? DefaultSeparators;
         var bootSector = ExFatPartition.ReadBootSector(partitionStream);
         if (!bootSector.IsValid)
+        {
             throw new InvalidOperationException("Given stream is not exFAT volume");
+        }
+
         _partitionStream = partitionStream;
     }
 
@@ -71,7 +74,9 @@ public partial class ExFatFileSystem : DiscFileSystem
     {
         base.Dispose(disposing);
         if (disposing)
+        {
             _filesystem.Dispose();
+        }
     }
 
     /// <summary>
@@ -154,7 +159,9 @@ public partial class ExFatFileSystem : DiscFileSystem
     private static Regex ConvertWildcardsToRegEx(string pattern)
     {
         if (pattern is null or "*.*")
+        {
             return null;
+        }
 
         //if (!pattern.Contains("."))
         //    pattern += ".";
@@ -168,14 +175,20 @@ public partial class ExFatFileSystem : DiscFileSystem
         var regex = ConvertWildcardsToRegEx(searchPattern);
         var entry = _filesystem.GetInformation(path);
         if (entry == null || !entry.Attributes.HasAny(FileAttributes.Directory))
+        {
             throw new DirectoryNotFoundException();
+        }
+
         return GetEntries(entry, searchOption == SearchOption.TopDirectoryOnly ? 1 : int.MaxValue).Where(e => IsMatch(regex, e));
     }
 
     private bool IsMatch(Regex regex, ExFatEntryInformation e)
     {
         if (regex == null)
+        {
             return true;
+        }
+
         var fileName = GetFileName(e.Path);
         return regex.IsMatch(fileName);
     }
@@ -189,7 +202,10 @@ public partial class ExFatFileSystem : DiscFileSystem
     private IEnumerable<ExFatEntryInformation> GetEntries(ExFatEntryInformation entryInformation, int depth)
     {
         if (depth == 0 || !entryInformation.Attributes.HasAny(FileAttributes.Directory))
+        {
             return _noEntry;
+        }
+
         return _filesystem.EnumerateEntries(entryInformation.Path).SelectMany(e => new[] { e }.Concat(GetEntries(e, depth - 1)));
     }
 
@@ -214,7 +230,10 @@ public partial class ExFatFileSystem : DiscFileSystem
             else
             {
                 if (overwrite)
+                {
                     DeleteFile(destinationName);
+                }
+
                 throw new IOException();
             }
         }
@@ -237,7 +256,10 @@ public partial class ExFatFileSystem : DiscFileSystem
     {
         var information = _filesystem.GetInformation(path);
         if (information == null)
+        {
             throw new FileNotFoundException();
+        }
+
         return information.Attributes;
     }
 
@@ -246,7 +268,10 @@ public partial class ExFatFileSystem : DiscFileSystem
     {
         var information = _filesystem.GetInformation(path);
         if (information == null)
+        {
             throw new FileNotFoundException();
+        }
+
         information.Attributes = newValue;
     }
 
@@ -291,7 +316,10 @@ public partial class ExFatFileSystem : DiscFileSystem
     {
         var information = _filesystem.GetInformation(path);
         if (information == null)
+        {
             throw new FileNotFoundException();
+        }
+
         return information.Length;
     }
 

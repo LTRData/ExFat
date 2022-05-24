@@ -36,10 +36,15 @@ public class ExFatFilesystemEntry
         get
         {
             if (_attributesOverride.HasValue)
+            {
                 return (FileAttributes)_attributesOverride.Value;
+            }
             // this is always the case
             if (FileEntry != null)
+            {
                 return (FileAttributes)FileEntry?.FileAttributes.Value;
+            }
+
             return 0;
         }
         set

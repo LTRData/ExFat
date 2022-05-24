@@ -72,7 +72,10 @@ public class DataDescriptor
     public override bool Equals(object obj)
     {
         if (!(obj is DataDescriptor other))
+        {
             return false;
+        }
+
         return FirstCluster == other.FirstCluster && Contiguous == other.Contiguous
             && PhysicalLength == other.PhysicalLength && LogicalLength == other.LogicalLength;
     }

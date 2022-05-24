@@ -92,7 +92,10 @@ public class ExFatAllocationBitmap
         lock (_lock)
         {
             if (cluster.Value < _firstCluster || cluster.Value >= Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(cluster));
+            }
+
             var clusterIndex = cluster.Value - _firstCluster;
             return GetAtIndex(clusterIndex);
         }
@@ -120,9 +123,14 @@ public class ExFatAllocationBitmap
         var byteIndex = (int)clusterIndex / 8;
         var bitMask = 1 << (int)(clusterIndex & 7);
         if (allocated)
+        {
             _bitmap[byteIndex] |= (byte)bitMask;
+        }
         else
+        {
             _bitmap[byteIndex] &= (byte)~bitMask;
+        }
+
         return byteIndex;
     }
 
@@ -148,18 +156,23 @@ public class ExFatAllocationBitmap
     public long GetUsedClusters()
     {
         long usedClusters = 0;
-        for (int clusterIndex = 0; clusterIndex < Length - _firstCluster;)
+        for (var clusterIndex = 0; clusterIndex < Length - _firstCluster;)
         {
             if (clusterIndex % 8 == 0)
             {
                 if (_bitmap[clusterIndex / 8] == 0xFF)
+                {
                     usedClusters += 8;
+                }
+
                 clusterIndex += 8;
             }
             else
             {
                 if (GetAtIndex(clusterIndex++))
+                {
                     usedClusters++;
+                }
             }
         }
         return usedClusters;
@@ -173,7 +186,9 @@ public class ExFatAllocationBitmap
     public Cluster Allocate(int contigous = 1)
     {
         lock (_lock)
+        {
             return Allocate(FindAvailable(_firstCluster, contigous), contigous) ?? Cluster.Free;
+        }
     }
 
     /// <summary>
@@ -185,25 +200,34 @@ public class ExFatAllocationBitmap
     public Cluster Allocate(Cluster hint, int contigous = 1)
     {
         lock (_lock)
+        {
             return Allocate(FindAvailable(hint, contigous) ?? FindAvailable(_firstCluster, contigous), contigous) ?? Cluster.Free;
+        }
     }
 
     private Cluster? Allocate(Cluster? first, int contigous)
     {
         if (!first.HasValue)
+        {
             return null;
+        }
 
         int? firstByteIndex = null;
-        int lastByteIndex = 0;
-        for (int index = 0; index < contigous; index++)
+        var lastByteIndex = 0;
+        for (var index = 0; index < contigous; index++)
         {
             lastByteIndex = SetAllocation(first.Value + index, true);
             if (!firstByteIndex.HasValue)
+            {
                 firstByteIndex = lastByteIndex;
+            }
         }
 
         if (firstByteIndex.HasValue)
+        {
             Write(firstByteIndex.Value, lastByteIndex - firstByteIndex.Value + 1);
+        }
+
         return first.Value;
     }
 
@@ -217,11 +241,13 @@ public class ExFatAllocationBitmap
     private Cluster? FindAvailable(Cluster first, int contiguous = 1)
     {
         if (!first.IsData)
+        {
             return null;
+        }
 
         UInt32 freeCluster = 0;
-        int unallocatedCount = 0;
-        for (UInt32 cluster = first.ToUInt32(); cluster < Length;)
+        var unallocatedCount = 0;
+        for (var cluster = first.ToUInt32(); cluster < Length;)
         {
             // special case: byte is filled, skip the block (and reset the search)
             if (((cluster - _firstCluster) & 0x07) == 0 && _bitmap[cluster / 8] == 0xFF)
@@ -236,12 +262,17 @@ public class ExFatAllocationBitmap
             {
                 // first to be free, keep it
                 if (unallocatedCount == 0)
+                {
                     freeCluster = cluster;
+                }
+
                 unallocatedCount++;
 
                 // when the amount is reached, return it
                 if (unallocatedCount == contiguous)
+                {
                     return freeCluster;
+                }
             }
             ++cluster;
         }

@@ -28,9 +28,15 @@ public class PartitionClustersTests
             for (Cluster c = oneM.SecondaryStreamExtension.FirstCluster.Value;; c = partition.GetNextCluster(c))
             {
                 if (c.IsLast)
+                {
                     break;
+                }
+
                 if (!c.IsData)
+                {
                     Assert.Fail("Found invalid cluster (o'brother, where art thou?)");
+                }
+
                 clusters.Add(c);
             }
         }

@@ -215,7 +215,10 @@ public class FileExFatDirectoryEntry : ExFatDirectoryEntry
         var checksum = Buffer.Bytes.GetChecksum16(0, 2);
         checksum = Buffer.Bytes.GetChecksum16(4, 28, checksum);
         foreach (var secondaryEntry in secondaryEntries)
+        {
             checksum = secondaryEntry.Buffer.Bytes.GetChecksum16(0, 32, checksum);
+        }
+
         return checksum;
     }
 }

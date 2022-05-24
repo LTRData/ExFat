@@ -24,7 +24,10 @@ public class BufferByteString : IValueProvider<string>
         foreach (var b in _buffer.GetBytes())
         {
             if (b == 0)
+            {
                 break;
+            }
+
             yield return b;
         }
     }
@@ -45,8 +48,10 @@ public class BufferByteString : IValueProvider<string>
             // first of all, inject bytes
             _buffer.Set(stringBytes);
             // then pad
-            for (int index = stringBytes.Length; index < _buffer.Length; index++)
+            for (var index = stringBytes.Length; index < _buffer.Length; index++)
+            {
                 _buffer[index] = 0;
+            }
         }
     }
 

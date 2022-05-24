@@ -58,7 +58,10 @@ public class DiscFilesystemTests
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
         using var filesystem = new ExFatFileSystem(testEnvironment.PartitionStream);
         using (var a = filesystem.OpenFile("a", FileMode.Create))
+        {
             a.WriteByte(1);
+        }
+
         Assert.IsTrue(filesystem.FileExists("a"));
         filesystem.MoveFile("a", "b");
         Assert.IsFalse(filesystem.FileExists("a"));
@@ -72,7 +75,10 @@ public class DiscFilesystemTests
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
         using var filesystem = new ExFatFileSystem(testEnvironment.PartitionStream);
         using (var a = filesystem.OpenFile("a", FileMode.Create))
+        {
             a.WriteByte(1);
+        }
+
         filesystem.CreateDirectory("d");
         Assert.IsTrue(filesystem.FileExists("a"));
         filesystem.MoveFile("a", "d");

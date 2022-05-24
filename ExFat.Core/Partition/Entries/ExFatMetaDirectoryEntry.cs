@@ -88,6 +88,8 @@ public class ExFatMetaDirectoryEntry : IDataProvider
     {
         Primary.Update(Secondaries.ToList());
         foreach (var entry in Entries)
+        {
             entry.Write(stream);
+        }
     }
 }

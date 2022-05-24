@@ -41,7 +41,10 @@ public class BufferBytes : IEnumerable<byte>
             var bytes = _buffer.GetBytes();
             var s = string.Join(", ", bytes.Take(10).Select(b => $"0x{b:X2}"));
             if (bytes.Length > 10)
+            {
                 s += " ...";
+            }
+
             return s;
         }
     }
@@ -64,7 +67,9 @@ public class BufferBytes : IEnumerable<byte>
     public void Set(IList<byte> bytes)
     {
         for (var offset = 0; offset < _buffer.Length; offset++)
+        {
             _buffer[offset] = bytes[offset];
+        }
     }
 
     /// <summary>

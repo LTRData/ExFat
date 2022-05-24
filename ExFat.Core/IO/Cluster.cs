@@ -11,7 +11,7 @@ using System.Diagnostics;
 /// Represents a cluster value
 /// </summary>
 [DebuggerDisplay("{" + nameof(Value) + "}")]
-public struct Cluster
+public readonly struct Cluster
 {
     /// <summary>
     /// Gets the value.
@@ -76,9 +76,13 @@ public struct Cluster
     public Cluster(UInt32 cluster)
     {
         if (cluster >= Reserved32)
+        {
             Value = (int)cluster;
+        }
         else
+        {
             Value = cluster;
+        }
     }
 
     /// <summary>
@@ -148,7 +152,10 @@ public struct Cluster
     public static Cluster operator +(Cluster cluster, long offset)
     {
         if (!cluster.IsData)
+        {
             throw new InvalidOperationException();
+        }
+
         return new Cluster(cluster.Value + offset);
     }
 
@@ -164,7 +171,10 @@ public struct Cluster
     public static Cluster operator -(Cluster cluster, long offset)
     {
         if (!cluster.IsData)
+        {
             throw new InvalidOperationException();
+        }
+
         return new Cluster(cluster.Value - offset);
     }
 
@@ -179,7 +189,10 @@ public struct Cluster
     public static Cluster operator --(Cluster cluster)
     {
         if (!cluster.IsData)
+        {
             throw new InvalidOperationException();
+        }
+
         return new Cluster(cluster.Value - 1);
     }
 
@@ -219,7 +232,10 @@ public struct Cluster
     public override bool Equals(object obj)
     {
         if (obj is Cluster cluster)
+        {
             return Value == cluster.Value;
+        }
+
         return false;
     }
 

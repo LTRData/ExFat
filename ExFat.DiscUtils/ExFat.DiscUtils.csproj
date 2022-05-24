@@ -16,6 +16,10 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\ExFat.Core\ExFat.Core.csproj" />
   </ItemGroup>
   

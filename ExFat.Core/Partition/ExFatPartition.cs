@@ -90,14 +90,21 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     private ExFatPartition(Stream partitionStream, ExFatOptions options, bool readBootsector)
     {
         if (!partitionStream.CanSeek)
+        {
             throw new ArgumentException("Given stream must be seekable");
+        }
+
         if (!partitionStream.CanRead)
+        {
             throw new ArgumentException("Given stream must be readable");
+        }
 
         _partitionStream = partitionStream;
         _options = options;
         if (readBootsector)
+        {
             BootSector = ReadBootSector(_partitionStream);
+        }
     }
 
     /// <summary>
@@ -125,7 +132,10 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     {
         FlushAllocationBitmap();
         lock (_fatLock)
+        {
             FlushFatPage();
+        }
+
         FlushPartitionStream();
     }
 
@@ -166,7 +176,9 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
 
         // it probably not a valid exFAT boot sector, so don't dig any further
         if (sectorSize is < 512 or > 4096)
+        {
             return defaultBootSector;
+        }
 
         var fullData = new byte[sectorSize * 12];
 
@@ -235,7 +247,9 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     private byte[] GetFatPageFromIndex(long fatPageIndex)
     {
         if (_fatPage == null)
+        {
             _fatPage = new byte[FatPageSize];
+        }
 
         if (fatPageIndex != _fatPageIndex)
         {
@@ -261,7 +275,10 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             WriteSectors(BootSector.FatOffsetSector.Value + _fatPageIndex * SectorsPerFatPage, _fatPage, SectorsPerFatPage);
             // optionnally update second
             if (BootSector.NumberOfFats.Value == 2)
+            {
                 WriteSectors(BootSector.FatOffsetSector.Value + BootSector.FatLengthSectors.Value + _fatPageIndex * SectorsPerFatPage, _fatPage, SectorsPerFatPage);
+            }
+
             _fatPageDirty = false;
         }
     }
@@ -299,12 +316,19 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             for (ulong offset = 0; offset < length; offset += (ulong)BytesPerCluster)
             {
                 if (cluster.IsLast)
+                {
                     yield break;
+                }
+
                 yield return cluster;
                 if (dataDescriptor.Contiguous)
+                {
                     cluster++;
+                }
                 else
+                {
                     cluster = GetNextCluster(cluster);
+                }
             }
         }
     }
@@ -325,11 +349,16 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             var b = LittleEndian.GetBytes((UInt32)nextCluster.Value);
             var fatPageOffset = clusterIndex * sizeof(UInt32);
             if (b[0] == fatPage[fatPageOffset] && b[1] == fatPage[fatPageOffset + 1] && b[2] == fatPage[fatPageOffset + 2] && b[3] == fatPage[fatPageOffset + 3])
+            {
                 return;
+            }
+
             Buffer.BlockCopy(b, 0, fatPage, fatPageOffset, sizeof(Int32));
             _fatPageDirty = true;
             if (!_options.HasAny(ExFatOptions.DelayWrite))
+            {
                 FlushFatPage();
+            }
         }
     }
 
@@ -341,7 +370,10 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
         {
             var fatPage = GetFatPageFromIndex(pageIndex);
             if (fatPage.All(b => b == 0))
+            {
                 continue;
+            }
+
             Array.Clear(fatPage, 0, fatPage.Length);
             _fatPageDirty = true;
         }
@@ -370,7 +402,9 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
         var allocationBitmap = GetAllocationBitmap();
         // TODO: optimize to write all only once
         foreach (var cluster in GetClusters(dataDescriptor))
+        {
             allocationBitmap.Free(cluster);
+        }
     }
 
     /// <inheritdoc />
@@ -402,11 +436,19 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     public void ReadCluster(Cluster cluster, byte[] clusterBuffer, int offset, int length)
     {
         if (length + offset > BytesPerCluster)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (length < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (offset < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(offset));
+        }
 
         _streamLock.Wait();
         try
@@ -440,11 +482,19 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     public async Task ReadClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken)
     {
         if (length + offset > BytesPerCluster)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (length < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (offset < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(offset));
+        }
 
         await _streamLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
@@ -477,11 +527,20 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     public void WriteCluster(Cluster cluster, byte[] clusterBuffer, int offset, int length)
     {
         if (length + offset > BytesPerCluster)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (length < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (offset < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(offset));
+        }
+
         _streamLock.Wait();
         try
         {
@@ -514,11 +573,20 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     public async Task WriteClusterAsync(Cluster cluster, byte[] clusterBuffer, int offset, int length, CancellationToken cancellationToken)
     {
         if (length + offset > BytesPerCluster)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (length < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(length));
+        }
+
         if (offset < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(offset));
+        }
+
         await _streamLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
@@ -600,7 +668,9 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     private ClusterStream OpenClusterStream(DataDescriptor dataDescriptor, FileAccess fileAccess, Action<DataDescriptor> onDisposed = null)
     {
         if (fileAccess == FileAccess.Read)
+        {
             return new ClusterStream(this, null, dataDescriptor, onDisposed);
+        }
         // write and read/write will be the same
         return new ClusterStream(this, this, dataDescriptor, onDisposed);
     }
@@ -615,7 +685,10 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     public ClusterStream OpenDataStream(DataDescriptor dataDescriptor, FileAccess fileAccess, Action<DataDescriptor> onDisposed = null)
     {
         if (dataDescriptor == null)
+        {
             return null;
+        }
+
         return OpenClusterStream(dataDescriptor, fileAccess, onDisposed);
     }
 
@@ -653,7 +726,9 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
                 _upCaseTable.Read(upCaseTableStream);
             }
             else
+            {
                 _upCaseTable.SetDefault();
+            }
         }
         return _upCaseTable;
     }

@@ -20,8 +20,10 @@ public class BufferWideString : IValueProvider<string>
     private IEnumerable<char> GetChars()
     {
         var all = _buffer.GetBytes();
-        for (int index = 0; index < all.Length; index += 2)
+        for (var index = 0; index < all.Length; index += 2)
+        {
             yield return ToChar(all[index], all[index + 1]);
+        }
     }
 
     private IEnumerable<char> GetZeroChars()
@@ -29,7 +31,10 @@ public class BufferWideString : IValueProvider<string>
         foreach (var b in GetChars())
         {
             if (b == 0)
+            {
                 break;
+            }
+
             yield return b;
         }
     }

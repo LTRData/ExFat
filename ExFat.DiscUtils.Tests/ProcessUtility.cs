@@ -40,7 +40,9 @@ public static class ProcessUtility
         process.OutputDataReceived += delegate(object sender, DataReceivedEventArgs e)
         {
             if (e.Data != null)
+            {
                 resultBuilder.AppendLine(e.Data);
+            }
         };
 
         try
@@ -59,7 +61,9 @@ public static class ProcessUtility
         }
 
         if (!waitForExit)
+        {
             return Tuple.Create(process.Id, (string) null);
+        }
 
         process.BeginOutputReadLine();
         process.WaitForExit();

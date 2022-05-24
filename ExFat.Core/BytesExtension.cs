@@ -22,8 +22,11 @@ public static class BytesExtension
     public static UInt16 GetChecksum16(this byte[] bytes, int offset, int count, UInt16 checksum = 0)
     {
         count += offset;
-        for (int index = offset; index < count; index++)
+        for (var index = offset; index < count; index++)
+        {
             checksum = (UInt16)(checksum.RotateRight() + bytes[index]);
+        }
+
         return checksum;
     }
 
@@ -38,8 +41,11 @@ public static class BytesExtension
     public static UInt32 GetChecksum32(this byte[] bytes, int offset, int count, UInt32 checksum = 0)
     {
         count += offset;
-        for (int index = offset; index < count; index++)
+        for (var index = offset; index < count; index++)
+        {
             checksum = checksum.RotateRight() + bytes[index];
+        }
+
         return checksum;
     }
 }

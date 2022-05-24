@@ -28,20 +28,22 @@ public static class Program
 
     public static void Main4(string[] _)
     {
-        string label = "Zap!";
-        long capacity = 2L << 40;
-        int blockSize = 4 << 20;
+        var label = "Zap!";
+        var capacity = 2L << 40;
+        var blockSize = 4 << 20;
         using var diskStream = File.Create("big.vhdx");
         using var disk = Disk.InitializeDynamic(diskStream, Ownership.Dispose, capacity, Geometry.FromCapacity(blockSize));
         var gpt = GuidPartitionTable.Initialize(disk);
         gpt.Create(gpt.FirstUsableSector, gpt.LastUsableSector, GuidPartitionTypes.WindowsBasicData, 0, null);
         var volume = VolumeManager.GetPhysicalVolumes(disk).First();
-        uint bytesPerSector = (uint)(volume.PhysicalGeometry?.BytesPerSector ?? 512);
+        var bytesPerSector = (uint)(volume.PhysicalGeometry?.BytesPerSector ?? 512);
         var clusterCount = 1 << 25;// uint.MaxValue - 16;
         var clusterSize = capacity / clusterCount;
         var clusterBits = (int)Math.Ceiling(Math.Log(clusterSize) / Math.Log(2));
         if (clusterBits > 18)
+        {
             clusterBits = 18;
+        }
         //clusterBits = 20;
         using var fs = ExFatFileSystem.Format(volume, new ExFatFormatOptions { SectorsPerCluster = (1u << clusterBits) / bytesPerSector }, label: label);
     }
@@ -111,7 +113,7 @@ public static class Program
         // A folder full of garbage
         var longDirectoryPath = Path.Combine(drive, DiskContent.LongFolderFileName);
         Directory.CreateDirectory(longDirectoryPath);
-        for (int subFileIndex = 0; subFileIndex < DiskContent.LongFolderEntriesCount; subFileIndex++)
+        for (var subFileIndex = 0; subFileIndex < DiskContent.LongFolderEntriesCount; subFileIndex++)
         {
             var path = Path.Combine(longDirectoryPath, Guid.NewGuid().ToString("N"));
             using var t = File.CreateText(path);

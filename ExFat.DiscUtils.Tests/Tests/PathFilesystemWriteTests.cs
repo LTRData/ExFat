@@ -82,7 +82,10 @@ public class PathFilesystemWriteTests
             {
                 filesystem.CreateDirectory("a");
                 using (var s = filesystem.Open(@"a\b.txt", FileMode.Create, FileAccess.ReadWrite))
+                {
                     s.WriteByte(66);
+                }
+
                 using (var r = filesystem.Open(@"a\b.txt", FileMode.Open, FileAccess.Read))
                 {
                     Assert.AreEqual(66, r.ReadByte());

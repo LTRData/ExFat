@@ -79,9 +79,14 @@ public class StreamExtensionExFatDirectoryEntry : ExFatDirectoryEntry, IDataProv
         {
             FirstCluster.Value = value.FirstCluster.ToUInt32();
             if (value.Contiguous)
+            {
                 GeneralSecondaryFlags.Value |= ExFatGeneralSecondaryFlags.NoFatChain;
+            }
             else
+            {
                 GeneralSecondaryFlags.Value &= ~ExFatGeneralSecondaryFlags.NoFatChain;
+            }
+
             DataLength.Value = value.PhysicalLength;
             ValidDataLength.Value = value.LogicalLength;
         }

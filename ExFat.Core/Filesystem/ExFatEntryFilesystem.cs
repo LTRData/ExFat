@@ -60,7 +60,10 @@ public class ExFatEntryFilesystem : IDisposable
         get
         {
             if (_rootDirectory == null)
+            {
                 _rootDirectory = CreateRootDirectory();
+            }
+
             return _rootDirectory;
         }
     }
@@ -111,9 +114,14 @@ public class ExFatEntryFilesystem : IDisposable
     public IEnumerable<ExFatFilesystemEntry> EnumerateFileSystemEntries(ExFatFilesystemEntry directoryEntry)
     {
         if (directoryEntry == null)
+        {
             throw new ArgumentNullException(nameof(directoryEntry));
+        }
+
         if (!directoryEntry.IsDirectory)
+        {
             throw new InvalidOperationException();
+        }
 
         lock (_entryLock)
         {
@@ -121,7 +129,9 @@ public class ExFatEntryFilesystem : IDisposable
             {
                 // keep only file entries
                 if (metaEntry.Primary is FileExFatDirectoryEntry)
+                {
                     yield return new ExFatFilesystemEntry(directoryEntry.DataDescriptor, metaEntry);
+                }
             }
         }
     }
@@ -136,10 +146,14 @@ public class ExFatEntryFilesystem : IDisposable
     public ExFatFilesystemEntry FindChild(ExFatFilesystemEntry directoryEntry, string name)
     {
         if (directoryEntry == null)
+        {
             throw new ArgumentNullException(nameof(directoryEntry));
+        }
 
         if (!directoryEntry.IsDirectory)
+        {
             throw new InvalidOperationException();
+        }
 
         var nameHash = _partition.ComputeNameHash(name);
         lock (_entryLock)
@@ -149,7 +163,9 @@ public class ExFatEntryFilesystem : IDisposable
                 var streamExtension = metaEntry.SecondaryStreamExtension;
                 // keep only file entries
                 if (streamExtension != null && streamExtension.NameHash.Value == nameHash && metaEntry.ExtensionsFileName == name)
+                {
                     return new ExFatFilesystemEntry(directoryEntry.DataDescriptor, metaEntry);
+                }
             }
         }
         return null;
@@ -165,7 +181,9 @@ public class ExFatEntryFilesystem : IDisposable
     public Stream OpenFile(ExFatFilesystemEntry fileEntry, FileAccess access)
     {
         if (fileEntry.IsDirectory)
+        {
             throw new InvalidOperationException();
+        }
 
         return OpenData(fileEntry, access);
     }
@@ -179,7 +197,9 @@ public class ExFatEntryFilesystem : IDisposable
     public Stream CreateFile(ExFatFilesystemEntry parentDirectory, string fileName)
     {
         if (!parentDirectory.IsDirectory)
+        {
             throw new InvalidOperationException();
+        }
 
         var existingFile = FindChild(parentDirectory, fileName);
         if (existingFile != null)
@@ -203,7 +223,9 @@ public class ExFatEntryFilesystem : IDisposable
     private void UpdateEntry(ExFatFilesystemEntry entry, FileAccess fileAccess, DataDescriptor dataDescriptor)
     {
         if (entry?.MetaEntry == null)
+        {
             return;
+        }
 
         DateTimeOffset? now = null;
         var file = (FileExFatDirectoryEntry)entry.MetaEntry.Primary;
@@ -223,9 +245,14 @@ public class ExFatEntryFilesystem : IDisposable
             file.LastWriteDateTimeOffset.Value = now.Value;
             var stream = entry.MetaEntry.SecondaryStreamExtension;
             if (dataDescriptor.Contiguous)
+            {
                 stream.GeneralSecondaryFlags.Value |= ExFatGeneralSecondaryFlags.NoFatChain;
+            }
             else
+            {
                 stream.GeneralSecondaryFlags.Value &= ~ExFatGeneralSecondaryFlags.NoFatChain;
+            }
+
             stream.FirstCluster.Value = (uint)dataDescriptor.FirstCluster.Value;
             stream.ValidDataLength.Value = dataDescriptor.LogicalLength;
             stream.DataLength.Value = dataDescriptor.PhysicalLength;
@@ -267,7 +294,7 @@ public class ExFatEntryFilesystem : IDisposable
                     NameHash = {Value = _partition.ComputeNameHash(name)},
                 }
             };
-        for (int nameIndex = 0; nameIndex < name.Length; nameIndex += 15)
+        for (var nameIndex = 0; nameIndex < name.Length; nameIndex += 15)
         {
             var namePart = name.Substring(nameIndex, Math.Min(15, name.Length - nameIndex));
             entries.Add(new FileNameExtensionExFatDirectoryEntry(new Buffer(new byte[32]))
@@ -292,10 +319,14 @@ public class ExFatEntryFilesystem : IDisposable
     public ExFatFilesystemEntry CreateDirectory(ExFatFilesystemEntry parentDirectoryEntry, string directoryName)
     {
         if (parentDirectoryEntry == null)
+        {
             throw new ArgumentNullException(nameof(parentDirectoryEntry));
+        }
 
         if (!parentDirectoryEntry.IsDirectory)
+        {
             throw new InvalidOperationException();
+        }
 
         lock (_entryLock)
         {
@@ -303,7 +334,10 @@ public class ExFatEntryFilesystem : IDisposable
             if (existingEntry != null)
             {
                 if (!existingEntry.IsDirectory)
+                {
                     throw new IOException();
+                }
+
                 return existingEntry;
             }
 
@@ -330,7 +364,10 @@ public class ExFatEntryFilesystem : IDisposable
         {
             _partition.Free(entry.DataDescriptor);
             foreach (var e in entry.MetaEntry.Entries)
+            {
                 e.EntryType.Value &= ~ExFatDirectoryEntryType.InUse;
+            }
+
             Update(entry);
         }
     }
@@ -346,7 +383,9 @@ public class ExFatEntryFilesystem : IDisposable
             if (entry.IsDirectory)
             {
                 foreach (var childEntry in EnumerateFileSystemEntries(entry))
+                {
                     DeleteTree(childEntry);
+                }
             }
             Delete(entry);
         }
@@ -359,7 +398,9 @@ public class ExFatEntryFilesystem : IDisposable
     public void Update(ExFatFilesystemEntry entry)
     {
         lock (_entryLock)
+        {
             _partition.UpdateEntry(entry.ParentDataDescriptor, entry.MetaEntry);
+        }
     }
 
     /// <summary>
@@ -396,7 +437,10 @@ public class ExFatEntryFilesystem : IDisposable
             UpdateEntry(targetDirectory, FileAccess.ReadWrite, newDataDescriptor);
             // and mark previous as deleted
             foreach (var e in source.MetaEntry.Entries)
+            {
                 e.EntryType.Value &= ~ExFatDirectoryEntryType.InUse;
+            }
+
             Update(source);
         }
     }

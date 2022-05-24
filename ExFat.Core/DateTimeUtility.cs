@@ -56,12 +56,20 @@ public static class DateTimeUtility
     public static TimeSpan FromTimeZoneOffset(Byte offset)
     {
         if (offset < 0x80)
+        {
             return TimeSpan.Zero;
+        }
+
         double hoursOffset;
         if (offset < 0xD0)
+        {
             hoursOffset = (offset - 0x80) * 0.25;
+        }
         else
+        {
             hoursOffset = (offset - 0x100) * 0.25;
+        }
+
         var timeSpanOffset = TimeSpan.FromHours(hoursOffset);
         return timeSpanOffset;
     }
@@ -75,7 +83,10 @@ public static class DateTimeUtility
     {
         var quartersOffset = (int)timeSpanOffset.TotalHours * 4;
         if (quartersOffset < 0)
+        {
             return (byte)(0x100 + quartersOffset);
+        }
+
         return (byte)(0x80 + quartersOffset);
     }
 
@@ -90,7 +101,10 @@ public static class DateTimeUtility
     {
         // unspecifed in our ExFat context means "local with unspecified zone", so it's the base to local, thus is it like local+0, which is UTC
         if (dateTime.Kind == DateTimeKind.Unspecified)
+        {
             dateTime = new DateTime(dateTime.Ticks, DateTimeKind.Utc);
+        }
+
         var dateTimeOffset = new DateTimeOffset(dateTime).ToOffset(offset);
         return dateTimeOffset;
     }

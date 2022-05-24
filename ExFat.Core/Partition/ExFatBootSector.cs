@@ -227,7 +227,9 @@ public class ExFatBootSector
                 || checksum[1] != _bytes[lastSectorOffset++]
                 || checksum[2] != _bytes[lastSectorOffset++]
                 || checksum[3] != _bytes[lastSectorOffset++])
+            {
                 return false;
+            }
         }
         return true;
     }

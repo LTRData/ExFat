@@ -38,7 +38,10 @@ public class ExFatPathFilesystem : IDisposable
         public Path GetParent()
         {
             if (Length == 0)
+            {
                 return null;
+            }
+
             return new Path(_allParts, Length - 1);
         }
 
@@ -74,7 +77,10 @@ public class ExFatPathFilesystem : IDisposable
             lock (_children)
             {
                 if (!_children.TryGetValue(childName, out var node))
+                {
                     return null;
+                }
+
                 if (_filesystem.HasExpired(node._generation))
                 {
                     _children.Remove(childName);
@@ -89,14 +95,19 @@ public class ExFatPathFilesystem : IDisposable
         {
             var child = new Node(entry, _filesystem) { _parent = this };
             lock (_children)
+            {
                 _children[path.Name] = child;
+            }
+
             return child;
         }
 
         public void RemoveChild(string childName)
         {
             lock (_children)
+            {
                 _children.Remove(childName);
+            }
         }
 
         public void Remove()
@@ -113,7 +124,9 @@ public class ExFatPathFilesystem : IDisposable
             }
             var keyValue = _parent._children.FirstOrDefault(kv => kv.Value == this);
             if (keyValue.Value == this)
+            {
                 _parent.RemoveChild(keyValue.Key);
+            }
         }
     }
 
@@ -224,16 +237,23 @@ public class ExFatPathFilesystem : IDisposable
     private Node GetNode(Path path)
     {
         if (path == null)
+        {
             throw new ArgumentNullException();
+        }
+
         if (path.Length == 0)
+        {
             return _rootNode;
+        }
 
         lock (_entriesLock)
         {
             var parentNode = GetNode(path.GetParent());
             var node = parentNode.GetChild(path.Name);
             if (node != null)
+            {
                 return node;
+            }
 
             return GetNode(parentNode, path);
         }
@@ -266,7 +286,10 @@ public class ExFatPathFilesystem : IDisposable
     {
         // on root entries, the direct name is returned
         if (literalParentPath == "")
+        {
             return fileName;
+        }
+
         return $"{literalParentPath}{PathSeparators[0]}{fileName}";
     }
 
@@ -274,7 +297,10 @@ public class ExFatPathFilesystem : IDisposable
     {
         var node = GetNode(path);
         if (node.Entry == null)
+        {
             throw new FileNotFoundException();
+        }
+
         return node;
     }
 
@@ -282,7 +308,10 @@ public class ExFatPathFilesystem : IDisposable
     {
         var directory = GetSafeNode(directoryPath);
         if (!directory.Entry.IsDirectory)
+        {
             throw new IOException();
+        }
+
         return directory;
     }
 
@@ -315,8 +344,10 @@ public class ExFatPathFilesystem : IDisposable
         var directoryPath = ParsePath(literalDirectoryPath);
         var directoryNode = GetSafeDirectoryNode(directoryPath);
         lock (_entriesLock)
+        {
             return _entryFilesystem.EnumerateFileSystemEntries(directoryNode.Entry)
                 .Select(e => new ExFatEntryInformation(_entryFilesystem, e, GetLiteralPath(directoryPath, e))).ToArray();
+        }
     }
 
     /// <summary>
@@ -399,7 +430,10 @@ public class ExFatPathFilesystem : IDisposable
         {
             var existingDirectory = GetNode(path);
             if (existingDirectory.Entry != null)
+            {
                 return existingDirectory;
+            }
+
             var parentDirectory = CreateDirectoryNode(path.GetParent());
             var directoryEntry = _entryFilesystem.CreateDirectory(parentDirectory.Entry, path.Name);
             return parentDirectory.NewChild(path, directoryEntry);
@@ -428,7 +462,9 @@ public class ExFatPathFilesystem : IDisposable
             if (node.Entry.IsDirectory)
             {
                 if (_entryFilesystem.EnumerateFileSystemEntries(node.Entry).Any())
+                {
                     throw new IOException();
+                }
             }
             _entryFilesystem.Delete(node.Entry);
             node.Remove();
@@ -449,7 +485,9 @@ public class ExFatPathFilesystem : IDisposable
             if (entry.Entry.IsDirectory)
             {
                 foreach (var childPath in EnumerateEntries(cleanPath.ToLiteral(PathSeparators[0])))
+                {
                     DeleteTree(childPath.Path);
+                }
             }
             Delete(literalPath);
         }
@@ -467,7 +505,10 @@ public class ExFatPathFilesystem : IDisposable
             var cleanPath = ParsePath(literalPath);
             var node = GetNode(cleanPath);
             if (node.Entry == null)
+            {
                 return null;
+            }
+
             return new ExFatEntryInformation(_entryFilesystem, node.Entry, cleanPath.ToLiteral(PathSeparators[0]));
         }
     }
@@ -490,26 +531,44 @@ public class ExFatPathFilesystem : IDisposable
             var path = ParsePath(literalPath);
             var parentEntry = GetNode(path.GetParent());
             if (parentEntry == null || !parentEntry.Entry.IsDirectory)
+            {
                 throw new DirectoryNotFoundException();
+            }
+
             var child = _entryFilesystem.FindChild(parentEntry.Entry, path.Name);
             // not existing?
             if (child == null)
             {
                 if (mode == FileMode.Append || mode == FileMode.Open || mode == FileMode.Truncate)
+                {
                     throw new FileNotFoundException();
+                }
+
                 parentEntry.RemoveChild(path.Name);
                 return _entryFilesystem.CreateFile(parentEntry.Entry, path.Name);
             }
 
             if (child.IsDirectory)
+            {
                 throw new IOException();
+            }
+
             if (mode == FileMode.CreateNew)
+            {
                 throw new IOException();
+            }
+
             var stream = _entryFilesystem.OpenFile(child, access);
             if (mode == FileMode.Truncate)
+            {
                 stream.SetLength(0);
+            }
+
             if (mode == FileMode.Append)
+            {
                 stream.Seek(0, SeekOrigin.End);
+            }
+
             return stream;
         }
     }
@@ -525,17 +584,24 @@ public class ExFatPathFilesystem : IDisposable
         lock (_entriesLock)
         {
             if (targetDirectoryLiteralPath == null && targetName == null)
+            {
                 throw new ArgumentNullException(nameof(targetDirectoryLiteralPath), "Either targetDirectory or targetName has to be provided");
+            }
 
             var sourcePath = ParsePath(sourceLiteralPath);
             var targetDirectory = targetDirectoryLiteralPath == null ? sourcePath.GetParent() : ParsePath(targetDirectoryLiteralPath);
 
             var sourceEntry = GetNode(sourcePath);
             if (sourceEntry == null)
+            {
                 throw new FileNotFoundException();
+            }
+
             var targetDirectoryEntry = GetNode(targetDirectory);
             if (targetDirectoryEntry == null)
+            {
                 throw new FileNotFoundException();
+            }
 
             _entryFilesystem.Move(sourceEntry.Entry, targetDirectoryEntry.Entry, targetName);
             sourceEntry.Remove();

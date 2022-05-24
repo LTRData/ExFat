@@ -41,10 +41,14 @@ internal class TestEnvironment : IDisposable
                 {
                     var t = CheckDisk();
                     if (!t.Item1)
+                    {
                         Assert.Fail("VHDX filesystem is found corrupted by CHKDSK: " + t.Item2);
+                    }
                 }
                 else
+                {
                     Assert.Inconclusive("Not elevated");
+                }
             }
             finally
             {
@@ -59,7 +63,7 @@ internal class TestEnvironment : IDisposable
         RunDiskPart("attach", VhdxPath);
         var newDrives = DriveInfo.GetDrives();
         var mountedDrive = newDrives.FirstOrDefault(d => previousDrives.All(p => p.Name != d.Name));
-        bool success = true;
+        var success = true;
         string checkResult = null;
         if (mountedDrive != null)
         {

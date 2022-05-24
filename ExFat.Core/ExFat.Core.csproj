@@ -16,6 +16,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
 
     <Reference Include="DiscUtils.Streams">
       <HintPath>$(DiscUtilsPath)\DiscUtils.Streams.dll</HintPath>

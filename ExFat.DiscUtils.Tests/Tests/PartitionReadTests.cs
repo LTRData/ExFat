@@ -50,13 +50,18 @@ public class PartitionReadTests
             foreach (var offset in range)
             {
                 if (forceSeek)
+                {
                     stream.Seek(offset, SeekOrigin.Begin);
+                }
+
                 stream.Read(vb, 0, vb.Length);
                 var v = LittleEndian.ToUInt64(vb);
                 Assert.AreEqual(v, getValueAtOffset((ulong) offset));
             }
             if (forward)
+            {
                 Assert.AreEqual(0, stream.Read(vb, 0, vb.Length));
+            }
         }
     }
 

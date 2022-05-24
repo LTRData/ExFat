@@ -25,17 +25,26 @@ partial class ExFatFileSystem
     {
         var lastIndex = path.LastIndexOfAny(PathSeparators);
         if (lastIndex < 0)
+        {
             return path;
+        }
+
         return path.Substring(lastIndex + 1);
     }
 
     private string GetDirectoryName(string path)
     {
         if (path == "")
+        {
             return null;
+        }
+
         var lastIndex = path.LastIndexOfAny(PathSeparators);
         if (lastIndex < 0)
+        {
             return "";
+        }
+
         return path.Substring(0, lastIndex);
     }
 }

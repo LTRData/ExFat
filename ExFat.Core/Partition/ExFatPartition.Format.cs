@@ -29,7 +29,10 @@ partial class ExFatPartition
         var totalSectors = volumeSpace / bytesPerSector;
         var sectorsPerCluster = options?.SectorsPerCluster ?? ComputeSectorsPerCluster(totalSectors);
         if (sectorsPerCluster > 1 << 25)
+        {
             throw new ArgumentException("Sectors per cluster can not exceed 2^25");
+        }
+
         const uint fats = 1;
         const uint usedFats = fats;
         const uint bootSectors = 12;
@@ -48,7 +51,10 @@ partial class ExFatPartition
         bootSector.ClusterOffsetSector.Value = Align(bootSector.FatOffsetSector.Value + usedFats * bootSector.FatLengthSectors.Value, bytesPerSector);
         totalClusters = (uint)((volumeSpace / bytesPerSector - bootSector.ClusterOffsetSector.Value) / sectorsPerCluster);
         if (totalClusters > 0xFFFFFFF0)
+        {
             throw new ArgumentException("clusters are too small to address full disk");
+        }
+
         bootSector.ClusterCount.Value = totalClusters;
         bootSector.VolumeSerialNumber.Value = (uint)new Random().Next();
         bootSector.FileSystemRevision.Value = 256;
@@ -58,7 +64,7 @@ partial class ExFatPartition
         bootSector.NumberOfFats.Value = (byte)fats;
         bootSector.DriveSelect.Value = 0x80;
         bootSector.PercentInUse.Value = 0xFF;
-        for (int sectorIndex = 0; sectorIndex <= 8; sectorIndex++)
+        for (var sectorIndex = 0; sectorIndex <= 8; sectorIndex++)
         {
             bootSectorBytes[sectorIndex * bytesPerSector + bytesPerSector - 2] = 0x55;
             bootSectorBytes[sectorIndex * bytesPerSector + bytesPerSector - 1] = 0xAA;
@@ -114,11 +120,20 @@ partial class ExFatPartition
         // Also, remember 1 KB = 1<<10, 1 GB = 1<<20, 1 TB = 1<<30
         const int refSectorBits = 9; // 512 B
         if (totalSectors <= 256 << (20 - refSectorBits))
+        {
             return 4 << (10 - refSectorBits);
+        }
+
         if (totalSectors <= 32 << (30 - refSectorBits))
+        {
             return 32 << (10 - refSectorBits);
+        }
+
         if (totalSectors <= 256 << (30 - refSectorBits))
+        {
             return 128 << (10 - refSectorBits);
+        }
+
         throw new ArgumentException("Sectors per cluster value has to be provided");
     }
 
@@ -126,7 +141,10 @@ partial class ExFatPartition
     {
         const int alignment = 4 << 10; // 4K alignmet
         if (bytesPerSector > alignment)
+        {
             return value;
+        }
+
         var r = alignment / bytesPerSector - 1;
         return (value + r) & ~r;
     }
@@ -134,7 +152,10 @@ partial class ExFatPartition
     private static void CreateVolumeLabel(ClusterStream directoryStream, string volumeLabel)
     {
         if (volumeLabel == null)
+        {
             return;
+        }
+
         var volumeLabelEntry = new VolumeLabelExFatDirectoryEntry(new Buffer(new byte[32]));
         volumeLabelEntry.EntryType.Value = ExFatDirectoryEntryType.VolumeLabel | ExFatDirectoryEntryType.InUse;
         volumeLabelEntry.VolumeLabel = volumeLabel;
@@ -149,7 +170,10 @@ partial class ExFatPartition
 
         var dataDescriptor = new DataDescriptor(0, false, 0, 0);
         using (var allocationBitmapStream = partition.OpenClusterStream(dataDescriptor, FileAccess.ReadWrite, d => dataDescriptor = d))
+        {
             allocationBitmap.Write(allocationBitmapStream);
+        }
+
         var allocationBitmapEntry = new AllocationBitmapExFatDirectoryEntry(new Buffer(new byte[32]));
         allocationBitmapEntry.EntryType.Value = ExFatDirectoryEntryType.AllocationBitmap | ExFatDirectoryEntryType.InUse;
         allocationBitmapEntry.BitmapFlags.Value = 0;

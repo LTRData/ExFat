@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using DiscUtils.Streams;
+using DiscUtils.Streams.Compatibility;
 using Partition;
 using Buffer = System.Buffer;
 
@@ -17,7 +18,7 @@ using Buffer = System.Buffer;
 /// Stream, based on clusters chain
 /// </summary>
 /// <seealso cref="T:System.IO.Stream" />
-public class ClusterStream : Stream
+public class ClusterStream : CompatibilityStream
 {
     private readonly IClusterReader _clusterReader;
     private readonly IClusterWriter _clusterWriter;
@@ -59,13 +60,7 @@ public class ClusterStream : Stream
     /// Gets the length in bytes of the stream.
     /// </summary>
     /// <exception cref="T:System.NotSupportedException"></exception>
-    public override long Length
-    {
-        get
-        {
-            return _validDataLength;
-        }
-    }
+    public override long Length => _validDataLength;
 
     /// <inheritdoc />
     /// <summary>
@@ -110,7 +105,9 @@ public class ClusterStream : Stream
         FlushCurrentCluster();
         base.Dispose(disposing);
         if (disposing && _onDisposed != null)
+        {
             _onDisposed(new DataDescriptor(_startCluster, _contiguous, (ulong)_dataLength, (ulong)_validDataLength));
+        }
     }
 
     /// <inheritdoc />
@@ -120,7 +117,9 @@ public class ClusterStream : Stream
     public override void Flush()
     {
         if (!CanWrite)
+        {
             throw new NotSupportedException();
+        }
 
         FlushCurrentCluster();
     }
@@ -134,7 +133,6 @@ public class ClusterStream : Stream
         }
     }
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
@@ -142,7 +140,9 @@ public class ClusterStream : Stream
     public override Task FlushAsync(CancellationToken cancellationToken)
     {
         if (!CanWrite)
+        {
             throw new NotSupportedException();
+        }
 
         return FlushCurrentClusterAsync(cancellationToken);
     }
@@ -155,7 +155,6 @@ public class ClusterStream : Stream
             _currentClusterDirty = false;
         }
     }
-#endif
 
     /// <summary>Sets the position within the current stream.</summary>
     /// <param name="offset">A byte offset relative to the <paramref name="origin" /> parameter. </param>
@@ -175,9 +174,14 @@ public class ClusterStream : Stream
             _ => throw new ArgumentOutOfRangeException(nameof(origin), origin, null),
         };
         if (newPosition < 0)
+        {
             newPosition = 0;
+        }
+
         if (newPosition > _validDataLength)
+        {
             newPosition = _validDataLength;
+        }
 
         _position = newPosition;
         return _position;
@@ -192,7 +196,9 @@ public class ClusterStream : Stream
     public override void SetLength(long value)
     {
         if (!CanWrite || !CanSeek)
+        {
             throw new NotSupportedException();
+        }
 
         var position = Position;
 
@@ -211,13 +217,15 @@ public class ClusterStream : Stream
     public void SetDataLength(long dataLength)
     {
         if (!CanWrite || !CanSeek)
+        {
             throw new NotSupportedException();
+        }
 
         var position = Position;
 
         // first part: go to end, pushing limits if necessary
         var cluster = _startCluster;
-        for (int offset = 0; offset < dataLength; offset += _clusterReader.BytesPerCluster)
+        for (var offset = 0; offset < dataLength; offset += _clusterReader.BytesPerCluster)
         {
             _position = offset;
             SeekClusterFromPosition(true, true);
@@ -234,7 +242,9 @@ public class ClusterStream : Stream
         // now adjust
         _dataLength = dataLength;
         if (_validDataLength > _dataLength)
+        {
             _validDataLength = dataLength;
+        }
 
         // adjust position if necessary
         Seek(position, SeekOrigin.Begin);
@@ -248,12 +258,16 @@ public class ClusterStream : Stream
     public void SetValidDataLength(long validDataLength)
     {
         if (!CanWrite || !CanSeek)
+        {
             throw new NotSupportedException();
+        }
 
         var position = Position;
 
         if (validDataLength > _dataLength)
+        {
             throw new ArgumentException("validDataLength must be be lower than or equal to data length", nameof(validDataLength));
+        }
 
         _validDataLength = validDataLength;
 
@@ -265,7 +279,9 @@ public class ClusterStream : Stream
     {
         var clusterIndexFromPosition = CurrentClusterIndexFromPosition;
         if (clusterIndexFromPosition == _currentClusterIndex && !force)
+        {
             return;
+        }
 
         FlushCurrentCluster();
 
@@ -293,8 +309,10 @@ public class ClusterStream : Stream
             if (_contiguous && newCluster != previousCluster + 1)
             {
                 _contiguous = false;
-                for (int clusterIndex = 1; clusterIndex < clusterIndexFromPosition; clusterIndex++)
+                for (var clusterIndex = 1; clusterIndex < clusterIndexFromPosition; clusterIndex++)
+                {
                     _clusterWriter.SetNextCluster(_startCluster + clusterIndex - 1, _startCluster + clusterIndex);
+                }
             }
 
             _clusterWriter.SetNextCluster(previousCluster, newCluster);
@@ -307,7 +325,9 @@ public class ClusterStream : Stream
     private byte[] GetSeekedCluster()
     {
         if (!_currentCluster.IsData)
+        {
             return null;
+        }
 
         if (_currentClusterBuffer == null)
         {
@@ -316,18 +336,21 @@ public class ClusterStream : Stream
         }
 
         if (_currentClusterDataIndex == _currentClusterIndex)
+        {
             return _currentClusterBuffer;
+        }
 
         _currentClusterDataIndex = _currentClusterIndex;
         _clusterReader.ReadCluster(_currentCluster, _currentClusterBuffer, 0, _currentClusterBuffer.Length);
         return _currentClusterBuffer;
     }
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     private async Task<byte[]> GetSeekedClusterAsync(CancellationToken cancellationToken)
     {
         if (!_currentCluster.IsData)
+        {
             return null;
+        }
 
         if (_currentClusterBuffer == null)
         {
@@ -336,44 +359,64 @@ public class ClusterStream : Stream
         }
 
         if (_currentClusterDataIndex == _currentClusterIndex)
+        {
             return _currentClusterBuffer;
+        }
 
         _currentClusterDataIndex = _currentClusterIndex;
         await _clusterReader.ReadClusterAsync(_currentCluster, _currentClusterBuffer, 0, _currentClusterBuffer.Length, cancellationToken).ConfigureAwait(false);
         return _currentClusterBuffer;
     }
-#endif
 
     private Cluster GetClusterFromIndex(long index)
     {
         if (index < 0)
+        {
             return Cluster.Last;
+        }
+
         if (index == 0)
+        {
             return _startCluster;
+        }
         // -1 means buffer is new
         if (_currentClusterDataIndex == -1)
+        {
             return GetNextCluster(_startCluster, index);
+        }
+
         if (index > _currentClusterDataIndex)
+        {
             return GetNextCluster(_currentCluster, index - _currentClusterDataIndex);
+        }
+
         return GetNextCluster(_startCluster, index);
     }
 
     private Cluster GetNextCluster(Cluster cluster, long clustersCount)
     {
         if (clustersCount < 0)
+        {
             throw new ArgumentOutOfRangeException(nameof(cluster), "cluster must be >= 0");
+        }
 
         if (_contiguous)
         {
             var nextCluster = cluster + clustersCount;
             var lastContiguousCluster = _startCluster + ((_dataLength + _clusterReader.BytesPerCluster - 1) / _clusterReader.BytesPerCluster - 1);
             if (nextCluster.Value <= lastContiguousCluster.Value)
+            {
                 return nextCluster;
+            }
+
             return Cluster.Last;
         }
 
         for (var index = 0; index < clustersCount && !cluster.IsLast; index++)
+        {
             cluster = _clusterReader.GetNextCluster(cluster);
+        }
+
         return cluster;
     }
 
@@ -397,14 +440,23 @@ public class ClusterStream : Stream
             var toRead = Math.Min(remainingInCluster, count);
             var leftInFile = _validDataLength - _position;
             if (leftInFile == 0)
+            {
                 break;
+            }
+
             if (toRead > leftInFile)
+            {
                 toRead = (int)leftInFile;
+            }
+
             SeekClusterFromPosition(false, false);
             var currentCluster = GetSeekedCluster();
             // null means nothing left to read (for streams without length; with length we've exited before)
             if (currentCluster == null)
+            {
                 break;
+            }
+
             Buffer.BlockCopy(currentCluster, CurrentClusterOffset, buffer, offset, toRead);
             _position += toRead;
             offset += toRead;
@@ -414,7 +466,6 @@ public class ClusterStream : Stream
         return totalRead;
     }
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
@@ -453,14 +504,23 @@ public class ClusterStream : Stream
             var toRead = Math.Min(remainingInCluster, count);
             var leftInFile = _validDataLength - _position;
             if (leftInFile == 0)
+            {
                 break;
+            }
+
             if (toRead > leftInFile)
+            {
                 toRead = (int)leftInFile;
+            }
+
             SeekClusterFromPosition(false, false);
             var currentCluster = await GetSeekedClusterAsync(cancellationToken).ConfigureAwait(false);
             // null means nothing left to read (for streams without length; with length we've exited before)
             if (currentCluster == null)
+            {
                 break;
+            }
+
             Buffer.BlockCopy(currentCluster, CurrentClusterOffset, buffer, offset, toRead);
             _position += toRead;
             offset += toRead;
@@ -469,9 +529,7 @@ public class ClusterStream : Stream
         }
         return totalRead;
     }
-#endif
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
@@ -491,17 +549,26 @@ public class ClusterStream : Stream
             var toRead = Math.Min(remainingInCluster, buffer.Length);
             var leftInFile = _validDataLength - _position;
             if (leftInFile == 0)
+            {
                 break;
+            }
+
             if (toRead > leftInFile)
+            {
                 toRead = (int)leftInFile;
+            }
+
             SeekClusterFromPosition(false, false);
             var currentCluster = await GetSeekedClusterAsync(cancellationToken).ConfigureAwait(false);
             // null means nothing left to read (for streams without length; with length we've exited before)
             if (currentCluster == null)
+            {
                 break;
+            }
+
             currentCluster.AsMemory(CurrentClusterOffset, toRead).CopyTo(buffer);
             _position += toRead;
-            buffer = buffer[toRead..];
+            buffer = buffer.Slice(toRead);
             totalRead += toRead;
         }
         return totalRead;
@@ -525,22 +592,30 @@ public class ClusterStream : Stream
             var toRead = Math.Min(remainingInCluster, buffer.Length);
             var leftInFile = _validDataLength - _position;
             if (leftInFile == 0)
+            {
                 break;
+            }
+
             if (toRead > leftInFile)
+            {
                 toRead = (int)leftInFile;
+            }
+
             SeekClusterFromPosition(false, false);
             var currentCluster = GetSeekedCluster();
             // null means nothing left to read (for streams without length; with length we've exited before)
             if (currentCluster == null)
+            {
                 break;
+            }
+
             currentCluster.AsSpan(CurrentClusterOffset, toRead).CopyTo(buffer);
             _position += toRead;
-            buffer = buffer[toRead..];
+            buffer = buffer.Slice(toRead);
             totalRead += toRead;
         }
         return totalRead;
     }
-#endif
 
     /// <inheritdoc />
     /// <summary>
@@ -553,7 +628,9 @@ public class ClusterStream : Stream
     public override void Write(byte[] buffer, int offset, int count)
     {
         if (!CanWrite)
+        {
             throw new NotSupportedException();
+        }
 
         while (count > 0)
         {
@@ -567,15 +644,20 @@ public class ClusterStream : Stream
             _position += toWrite;
             // pushing the limits!
             if (_position > _validDataLength)
+            {
                 _validDataLength = _position;
+            }
+
             if (_position > _dataLength)
+            {
                 _dataLength = _position;
+            }
+
             offset += toWrite;
             count -= toWrite;
         }
     }
 
-#if NET45_OR_GREATER || NETSTANDARD || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
@@ -622,16 +704,20 @@ public class ClusterStream : Stream
             _position += toWrite;
             // pushing the limits!
             if (_position > _validDataLength)
+            {
                 _validDataLength = _position;
+            }
+
             if (_position > _dataLength)
+            {
                 _dataLength = _position;
+            }
+
             offset += toWrite;
             count -= toWrite;
         }
     }
-#endif
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP
     /// <inheritdoc />
     /// <summary>
     /// Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
@@ -653,15 +739,21 @@ public class ClusterStream : Stream
             var toWrite = Math.Min(remainingInCluster, buffer.Length);
             SeekClusterFromPosition(true, false);
             var currentCluster = await GetSeekedClusterAsync(cancellationToken).ConfigureAwait(false);
-            buffer[..toWrite].CopyTo(currentCluster.AsMemory(CurrentClusterOffset));
+            buffer.Slice(0, toWrite).CopyTo(currentCluster.AsMemory(CurrentClusterOffset));
             _currentClusterDirty = true;
             _position += toWrite;
             // pushing the limits!
             if (_position > _validDataLength)
+            {
                 _validDataLength = _position;
+            }
+
             if (_position > _dataLength)
+            {
                 _dataLength = _position;
-            buffer = buffer[toWrite..];
+            }
+
+            buffer = buffer.Slice(toWrite);
         }
     }
 
@@ -685,16 +777,21 @@ public class ClusterStream : Stream
             var toWrite = Math.Min(remainingInCluster, buffer.Length);
             SeekClusterFromPosition(true, false);
             var currentCluster = GetSeekedCluster();
-            buffer[..toWrite].CopyTo(currentCluster.AsSpan(CurrentClusterOffset));
+            buffer.Slice(0, toWrite).CopyTo(currentCluster.AsSpan(CurrentClusterOffset));
             _currentClusterDirty = true;
             _position += toWrite;
             // pushing the limits!
             if (_position > _validDataLength)
+            {
                 _validDataLength = _position;
+            }
+
             if (_position > _dataLength)
+            {
                 _dataLength = _position;
-            buffer = buffer[toWrite..];
+            }
+
+            buffer = buffer.Slice(toWrite);
         }
     }
-#endif
 }
