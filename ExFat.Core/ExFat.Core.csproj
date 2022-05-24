@@ -21,11 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-
-    <Reference Include="DiscUtils.Streams">
-      <HintPath>$(DiscUtilsPath)\DiscUtils.Streams.dll</HintPath>
-    </Reference>
-
+    <PackageReference Include="LTRData.DiscUtils.Streams" Version="1.0.0" />
   </ItemGroup>
   
 </Project>

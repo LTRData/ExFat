@@ -40,15 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DiscUtils.Core">
-      <HintPath>$(DiscUtilsPath)\DiscUtils.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Streams">
-      <HintPath>$(DiscUtilsPath)\DiscUtils.Streams.dll</HintPath>
-    </Reference>
-    <Reference Include="DiscUtils.Vhdx">
-      <HintPath>$(DiscUtilsPath)\DiscUtils.Vhdx.dll</HintPath>
-    </Reference>
+    <PackageReference Include="LTRData.DiscUtils.Core" Version="1.0.0" />
+    <PackageReference Include="LTRData.DiscUtils.Streams" Version="1.0.0" />
+    <PackageReference Include="LTRData.DiscUtils.Vhdx" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
