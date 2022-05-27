@@ -2,17 +2,14 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.Filesystem;
 using System;
 using System.IO;
-using System.Linq;
-using Environment;
-using Filesystem;
-using Xunit;
 
-
-[TestCategory("PathFilesystem")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "PathFilesystem")]
 public class PathFilesystemWriteTests
 {
     private static bool IsAlmostMoreRecentThan(DateTime test, DateTime reference)
@@ -24,7 +21,7 @@ public class PathFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateDirectory()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -37,7 +34,7 @@ public class PathFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateDirectoryTree()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -50,7 +47,7 @@ public class PathFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void DeleteTree()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -60,7 +57,7 @@ public class PathFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateFileTree()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -77,7 +74,7 @@ public class PathFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void MoveTree()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);

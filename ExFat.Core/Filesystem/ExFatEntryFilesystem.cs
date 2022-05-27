@@ -2,20 +2,20 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Filesystem;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
-using IO;
-using Partition;
-using Partition.Entries;
+using ExFat.IO;
+using ExFat.Partition;
+using ExFat.Partition.Entries;
 
+namespace ExFat.Filesystem;
 /// <summary>
 /// Filesystem access at low-level: entry manipulation
 /// (high level is <see cref="ExFatPathFilesystem"/> which works with paths)
 /// </summary>
-/// <seealso cref="System.IDisposable" />
+/// <seealso cref="IDisposable" />
 public class ExFatEntryFilesystem : IDisposable
 {
     private readonly ExFatOptions _options;
@@ -109,7 +109,7 @@ public class ExFatEntryFilesystem : IDisposable
     /// </summary>
     /// <param name="directoryEntry">The directory entry.</param>
     /// <returns></returns>
-    /// <exception cref="System.InvalidOperationException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public IEnumerable<ExFatFilesystemEntry> EnumerateFileSystemEntries(ExFatFilesystemEntry directoryEntry)
     {
         if (directoryEntry == null)
@@ -141,7 +141,7 @@ public class ExFatEntryFilesystem : IDisposable
     /// <param name="directoryEntry">The directory entry.</param>
     /// <param name="name">The name.</param>
     /// <returns></returns>
-    /// <exception cref="System.InvalidOperationException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public ExFatFilesystemEntry FindChild(ExFatFilesystemEntry directoryEntry, string name)
     {
         if (directoryEntry == null)

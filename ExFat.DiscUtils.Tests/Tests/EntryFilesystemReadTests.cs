@@ -2,20 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.Filesystem;
+using DiscUtils.Streams;
 using System.IO;
-using Environment;
-using Filesystem;
-using global::DiscUtils.Streams;
-using Xunit;
 
-
-[TestCategory("EntryFilesystem")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "EntryFilesystem")]
 public class EntryFilesystemReadTests
 {
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void FindFile()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -25,7 +23,7 @@ public class EntryFilesystemReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadFile()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -42,7 +40,7 @@ public class EntryFilesystemReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void UpdateLastAccessTime()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

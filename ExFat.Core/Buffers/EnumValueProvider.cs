@@ -2,16 +2,16 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers;
 
 using System.Diagnostics;
 
+namespace ExFat.Buffers;
 /// <summary>
 /// enum mapper, with variable sizez
 /// </summary>
 /// <typeparam name="TEnum">The type of the enum.</typeparam>
 /// <typeparam name="TBacking">The type of the backing.</typeparam>
-/// <seealso cref="ExFat.Buffers.IValueProvider{TEnum}" />
+/// <seealso cref="IValueProvider{TEnum}" />
 [DebuggerDisplay("{" + nameof(Value) + "}")]
 public class EnumValueProvider<TEnum, TBacking> : IValueProvider<TEnum>
 {

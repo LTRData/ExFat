@@ -2,18 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Diagnostics;
-using Buffers;
-using IO;
+using ExFat.Buffers;
+using ExFat.IO;
 
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Allocation bitmap directory entry
 /// </summary>
-/// <seealso cref="ExFat.Partition.Entries.ExFatDirectoryEntry" />
-/// <seealso cref="ExFat.IO.IDataProvider" />
+/// <seealso cref="ExFatDirectoryEntry" />
+/// <seealso cref="IDataProvider" />
 [DebuggerDisplay("Allocation bitmap @{FirstCluster.Value} ({DataLength.Value})")]
 public class AllocationBitmapExFatDirectoryEntry : ExFatDirectoryEntry, IDataProvider
 {

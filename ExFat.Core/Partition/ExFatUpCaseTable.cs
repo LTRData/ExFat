@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
 using DiscUtils.Streams;
 using System;
@@ -10,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+namespace ExFat.Partition;
 /// <summary>
 /// Up-case table
 /// </summary>

@@ -2,13 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Diagnostics;
-using Buffers;
+using ExFat.Buffers;
 
-
+namespace ExFat.Partition.Entries;
 /// <inheritdoc />
 /// <summary>
 /// Secondary entry representing file name part (up to 15 characters).

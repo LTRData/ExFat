@@ -2,14 +2,13 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Diagnostics;
-using Buffers;
-using IO;
+using ExFat.Buffers;
+using ExFat.IO;
 
-
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Directory entry for up-case table
 /// </summary>

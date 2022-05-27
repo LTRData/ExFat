@@ -2,18 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.IO;
+using ExFat.Partition;
+using DiscUtils.Streams;
 using System;
 using System.IO;
 using System.Linq;
-using Environment;
-using IO;
-using Xunit;
-using Partition;
-using global::DiscUtils.Streams;
 
-[TestCategory("Partition")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "Partition")]
 public class PartitionWriteTests
 {
     private static void OverwriteTest(ExFatPartition partition, string fileName, Func<ulong, ulong> getOffsetValue)
@@ -45,8 +44,8 @@ public class PartitionWriteTests
     }
 
     [Fact]
-    [TestCategory("Overwrite")]
-    [TestCategory("Write")]
+    [Trait("Category", "Overwrite")]
+    [Trait("Category", "Write")]
     public void OverwriteSparseTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -58,8 +57,8 @@ public class PartitionWriteTests
     }
 
     [Fact]
-    [TestCategory("Overwrite")]
-    [TestCategory("Write")]
+    [Trait("Category", "Overwrite")]
+    [Trait("Category", "Write")]
     public void OverwriteContiguousTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -100,8 +99,8 @@ public class PartitionWriteTests
     }
 
     [Fact]
-    [TestCategory("Append")]
-    [TestCategory("Write")]
+    [Trait("Category", "Append")]
+    [Trait("Category", "Write")]
     public void AppendSparseTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -114,8 +113,8 @@ public class PartitionWriteTests
     }
 
     [Fact]
-    [TestCategory("Append")]
-    [TestCategory("Write")]
+    [Trait("Category", "Append")]
+    [Trait("Category", "Write")]
     public void AppendContiguousTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -130,8 +129,8 @@ public class PartitionWriteTests
     }
 
     [Fact]
-    [TestCategory("Create")]
-    [TestCategory("Write")]
+    [Trait("Category", "Create")]
+    [Trait("Category", "Write")]
     public void CreateStreamTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

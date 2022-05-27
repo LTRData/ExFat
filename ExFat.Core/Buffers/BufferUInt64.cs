@@ -2,12 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers;
 
 using DiscUtils.Streams;
 using System;
 using System.Diagnostics;
 
+namespace ExFat.Buffers;
 /// <summary>
 /// 64-bits unsigned int buffer
 /// </summary>

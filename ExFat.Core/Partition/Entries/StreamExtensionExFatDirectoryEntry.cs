@@ -2,19 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Diagnostics;
-using Buffers;
-using IO;
+using ExFat.Buffers;
+using ExFat.IO;
 
-
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Stream secondary entry
 /// </summary>
-/// <seealso cref="ExFat.Partition.Entries.ExFatDirectoryEntry" />
-/// <seealso cref="ExFat.IO.IDataProvider" />
+/// <seealso cref="ExFatDirectoryEntry" />
+/// <seealso cref="IDataProvider" />
 [DebuggerDisplay("Stream extension length={ValidDataLength.Value} @{FirstCluster.Value} ({DataLength.Value})")]
 public class StreamExtensionExFatDirectoryEntry : ExFatDirectoryEntry, IDataProvider
 {

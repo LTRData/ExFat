@@ -2,10 +2,10 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// File attributes. Here are the only attributes supported by exFAT
 /// </summary>

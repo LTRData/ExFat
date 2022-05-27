@@ -2,15 +2,14 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils;
 
-using System;
 using System.Collections.Generic;
 using System.IO;
-using global::DiscUtils;
-using global::DiscUtils.Vfs;
-using FileSystemInfo = global::DiscUtils.FileSystemInfo;
+using DiscUtils;
+using DiscUtils.Vfs;
+using FileSystemInfo = DiscUtils.FileSystemInfo;
 
+namespace ExFat.DiscUtils;
 /// <summary>
 /// </summary>
 [VfsFileSystemFactory]

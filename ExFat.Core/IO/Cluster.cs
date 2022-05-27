@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.IO;
 
 using System;
 using System.Diagnostics;
 
+namespace ExFat.IO;
 /// <summary>
 /// Represents a cluster value
 /// </summary>
@@ -145,7 +145,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    /// <exception cref="System.InvalidOperationException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public static Cluster operator +(Cluster cluster, long offset)
     {
         if (!cluster.IsData)
@@ -164,7 +164,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    /// <exception cref="System.InvalidOperationException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public static Cluster operator -(Cluster cluster, long offset)
     {
         if (!cluster.IsData)
@@ -182,7 +182,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    /// <exception cref="System.InvalidOperationException"></exception>
+    /// <exception cref="InvalidOperationException"></exception>
     public static Cluster operator --(Cluster cluster)
     {
         if (!cluster.IsData)

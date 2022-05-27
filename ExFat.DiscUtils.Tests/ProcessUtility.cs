@@ -2,12 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils;
 
 using System;
 using System.Diagnostics;
 using System.Text;
 
+namespace ExFat.DiscUtils;
 /// <summary>
 /// Extensions to Process
 /// </summary>

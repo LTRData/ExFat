@@ -2,17 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Environment;
 
-using System;
+using ExFat.Filesystem;
+using DiscUtils;
+using DiscUtils.Partitions;
+using DiscUtils.Streams;
+using DiscUtils.Vhdx;
 using System.IO;
 using System.Linq;
-using Filesystem;
-using global::DiscUtils;
-using global::DiscUtils.Partitions;
-using global::DiscUtils.Streams;
-using global::DiscUtils.Vhdx;
+using System;
 
+namespace ExFat.DiscUtils.Environment;
 internal class EntryFilesystemTestEnvironment : TestEnvironment
 {
     public ExFatEntryFilesystem FileSystem { get; private set; }

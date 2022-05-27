@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
-using Buffers;
+using ExFat.Buffers;
 
+namespace ExFat.Partition.Entries;
 /// <inheritdoc />
 /// <summary>
 /// Provides <see cref="T:System.DateTimeOffset" /> based on <see cref="T:System.DateTime" /> and <see cref="T:System.TimeSpan" /> sources

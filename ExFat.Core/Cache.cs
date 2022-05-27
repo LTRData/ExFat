@@ -2,17 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat;
 
 using System.Collections;
 using System.Collections.Generic;
 
+namespace ExFat;
 /// <summary>
 /// Cache dictionary
 /// </summary>
 /// <typeparam name="TKey">The type of the key.</typeparam>
 /// <typeparam name="TValue">The type of the value.</typeparam>
-/// <seealso cref="System.Collections.Generic.IDictionary{TKey, TValue}" />
+/// <seealso cref="IDictionary{TKey, TValue}" />
 public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
 {
     private readonly int _capacity;

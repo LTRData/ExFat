@@ -2,21 +2,20 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.IO;
+using ExFat.Partition;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Environment;
-using IO;
-using Xunit;
-using Partition;
 
-
-[TestCategory("Structure")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "Structure")]
 public class PartitionClustersTests
 {
     [Fact]
-    [TestCategory("Structure")]
+    [Trait("Category", "Structure")]
     public void ReadLongFileClusters()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

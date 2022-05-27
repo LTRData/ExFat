@@ -2,10 +2,10 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat;
 
 using System;
 
+namespace ExFat;
 /// <summary>
 /// Extenstions to <see cref="byte"/>[]
 /// </summary>

@@ -2,10 +2,10 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers;
 
 using System;
 
+namespace ExFat.Buffers;
 /// <summary>
 /// Converts a log2 value to its integer representation
 /// </summary>
@@ -20,7 +20,7 @@ public class ShiftValueProvider : IValueProvider<uint>
     /// <value>
     /// The value.
     /// </value>
-    /// <exception cref="System.ArgumentException">value must be a power of 2</exception>
+    /// <exception cref="ArgumentException">value must be a power of 2</exception>
     public uint Value
     {
         get => 1u << _shift.Value;

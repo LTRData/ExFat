@@ -2,11 +2,9 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
-
 using System;
-using Xunit;
 
+namespace ExFat.DiscUtils.Tests;
 public class DateTests
 {
     [Fact]
@@ -20,9 +18,9 @@ public class DateTests
     public void DateTimeToUInt161()
     {
         var dateTime = new DateTime(2070, 7, 4, 17, 45, 7, 510, DateTimeKind.Local);
-        var ts = dateTime.ToTimeStamp();
-        Assert.Equal(0b1011010_0111_00100__10001_101101_00011, ts.Item1);
-        Assert.Equal(151, ts.Item2);
+        var (timeStamp, tenMs) = dateTime.ToTimeStamp();
+        Assert.Equal(0b1011010_0111_00100__10001_101101_00011, timeStamp);
+        Assert.Equal(151, tenMs);
     }
 
     [Fact]
@@ -47,7 +45,7 @@ public class DateTests
     }
 
     [Fact]
-    [TestCategory("DateTimeOffset")]
+    [Trait("Category", "DateTimeOffset")]
     public void TimeZoneInfoCustom()
     {
         var t = DateTimeUtility.FromTimeZoneOffset(0xF3);
@@ -55,7 +53,7 @@ public class DateTests
     }
 
     [Fact]
-    [TestCategory("DateTimeOffset")]
+    [Trait("Category", "DateTimeOffset")]
     public void NonLocalTimeOffsetFromLocal()
     {
         var t = new DateTime(2017, 11, 13, 12, 34, 56, DateTimeKind.Utc);

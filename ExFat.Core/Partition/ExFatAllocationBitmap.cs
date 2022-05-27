@@ -2,12 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
 using System;
 using System.IO;
-using IO;
+using ExFat.IO;
 
+namespace ExFat.Partition;
 /// <summary>
 /// Allocation bitmap manager. Allows to allocate or free clusters from bitmap.
 /// This is where you start when you want a free cluster, then it needs to be chained... If not contiguous
@@ -86,7 +86,7 @@ public class ExFatAllocationBitmap
     /// </summary>
     /// <param name="cluster">The cluster.</param>
     /// <returns></returns>
-    /// <exception cref="System.ArgumentOutOfRangeException">cluster</exception>
+    /// <exception cref="ArgumentOutOfRangeException">cluster</exception>
     public bool GetAt(Cluster cluster)
     {
         lock (_lock)

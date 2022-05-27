@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat;
 
 using System;
-using Partition;
+using ExFat.Partition;
 
+namespace ExFat;
 /// <summary>
 /// Partition management flags
 /// </summary>

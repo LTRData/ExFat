@@ -2,17 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Generator;
 
 using System;
 using System.IO;
 using System.Linq;
+using ExFat.DiscUtils;
 using DiscUtils;
-using global::DiscUtils;
-using global::DiscUtils.Partitions;
-using global::DiscUtils.Streams;
-using global::DiscUtils.Vhdx;
+using DiscUtils.Partitions;
+using DiscUtils.Streams;
+using DiscUtils.Vhdx;
 
+namespace ExFat.Generator;
 public static class Program
 {
     public static void Main(params string[] _)

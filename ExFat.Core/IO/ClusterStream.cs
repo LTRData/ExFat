@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.IO;
 
 using System;
 using System.IO;
@@ -10,9 +9,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using DiscUtils.Streams;
 using DiscUtils.Streams.Compatibility;
-using Partition;
+using ExFat.Partition;
 using Buffer = System.Buffer;
 
+namespace ExFat.IO;
 /// <inheritdoc />
 /// <summary>
 /// Stream, based on clusters chain

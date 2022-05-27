@@ -3,9 +3,6 @@
 // https://github.com/picrap/ExFat
 
 namespace ExFat;
-
-using System;
-
 /// <summary>
 /// Extensions to <see cref="int"/> and friends
 /// </summary>

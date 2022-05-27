@@ -2,11 +2,10 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat;
 
 using System;
-using System.ComponentModel;
 
+namespace ExFat;
 /// <summary>
 /// Utility for <see cref="DateTime"/>
 /// </summary>
@@ -36,7 +35,7 @@ public static class DateTimeUtility
     /// </summary>
     /// <param name="dateTime">The date time.</param>
     /// <returns></returns>
-    public static Tuple<uint, byte> ToTimeStamp(this DateTime dateTime)
+    public static (uint timeStamp, byte tenMs) ToTimeStamp(this DateTime dateTime)
     {
         var timeStamp = (dateTime.Year - 1980) << 25
                         | dateTime.Month << 21
@@ -45,7 +44,7 @@ public static class DateTimeUtility
                         | dateTime.Minute << 5
                         | dateTime.Second >> 1;
         var tenMs = dateTime.Millisecond / 10 + dateTime.Second % 2 * 100;
-        return Tuple.Create((uint)timeStamp, (byte)tenMs);
+        return ((uint)timeStamp, (byte)tenMs);
     }
 
     /// <summary>

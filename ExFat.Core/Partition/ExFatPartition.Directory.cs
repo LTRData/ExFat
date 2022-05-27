@@ -2,14 +2,13 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
 using System.Collections.Generic;
 using System.IO;
-using Entries;
-using IO;
+using ExFat.Partition.Entries;
+using ExFat.IO;
 
-
+namespace ExFat.Partition;
 partial class ExFatPartition
 {
     private readonly object _directoryLock = new();

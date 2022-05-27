@@ -2,19 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.Filesystem;
 using System.Linq;
-using Environment;
-using Filesystem;
-using Xunit;
 
-
-[TestCategory("EntryFilesystem")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "EntryFilesystem")]
 public class EntryFilesystemStructureTests
 {
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadFile()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

@@ -2,13 +2,13 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IO;
+using ExFat.IO;
 
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Groups entries by primary entry
 /// </summary>

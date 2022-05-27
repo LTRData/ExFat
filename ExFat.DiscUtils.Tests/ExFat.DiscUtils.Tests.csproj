@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <RootNamespace>ExFat.DiscUtils</RootNamespace>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <TargetFrameworks>net6.0;net48;net46</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -22,15 +22,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
+    <PackageReference Include="xunit" Version="*" />
+    <PackageReference Include="coverlet.collector" Version="*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.2">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework.CompareTo(`net462`))' &lt; 0">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework.CompareTo(`net462`))' &gt;= 0">
+    <PackageReference Include="xunit.runner.visualstudio" Version="*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
@@ -40,9 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LTRData.DiscUtils.Core" Version="1.0.0" />
-    <PackageReference Include="LTRData.DiscUtils.Streams" Version="1.0.0" />
-    <PackageReference Include="LTRData.DiscUtils.Vhdx" Version="1.0.0" />
+    <PackageReference Include="LTRData.DiscUtils.Core" Version="*" />
+    <PackageReference Include="LTRData.DiscUtils.Streams" Version="*" />
+    <PackageReference Include="LTRData.DiscUtils.Vhdx" Version="*" />
   </ItemGroup>
 
   <ItemGroup>

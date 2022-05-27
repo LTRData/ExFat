@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
-using Buffers;
+using ExFat.Buffers;
 
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Allows to specify time zones
 /// </summary>

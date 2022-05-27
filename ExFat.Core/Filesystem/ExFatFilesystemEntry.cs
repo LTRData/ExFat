@@ -2,14 +2,14 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Filesystem;
 
 using System;
 using System.Diagnostics;
 using System.IO;
-using IO;
-using Partition.Entries;
+using ExFat.IO;
+using ExFat.Partition.Entries;
 
+namespace ExFat.Filesystem;
 /// <summary>
 /// Entry for <see cref="ExFatEntryFilesystem"/>.
 /// Links to <see cref="ExFatMetaDirectoryEntry"/> for partition-level manipulation

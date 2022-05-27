@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
-using Buffers;
+using ExFat.Buffers;
 
+namespace ExFat.Partition.Entries;
 /// <inheritdoc />
 /// <summary>
 /// Provides <see cref="T:System.DateTime" /> based on DOS <see cref="T:System.UInt32" /> data
@@ -29,11 +29,13 @@ public class EntryDateTime : IValueProvider<DateTime>
         get => DateTimeUtility.FromTimeStamp(_dateTimeProvider.Value, _tenMsProvider != null ? _tenMsProvider.Value : (byte)0);
         set
         {
-            var t = value.ToTimeStamp();
-            _dateTimeProvider.Value = t.Item1;
+            var (timeStamp, tenMs) = value.ToTimeStamp();
+            
+            _dateTimeProvider.Value = timeStamp;
+            
             if (_tenMsProvider != null)
             {
-                _tenMsProvider.Value = t.Item2;
+                _tenMsProvider.Value = tenMs;
             }
         }
     }

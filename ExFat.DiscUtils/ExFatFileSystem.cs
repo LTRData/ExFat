@@ -2,18 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Filesystem;
-using global::DiscUtils;
-using global::DiscUtils.Streams;
-using Partition;
+using ExFat.Filesystem;
+using DiscUtils;
+using DiscUtils.Streams;
+using ExFat.Partition;
 
+namespace ExFat.DiscUtils;
 public partial class ExFatFileSystem : DiscFileSystem
 {
     /// <summary>

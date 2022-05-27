@@ -2,19 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.Filesystem;
 using System.Linq;
-using Environment;
-using Filesystem;
-using Xunit;
 
-
-[TestCategory("PathFilesystem")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "PathFilesystem")]
 public class PathFilesystemReadTests
 {
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadRootFolderEntriesTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -27,7 +25,7 @@ public class PathFilesystemReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadSubFolderFilesTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -37,7 +35,7 @@ public class PathFilesystemReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadDatesTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

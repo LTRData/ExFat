@@ -12,26 +12,22 @@
     <Deterministic>false</Deterministic>
     <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
 
-    <DiscUtilsPath>$(SolutionDir)..\..\DiscUtils\Library\DiscUtils\bin\$(Configuration)\$(TargetFramework)</DiscUtilsPath>
-
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>LTRData.$(MSBuildProjectName)</PackageId>
-    <Company>LTR Data</Company>
-    <Authors>Olof Lagerkvist</Authors>
-
-  </PropertyGroup>
-
-  <PropertyGroup>
-
     <Company>picrap</Company>
     <Product>ExFat</Product>
     <Copyright>MIT license https://opensource.org/licenses/MIT</Copyright>
     <Trademark></Trademark>
     <Culture></Culture>
 
-    <Version>0.9.16</Version>
-    <FileVersion>0.9.16</FileVersion>
+    <Version>0.9.17</Version>
+    <FileVersion>0.9.17</FileVersion>
+
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>LTRData.$(MSBuildProjectName)</PackageId>
+    <Company>LTR Data</Company>
+    <Authors>Olof Lagerkvist</Authors>
+    <PackageVersion>1.0.0</PackageVersion>
+	<PackageOutputPath>$(LocalNuGetPath)\$(Configuration)</PackageOutputPath>
 
   </PropertyGroup>
-  
+
 </Project>

@@ -2,20 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.Partition;
+using ExFat.Partition.Entries;
 using System.Linq;
-using Environment;
-using Xunit;
-using Partition;
-using Partition.Entries;
 
-
-[TestCategory("Partition")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "Partition")]
 public class PartitionStructureTests
 {
     [Fact]
-    [TestCategory("Structure")]
+    [Trait("Category", "Structure")]
     public void DirectoryEntries()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -26,7 +24,7 @@ public class PartitionStructureTests
     }
 
     [Fact]
-    [TestCategory("Structure")]
+    [Trait("Category", "Structure")]
     public void ValidGroupedEntries()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -36,7 +34,7 @@ public class PartitionStructureTests
     }
 
     [Fact]
-    [TestCategory("Structure")]
+    [Trait("Category", "Structure")]
     public void CheckHashes()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -52,7 +50,7 @@ public class PartitionStructureTests
     }
 
     [Fact]
-    [TestCategory("Structure")]
+    [Trait("Category", "Structure")]
     public void CheckChecksums()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -69,7 +67,7 @@ public class PartitionStructureTests
 
 #if nomore
     [Fact]
-    [TestCategory("Structure")]
+    [Trait("Category", "Structure")]
     public void AllocationBitmapExists()
     {
         using (var testEnvironment = StreamTestEnvironment.FromExistingVhdx())

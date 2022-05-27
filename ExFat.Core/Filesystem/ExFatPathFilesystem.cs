@@ -2,15 +2,15 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Filesystem;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Partition;
+using ExFat.Partition;
 
+namespace ExFat.Filesystem;
 /// <inheritdoc />
 /// <summary>
 /// High-level file system, which works with paths
@@ -435,7 +435,7 @@ public class ExFatPathFilesystem : IDisposable
     /// Deletes the specified entry at given path.
     /// </summary>
     /// <param name="literalPath">The path.</param>
-    /// <exception cref="System.IO.IOException"></exception>
+    /// <exception cref="IOException"></exception>
     public void Delete(string literalPath)
     {
         lock (_entriesLock)
@@ -502,9 +502,9 @@ public class ExFatPathFilesystem : IDisposable
     /// <param name="mode">The mode.</param>
     /// <param name="access">The access.</param>
     /// <returns></returns>
-    /// <exception cref="System.IO.DirectoryNotFoundException"></exception>
-    /// <exception cref="System.IO.FileNotFoundException"></exception>
-    /// <exception cref="System.IO.IOException">
+    /// <exception cref="DirectoryNotFoundException"></exception>
+    /// <exception cref="FileNotFoundException"></exception>
+    /// <exception cref="IOException">
     /// </exception>
     public Stream Open(string literalPath, FileMode mode, FileAccess access)
     {

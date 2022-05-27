@@ -2,13 +2,13 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using IO;
+using ExFat.IO;
 
+namespace ExFat.Partition;
 /// <summary>
 /// Allows to access cluter information and data
 /// </summary>

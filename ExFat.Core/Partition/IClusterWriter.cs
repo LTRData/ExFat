@@ -2,12 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
-using IO;
+using ExFat.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+namespace ExFat.Partition;
 /// <summary>
 /// Cluster writer
 /// </summary>

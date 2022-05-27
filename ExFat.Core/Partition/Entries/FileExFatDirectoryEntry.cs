@@ -2,19 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Buffers;
-using Filesystem;
+using ExFat.Buffers;
+using ExFat.Filesystem;
 
-
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Represents a directory entry for <see cref="ExFatEntryFilesystem"/>
 /// </summary>
-/// <seealso cref="ExFat.Partition.Entries.ExFatDirectoryEntry" />
+/// <seealso cref="ExFatDirectoryEntry" />
 [DebuggerDisplay("File")]
 public class FileExFatDirectoryEntry : ExFatDirectoryEntry
 {

@@ -2,17 +2,16 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Diagnostics;
-using Buffers;
+using ExFat.Buffers;
 
-
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Volume label
 /// </summary>
-/// <seealso cref="ExFat.Partition.Entries.ExFatDirectoryEntry" />
+/// <seealso cref="ExFatDirectoryEntry" />
 [DebuggerDisplay("Volume label {" + nameof(VolumeLabel) + "}")]
 public class VolumeLabelExFatDirectoryEntry : ExFatDirectoryEntry
 {

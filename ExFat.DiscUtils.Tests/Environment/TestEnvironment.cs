@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Environment;
 
 using System;
 using System.IO;
@@ -10,9 +9,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.Principal;
-using global::DiscUtils.Vhdx;
-using Xunit;
+using DiscUtils.Vhdx;
 
+namespace ExFat.DiscUtils.Environment;
 internal class TestEnvironment : IDisposable
 {
     protected string VhdxPath;
@@ -22,7 +21,9 @@ internal class TestEnvironment : IDisposable
     {
     }
 
+#if NETCOREAPP
     [SupportedOSPlatform("windows")]
+#endif
     private static bool IsElevated
     {
         get
@@ -40,20 +41,24 @@ internal class TestEnvironment : IDisposable
         {
             try
             {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+#if NET461_OR_GREATER || NETSTANDARD || NETCOREAPP
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    if (IsElevated)
+                    return;
+                }
+#endif
+
+                if (IsElevated)
+                {
+                    var t = CheckDisk();
+                    if (!t.Item1)
                     {
-                        var t = CheckDisk();
-                        if (!t.Item1)
-                        {
-                            throw new Exception("VHDX filesystem is found corrupted by CHKDSK: " + t.Item2);
-                        }
+                        throw new Exception($"VHDX filesystem is found corrupted by CHKDSK: {t.Item2}");
                     }
-                    else
-                    {
-                        throw new Exception("Not elevated");
-                    }
+                }
+                else
+                {
+                    throw new Exception("Not elevated");
                 }
             }
             finally

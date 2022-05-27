@@ -2,19 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.IO;
+using ExFat.Partition;
+using ExFat.Partition.Entries;
+using DiscUtils.Streams;
 using System;
-using System.IO;
 using System.Linq;
-using Environment;
-using IO;
-using Xunit;
-using Partition;
-using Partition.Entries;
-using global::DiscUtils.Streams;
+using System.IO;
 
-[TestCategory("Partition")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "Partition")]
 public class PartitionReadTests
 {
     internal static void ReadFile(string fileName, Func<ulong, ulong> getValueAtOffset,
@@ -62,11 +61,11 @@ public class PartitionReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadLongContiguousFull() => ReadFile(DiskContent.LongContiguousFileName, DiskContent.GetLongContiguousFileNameOffsetValue);
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadLongContiguousFullBackwards()
     {
         ReadFile(DiskContent.LongContiguousFileName, DiskContent.GetLongContiguousFileNameOffsetValue,
@@ -74,7 +73,7 @@ public class PartitionReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadLongContiguousLimited()
     {
         var length = (DiskContent.LongFileSize / 3 * 2) & ~7ul;
@@ -82,15 +81,15 @@ public class PartitionReadTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadLongSparseFull() => ReadFile(DiskContent.LongSparseFile1Name, DiskContent.GetLongSparseFile1NameOffsetValue);
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadLongSparseFullBackwards() => ReadFile(DiskContent.LongSparseFile1Name, DiskContent.GetLongSparseFile1NameOffsetValue, forward: false);
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadLongSparseLimited()
     {
         var length = (DiskContent.LongFileSize / 3 * 2) & ~7ul;

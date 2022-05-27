@@ -2,17 +2,15 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
+
+using ExFat.DiscUtils.Environment;
+
 namespace ExFat.DiscUtils.Tests;
-
-using Environment;
-using Xunit;
-
-
-[TestCategory("Partition")]
+[Trait("Category", "Partition")]
 public class IntegrityTests
 {
     [Fact]
-    [TestCategory("Detection")]
+    [Trait("Category", "Detection")]
     public void ValidVolume()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

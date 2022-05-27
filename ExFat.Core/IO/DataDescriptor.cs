@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.IO;
 
 using System;
 using System.Diagnostics;
 
+namespace ExFat.IO;
 /// <summary>
 /// Information about data in partition
 /// </summary>

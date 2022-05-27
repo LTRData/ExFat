@@ -2,19 +2,18 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DiscUtils.Streams;
-using Entries;
-using IO;
+using ExFat.Partition.Entries;
+using ExFat.IO;
 
+namespace ExFat.Partition;
 /// <summary>
 /// The ExFAT filesystem.
 /// The class is a quite low-level accessor
@@ -80,7 +79,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
     /// </summary>
     /// <param name="partitionStream">The partition stream.</param>
     /// <param name="options">The options.</param>
-    /// <exception cref="System.ArgumentException">Given stream must be seekable
+    /// <exception cref="ArgumentException">Given stream must be seekable
     /// or
     /// Given stream must be readable</exception>
     public ExFatPartition(Stream partitionStream, ExFatOptions options = ExFatOptions.Default)

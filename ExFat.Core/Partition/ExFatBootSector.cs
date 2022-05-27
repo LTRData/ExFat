@@ -2,14 +2,13 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition;
 
 using System;
 using System.IO;
-using System.Linq;
-using Buffers;
+using ExFat.Buffers;
 using DiscUtils.Streams;
 
+namespace ExFat.Partition;
 /// <summary>
 /// exFAT boot sector
 /// </summary>

@@ -2,11 +2,11 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers;
 
 using System;
 using System.Diagnostics;
 
+namespace ExFat.Buffers;
 /// <summary>
 /// 8-bit unsigned int buffer (in other words, a byte)
 /// </summary>

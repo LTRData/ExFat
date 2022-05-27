@@ -2,15 +2,15 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Environment;
 
 using System;
 using System.IO;
 using System.IO.Compression;
-using global::DiscUtils;
-using global::DiscUtils.Streams;
-using global::DiscUtils.Vhdx;
+using DiscUtils;
+using DiscUtils.Streams;
+using DiscUtils.Vhdx;
 
+namespace ExFat.DiscUtils.Environment;
 internal class StreamTestEnvironment : TestEnvironment
 {
     public Stream PartitionStream { get; private set; }

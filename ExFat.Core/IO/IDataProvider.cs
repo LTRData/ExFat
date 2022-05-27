@@ -2,10 +2,10 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
+
+using ExFat.Partition.Entries;
+
 namespace ExFat.IO;
-
-using Partition.Entries;
-
 /// <summary>
 /// When implemented by <see cref="ExFatDirectoryEntry"/>-derived classes, provides information about how to handle data streams
 /// </summary>

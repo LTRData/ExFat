@@ -2,13 +2,13 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
+namespace ExFat.Buffers;
 /// <summary>
 /// 16-bit char string buffer
 /// </summary>

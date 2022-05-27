@@ -2,19 +2,17 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
 using System.IO;
 using System.Linq;
-using Environment;
-using Xunit;
 
-
-[TestCategory("DiscUtils")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "DiscUtils")]
 public class DiscFilesystemTests
 {
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadAllFiles()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -24,35 +22,35 @@ public class DiscFilesystemTests
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadRootFiles()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
         using var filesystem = new ExFatFileSystem(testEnvironment.PartitionStream);
         var allFiles = filesystem.GetFiles("");
-        Assert.True(allFiles.Contains(DiskContent.LongContiguousFileName));
-        Assert.True(allFiles.Contains(DiskContent.LongSparseFile1Name));
-        Assert.True(allFiles.Contains(DiskContent.LongSparseFile2Name));
-        Assert.False(allFiles.Contains(DiskContent.EmptyRootFolderFileName));
-        Assert.False(allFiles.Contains(DiskContent.LongFolderFileName));
+        Assert.Contains(DiskContent.LongContiguousFileName, allFiles);
+        Assert.Contains(DiskContent.LongSparseFile1Name, allFiles);
+        Assert.Contains(DiskContent.LongSparseFile2Name, allFiles);
+        Assert.DoesNotContain(DiskContent.EmptyRootFolderFileName, allFiles);
+        Assert.DoesNotContain(DiskContent.LongFolderFileName, allFiles);
     }
 
     [Fact]
-    [TestCategory("Read")]
+    [Trait("Category", "Read")]
     public void ReadRootDirectories()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
         using var filesystem = new ExFatFileSystem(testEnvironment.PartitionStream);
         var allDirectories = filesystem.GetDirectories("");
-        Assert.False(allDirectories.Contains(DiskContent.LongContiguousFileName));
-        Assert.False(allDirectories.Contains(DiskContent.LongSparseFile1Name));
-        Assert.False(allDirectories.Contains(DiskContent.LongSparseFile2Name));
-        Assert.True(allDirectories.Contains(DiskContent.EmptyRootFolderFileName));
-        Assert.True(allDirectories.Contains(DiskContent.LongFolderFileName));
+        Assert.DoesNotContain(DiskContent.LongContiguousFileName, allDirectories);
+        Assert.DoesNotContain(DiskContent.LongSparseFile1Name, allDirectories);
+        Assert.DoesNotContain(DiskContent.LongSparseFile2Name, allDirectories);
+        Assert.Contains(DiskContent.EmptyRootFolderFileName, allDirectories);
+        Assert.Contains(DiskContent.LongFolderFileName, allDirectories);
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void MoveFile()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();
@@ -69,7 +67,7 @@ public class DiscFilesystemTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void MoveFileToDirectory()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx();

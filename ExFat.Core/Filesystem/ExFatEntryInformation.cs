@@ -2,12 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Filesystem;
 
 using System;
 using System.Diagnostics;
 using System.IO;
 
+namespace ExFat.Filesystem;
 /// <summary>
 /// Information about file system entry.
 /// High-level, related to <see cref="ExFatPathFilesystem"/>

@@ -2,15 +2,14 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Buffers;
+using ExFat.Buffers;
 using DiscUtils.Streams.Compatibility;
 
-
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Simple (raw) directory entry
 /// </summary>
@@ -93,7 +92,7 @@ public class ExFatDirectoryEntry
     /// <param name="buffer">The buffer.</param>
     /// <param name="directoryPosition">The directory position.</param>
     /// <returns></returns>
-    /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static ExFatDirectoryEntry Create(Memory<byte> buffer, long directoryPosition)
     {
         var entry = Create(buffer);

@@ -30,9 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LTRData.DiscUtils.Core" Version="1.0.0" />
-    <PackageReference Include="LTRData.DiscUtils.Streams" Version="1.0.0" />
-    <PackageReference Include="LTRData.DiscUtils.Vhdx" Version="1.0.0" />
+    <PackageReference Include="LTRData.DiscUtils.Core" Version="*" />
+    <PackageReference Include="LTRData.DiscUtils.Streams" Version="*" />
+    <PackageReference Include="LTRData.DiscUtils.Vhdx" Version="*" />
   </ItemGroup>
 
 </Project>

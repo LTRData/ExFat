@@ -8,7 +8,7 @@ namespace ExFat.Buffers;
 /// Creates a cache value provider
 /// </summary>
 /// <typeparam name="TValue">The type of the value.</typeparam>
-/// <seealso cref="ExFat.Buffers.IValueProvider{TValue}" />
+/// <seealso cref="IValueProvider{TValue}" />
 public class CacheValueProvider<TValue> : IValueProvider<TValue>
 {
     private readonly IValueProvider<TValue> _valueProvider;

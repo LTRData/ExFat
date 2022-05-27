@@ -2,10 +2,10 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Partition.Entries;
 
 using System;
 
+namespace ExFat.Partition.Entries;
 /// <summary>
 /// Flags for secondary entries (common flags)
 /// </summary>

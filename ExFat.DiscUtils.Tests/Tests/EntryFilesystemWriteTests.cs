@@ -2,23 +2,21 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.DiscUtils.Tests;
 
+using ExFat.DiscUtils.Environment;
+using ExFat.Filesystem;
+using DiscUtils.Streams;
+using System.IO;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Environment;
-using Filesystem;
-using global::DiscUtils.Streams;
-using Xunit;
 
-
-[TestCategory("EntryFilesystem")]
+namespace ExFat.DiscUtils.Tests;
+[Trait("Category", "EntryFilesystem")]
 public class EntryFilesystemWriteTests
 {
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void AppendTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -37,7 +35,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateDirectoryTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -50,7 +48,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateSubDirectoryTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -63,7 +61,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateFileTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -80,7 +78,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateEmptyFileTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -95,7 +93,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void DeleteFileTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -106,7 +104,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void DeleteDirectoryTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -117,7 +115,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void TruncateFileTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -135,7 +133,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void LengthenFileTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -151,7 +149,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void MoveFileTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -162,7 +160,7 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void RandomReadWriteTest()
     {
         using var testEnvironment = StreamTestEnvironment.FromExistingVhdx(true);
@@ -204,14 +202,14 @@ public class EntryFilesystemWriteTests
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void NewPartitionTest()
     {
         using (EntryFilesystemTestEnvironment.FromNewVhdx(true)) { }
     }
 
     [Fact]
-    [TestCategory("Write")]
+    [Trait("Category", "Write")]
     public void CreateFolderOnNewPartitionTest()
     {
         using var testEnvironment = EntryFilesystemTestEnvironment.FromNewVhdx(true);

@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-namespace ExFat.Buffers;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
+namespace ExFat.Buffers;
 /// <summary>
 /// 8-bit char string
 /// </summary>
