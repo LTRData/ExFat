@@ -12,20 +12,23 @@
     <Deterministic>false</Deterministic>
     <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
 
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../ExFat.snk</AssemblyOriginatorKeyFile>
+    
     <Company>picrap</Company>
     <Product>ExFat</Product>
     <Copyright>MIT license https://opensource.org/licenses/MIT</Copyright>
     <Trademark></Trademark>
     <Culture></Culture>
 
-    <Version>0.9.17</Version>
-    <FileVersion>0.9.17</FileVersion>
+    <Version>0.9.18</Version>
+    <FileVersion>0.9.18</FileVersion>
 
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
     <PackageId>LTRData.$(MSBuildProjectName)</PackageId>
     <Company>LTR Data</Company>
     <Authors>Olof Lagerkvist</Authors>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
 	<PackageOutputPath>$(LocalNuGetPath)\$(Configuration)</PackageOutputPath>
 
   </PropertyGroup>

@@ -268,6 +268,70 @@ public partial class ExFatFileSystem : DiscFileSystem
     /// <inheritdoc />
     public override void SetLastWriteTimeUtc(string path, DateTime newTime) => _filesystem.SetLastWriteTimeUtc(path, newTime);
 
+    public override DiscFileSystemInfo GetFileSystemInfo(string path)
+    {
+        try
+        {
+            var information = _filesystem.GetInformation(path);
+            if (information != null)
+            {
+                if (information.Attributes.HasFlag(FileAttributes.Directory))
+                {
+                    return new CachedDiscDirectoryInfo(this, path, information.Attributes, information.CreationTimeUtc,
+                                                       information.LastAccessTimeUtc, information.LastWriteTimeUtc);
+                }
+                else
+                {
+                    return new CachedDiscFileInfo(this, path, information.Attributes, information.CreationTimeUtc,
+                                                  information.LastAccessTimeUtc, information.LastWriteTimeUtc,
+                                                  information.Length);
+                }
+            }
+        }
+        catch
+        {
+        }
+
+        return base.GetFileSystemInfo(path);
+    }
+
+    public override DiscDirectoryInfo GetDirectoryInfo(string path)
+    {
+        try
+        {
+            var information = _filesystem.GetInformation(path);
+            if (information != null && information.Attributes.HasFlag(FileAttributes.Directory))
+            {
+                return new CachedDiscDirectoryInfo(this, path, information.Attributes, information.CreationTimeUtc,
+                                                   information.LastAccessTimeUtc, information.LastWriteTimeUtc);
+            }
+        }
+        catch
+        {
+        }
+
+        return base.GetDirectoryInfo(path);
+    }
+
+    public override DiscFileInfo GetFileInfo(string path)
+    {
+        try
+        {
+            var information = _filesystem.GetInformation(path);
+            if (information != null && !information.Attributes.HasFlag(FileAttributes.Directory))
+            {
+                return new CachedDiscFileInfo(this, path, information.Attributes, information.CreationTimeUtc,
+                                              information.LastAccessTimeUtc, information.LastWriteTimeUtc,
+                                              information.Length);
+            }
+        }
+        catch
+        {
+        }
+
+        return base.GetFileInfo(path);
+    }
+
     /// <inheritdoc />
     public override long GetFileLength(string path)
     {
