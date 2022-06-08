@@ -202,13 +202,8 @@ public class ExFatPathFilesystem : IDisposable
         _rootNode = new Node(_entryFilesystem.RootDirectory, this);
     }
 
-    /// <inheritdoc />
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose() => _entryFilesystem.Dispose();
-
     private long _generation;
+    private bool disposedValue;
     private readonly int _generationExpiry = Environment.ProcessorCount * (8 + 100);
 
     private long GetNextGeneration() => ++_generation;
@@ -226,7 +221,7 @@ public class ExFatPathFilesystem : IDisposable
     {
         if (path == null)
         {
-            throw new ArgumentNullException();
+            throw new ArgumentNullException(nameof(path));
         }
 
         if (path.Length == 0)
@@ -521,7 +516,7 @@ public class ExFatPathFilesystem : IDisposable
             // not existing?
             if (child == null)
             {
-                if (mode == FileMode.Append || mode == FileMode.Open || mode == FileMode.Truncate)
+                if (mode is FileMode.Append or FileMode.Open or FileMode.Truncate)
                 {
                     throw new FileNotFoundException();
                 }
@@ -602,5 +597,36 @@ public class ExFatPathFilesystem : IDisposable
     {
         var entryFilesystem = ExFatEntryFilesystem.Format(partitionStream, options, volumeLabel);
         return new ExFatPathFilesystem(entryFilesystem);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                // TODO: dispose managed state (managed objects)
+                _entryFilesystem.Dispose();
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+
+            // TODO: set large fields to null
+            disposedValue = true;
+        }
+    }
+
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    ~ExFatPathFilesystem()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: false);
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

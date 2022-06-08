@@ -71,7 +71,7 @@ public class DataDescriptor
     /// </returns>
     public override bool Equals(object obj)
     {
-        if (!(obj is DataDescriptor other))
+        if (obj is not DataDescriptor other)
         {
             return false;
         }

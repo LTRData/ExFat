@@ -141,18 +141,25 @@ public partial class ExFatFileSystem : DiscFileSystem
     /// <inheritdoc />
     public override IEnumerable<string> GetFileSystemEntries(string path, string searchPattern) => GetEntries(path, searchPattern, SearchOption.TopDirectoryOnly).Select(e => e.Path);
 
-    private static Regex ConvertWildcardsToRegEx(string pattern)
+    private static Func<string, bool> ConvertWildcardsToRegEx(string pattern)
     {
-        if (pattern is null or "*.*")
+        if (pattern is null or "*.*" or "*")
         {
             return null;
         }
 
-        //if (!pattern.Contains("."))
-        //    pattern += ".";
+        if (pattern.AsSpan().IndexOfAny('*', '?') < 0)
+        {
+            if (!pattern.Contains('.'))
+            {
+                pattern += ".";
+            }
+
+            return name => StringComparer.OrdinalIgnoreCase.Equals(name, pattern);
+        }
 
         var query = $"^{Regex.Escape(pattern).Replace(@"\*", ".*").Replace(@"\?", "[^.]")}$";
-        return new Regex(query, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        return new Regex(query, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant).IsMatch;
     }
 
     private IEnumerable<ExFatEntryInformation> GetEntries(string path, string searchPattern, SearchOption searchOption)
@@ -167,7 +174,7 @@ public partial class ExFatFileSystem : DiscFileSystem
         return GetEntries(entry, searchOption == SearchOption.TopDirectoryOnly ? 1 : int.MaxValue).Where(e => IsMatch(regex, e));
     }
 
-    private bool IsMatch(Regex regex, ExFatEntryInformation e)
+    private bool IsMatch(Func<string, bool> regex, ExFatEntryInformation e)
     {
         if (regex == null)
         {
@@ -175,7 +182,7 @@ public partial class ExFatFileSystem : DiscFileSystem
         }
 
         var fileName = GetFileName(e.Path);
-        return regex.IsMatch(fileName);
+        return regex(fileName);
     }
 
     private readonly ExFatEntryInformation[] _noEntry = Array.Empty<ExFatEntryInformation>();
