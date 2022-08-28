@@ -28,7 +28,7 @@
     <PackageId>LTRData.$(MSBuildProjectName)</PackageId>
     <Company>LTR Data</Company>
     <Authors>Olof Lagerkvist</Authors>
-    <PackageVersion>1.0.1</PackageVersion>
+    <PackageVersion>1.0.9</PackageVersion>
 	<PackageOutputPath>$(LocalNuGetPath)\$(Configuration)</PackageOutputPath>
 
   </PropertyGroup>

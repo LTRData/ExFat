@@ -35,7 +35,11 @@ public class ExFatEntryInformation
     public FileAttributes Attributes
     {
         get => _entry.Attributes;
-        set { _entry.Attributes = value; Update(); }
+        set
+        {
+            _entry.Attributes = value;
+            Update();
+        }
     }
 
     /// <summary>
@@ -47,7 +51,11 @@ public class ExFatEntryInformation
     public DateTime CreationTime
     {
         get => _entry.CreationDateTimeOffset.LocalDateTime;
-        set { _entry.CreationDateTimeOffset = value.ToLocalTime(); Update(); }
+        set
+        {
+            _entry.CreationDateTimeOffset = value.ToLocalTime();
+            Update();
+        }
     }
 
     /// <summary>
@@ -59,7 +67,11 @@ public class ExFatEntryInformation
     public DateTime CreationTimeUtc
     {
         get => _entry.CreationDateTimeOffset.UtcDateTime;
-        set { _entry.CreationDateTimeOffset = value.ToUniversalTime(); Update(); }
+        set
+        {
+            _entry.CreationDateTimeOffset = value.ToUniversalTime();
+            Update();
+        }
     }
 
     /// <summary>
@@ -71,7 +83,11 @@ public class ExFatEntryInformation
     public DateTime LastWriteTime
     {
         get => _entry.LastWriteDateTimeOffset.LocalDateTime;
-        set { _entry.LastWriteDateTimeOffset = value.ToLocalTime(); Update(); }
+        set
+        {
+            _entry.LastWriteDateTimeOffset = value.ToLocalTime();
+            Update();
+        }
     }
 
     /// <summary>
@@ -83,7 +99,11 @@ public class ExFatEntryInformation
     public DateTime LastWriteTimeUtc
     {
         get => _entry.LastWriteDateTimeOffset.UtcDateTime;
-        set { _entry.LastWriteDateTimeOffset = value.ToUniversalTime(); Update(); }
+        set
+        {
+            _entry.LastWriteDateTimeOffset = value.ToUniversalTime();
+            Update();
+        }
     }
 
     /// <summary>
@@ -95,7 +115,11 @@ public class ExFatEntryInformation
     public DateTime LastAccessTime
     {
         get => _entry.LastAccessDateTimeOffset.LocalDateTime;
-        set { _entry.LastAccessDateTimeOffset = value.ToLocalTime(); Update(); }
+        set
+        {
+            _entry.LastAccessDateTimeOffset = value.ToLocalTime();
+            Update();
+        }
     }
 
     /// <summary>
@@ -107,7 +131,11 @@ public class ExFatEntryInformation
     public DateTime LastAccessTimeUtc
     {
         get => _entry.LastAccessDateTimeOffset.UtcDateTime;
-        set { _entry.LastAccessDateTimeOffset = value.ToUniversalTime(); Update(); }
+        set
+        {
+            _entry.LastAccessDateTimeOffset = value.ToUniversalTime();
+            Update();
+        }
     }
 
     /// <summary>

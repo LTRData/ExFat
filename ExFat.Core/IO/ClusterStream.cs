@@ -37,7 +37,7 @@ public class ClusterStream : CompatibilityStream
     private long CurrentClusterIndexFromPosition => _position / _clusterReader.BytesPerCluster;
     private Cluster _currentCluster;
 
-    private int CurrentClusterOffset => (int)_position % _clusterReader.BytesPerCluster;
+    private int CurrentClusterOffset => (int)(_position % _clusterReader.BytesPerCluster);
 
     /// <inheritdoc />
     /// <summary>

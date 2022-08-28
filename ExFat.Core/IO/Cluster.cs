@@ -43,31 +43,31 @@ public readonly struct Cluster
     /// <value>
     ///   <c>true</c> if this instance is last; otherwise, <c>false</c>.
     /// </value>
-    public bool IsLast => Value < 0 && Value >= MinLast;
+    public bool IsLast => Value is < 0 and >= MinLast;
 
     /// <summary>
     /// The first data cluster
     /// </summary>
-    public static Cluster First = new(2);
+    public static Cluster First { get; } = new(2);
     /// <summary>
     /// Free cluster instance
     /// </summary>
-    public static Cluster Free = new(0);
+    public static Cluster Free { get; } = new(0);
     /// <summary>
     /// Last cluster of chain
     /// </summary>
-    public static Cluster Last = new(0xFFFFFFFF);
+    public static Cluster Last { get; } = new(0xFFFFFFFF);
     /// <summary>
     /// Cluster marked bad
     /// </summary>
-    public static Cluster Bad = new(0xFFFFFFF7);
+    public static Cluster Bad { get; } = new(0xFFFFFFF7);
     /// <summary>
     /// The marker
     /// </summary>
-    public static Cluster Marker = new(0xFFFFFFF8);
+    public static Cluster Marker { get; } = new(0xFFFFFFF8);
 
-    private static long MinLast = -8;
-    private static uint Reserved32 = 0xFFFFFFF0;
+    private const long MinLast = -8;
+    private const uint Reserved32 = 0xFFFFFFF0;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Cluster"/> struct.
@@ -107,10 +107,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the conversion.
     /// </returns>
-    public static implicit operator Cluster(uint cluster)
-    {
-        return new Cluster(cluster);
-    }
+    public static implicit operator Cluster(uint cluster) => new(cluster);
 
     /// <summary>
     /// Adds an offset to a cluster.
@@ -119,10 +116,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static Cluster operator ++(Cluster cluster)
-    {
-        return cluster + 1L;
-    }
+    public static Cluster operator ++(Cluster cluster) => cluster + 1L;
 
     /// <summary>
     /// Adds an offset to a cluster.
@@ -132,10 +126,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static Cluster operator +(Cluster cluster, int offset)
-    {
-        return cluster + (long)offset;
-    }
+    public static Cluster operator +(Cluster cluster, int offset) => cluster + (long)offset;
 
     /// <summary>
     /// Adds an offset to a cluster.
@@ -201,10 +192,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator ==(Cluster a, Cluster b)
-    {
-        return a.Value == b.Value;
-    }
+    public static bool operator ==(Cluster a, Cluster b) => a.Value == b.Value;
 
     /// <summary>
     /// Indicates whether two clusters have different value
@@ -214,10 +202,7 @@ public readonly struct Cluster
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator !=(Cluster a, Cluster b)
-    {
-        return !(a == b);
-    }
+    public static bool operator !=(Cluster a, Cluster b) => !(a == b);
 
     /// <summary>
     /// Determines whether the specified <see cref="object" />, is equal to this instance.

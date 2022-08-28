@@ -27,7 +27,7 @@ public class EntryFilesystemWriteTests
             s.Seek(0, SeekOrigin.End);
             s.WriteByte(123);
         }
-        Assert.Equal(file.Length, (long)DiskContent.LongFileSize + 1);
+        Assert.Equal((long)DiskContent.LongFileSize + 1, file.Length);
         using var s2 = filesystem.OpenFile(file, FileAccess.Read);
         s2.Seek(-1, SeekOrigin.End);
         Assert.Equal(123, s2.ReadByte());
@@ -205,7 +205,9 @@ public class EntryFilesystemWriteTests
     [Trait("Category", "Write")]
     public void NewPartitionTest()
     {
-        using (EntryFilesystemTestEnvironment.FromNewVhdx(true)) { }
+        using (EntryFilesystemTestEnvironment.FromNewVhdx(true))
+        {
+        }
     }
 
     [Fact]

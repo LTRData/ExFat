@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using DiscUtils.Streams.Compatibility;
 using ExFat.IO;
 using ExFat.Partition;
 using ExFat.Partition.Entries;
@@ -214,7 +215,9 @@ public class ExFatEntryFilesystem : IDisposable
         return OpenData(fileEntry, FileAccess.ReadWrite);
     }
 
-    private Stream OpenData(ExFatFilesystemEntry fileEntry, FileAccess access) => _partition.OpenDataStream(fileEntry.DataDescriptor, access, d => UpdateEntry(fileEntry, access, d));
+    private Stream OpenData(ExFatFilesystemEntry fileEntry, FileAccess access)
+        => _partition.OpenDataStream(fileEntry.DataDescriptor, access,
+            CanWrite ? d => UpdateEntry(fileEntry, access, d) : null);
 
     private void UpdateEntry(ExFatFilesystemEntry entry, FileAccess fileAccess, DataDescriptor dataDescriptor)
     {
@@ -342,8 +345,9 @@ public class ExFatEntryFilesystem : IDisposable
             using (var directoryStream = OpenData(directoryEntry, FileAccess.ReadWrite))
             {
                 // at least one empty entry, otherwise CHKDSK doesn't understand (the dumbass)
-                var empty = new byte[32];
-                directoryStream.Write(empty, 0, empty.Length);
+                Span<byte> empty = stackalloc byte[32];
+                empty.Clear();
+                directoryStream.Write(empty);
             }
             UpdateEntry(parentDirectoryEntry, FileAccess.Write, updatedDataDescriptor);
             return directoryEntry;
@@ -453,4 +457,6 @@ public class ExFatEntryFilesystem : IDisposable
         var partition = ExFatPartition.Format(partitionStream, options, volumeLabel);
         return new ExFatEntryFilesystem(partition);
     }
+
+    public bool CanWrite => _partition.CanWrite;
 }

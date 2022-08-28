@@ -206,20 +206,20 @@ public class ExFatBootSector
     /// <summary>
     /// Computes the checksum.
     /// </summary>
+    /// <param name="buffer">Byte buffer that will receive the calculated four checksum bytes</param>
     /// <returns></returns>
-    public byte[] ComputeChecksum()
+    public void ComputeChecksum(Span<byte> buffer)
     {
         var checksum = _bytes.GetChecksum32(0, 106);
         checksum = _bytes.GetChecksum32(108, 4, checksum);
         checksum = _bytes.GetChecksum32(113, (int)(BytesPerSector.Value * 11 - 113), checksum);
-        var buffer = new byte[sizeof(uint)];
         EndianUtilities.WriteBytesLittleEndian(checksum, buffer);
-        return buffer;
     }
 
     private bool IsChecksumValid()
     {
-        var checksum = ComputeChecksum();
+        Span<byte> checksum = stackalloc byte[sizeof(uint)];
+        ComputeChecksum(checksum);
         var startSectorOffset = 11 * BytesPerSector.Value;
         var endSectorOffset = 12 * BytesPerSector.Value;
         for (var lastSectorOffset = startSectorOffset; lastSectorOffset < endSectorOffset;)

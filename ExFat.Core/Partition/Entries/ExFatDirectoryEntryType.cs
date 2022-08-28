@@ -4,12 +4,14 @@
 
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExFat.Partition.Entries;
 /// <summary>
 /// Flags for directory entry type
 /// </summary>
 [Flags]
+[SuppressMessage("Design", "CA1069:Enums values should not be duplicated", Justification = "Dual meaning of some flags")]
 public enum ExFatDirectoryEntryType : byte
 {
     // values

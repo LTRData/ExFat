@@ -361,7 +361,9 @@ public partial class ExFatFileSystem : DiscFileSystem
     public static ExFatFileSystem Format(PhysicalVolumeInfo volume, ExFatFormatOptions options = null, string label = null)
     {
         var partitionStream = volume.Open();
-        using (ExFatPathFilesystem.Format(partitionStream, options, label)) { }
+        using (ExFatPathFilesystem.Format(partitionStream, options, label))
+        {
+        }
         return new ExFatFileSystem(partitionStream);
     }
 }

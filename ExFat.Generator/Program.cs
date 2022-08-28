@@ -11,6 +11,7 @@ using DiscUtils;
 using DiscUtils.Partitions;
 using DiscUtils.Streams;
 using DiscUtils.Vhdx;
+using System.Runtime.Versioning;
 
 namespace ExFat.Generator;
 public static class Program
@@ -69,6 +70,7 @@ public static class Program
         }
     }
 
+    [SupportedOSPlatform("windows")]
     public static void Main111(string[] args)
     {
         const string drive = "X:";

@@ -88,7 +88,8 @@ partial class ExFatPartition
         bootSector.RootDirectoryCluster.Value = directoryDataDescriptor.FirstCluster.ToUInt32();
 
         // boot sector is now complete
-        var checksum = bootSector.ComputeChecksum();
+        Span<byte> checksum = stackalloc byte[sizeof(uint)];
+        bootSector.ComputeChecksum(checksum);
         for (var offset = 11 * bytesPerSector; offset < 12 * bytesPerSector; offset += 4)
         {
             bootSectorBytes[offset] = checksum[0];

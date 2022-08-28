@@ -19,12 +19,13 @@ partial class ExFatPartition
     /// <returns></returns>
     public IEnumerable<ExFatDirectoryEntry> GetEntries(DataDescriptor dataDescriptor)
     {
+        var entryBytes = new byte[32];
+
         lock (_directoryLock)
         {
             using var readerStream = OpenDataStream(dataDescriptor, FileAccess.Read);
             for (var offset = 0L; ; offset += 32)
             {
-                var entryBytes = new byte[32];
                 // cluster offset before reading data, since it's the start
                 if (readerStream.Read(entryBytes, 0, entryBytes.Length) != 32)
                 {
@@ -35,6 +36,7 @@ partial class ExFatPartition
                 if (directoryEntry != null)
                 {
                     yield return directoryEntry;
+                    entryBytes = new byte[32];
                 }
             }
         }
@@ -163,4 +165,6 @@ partial class ExFatPartition
             metaEntry.Write(directoryStream);
         }
     }
+
+    public bool CanWrite => _partitionStream.CanWrite;
 }

@@ -4,6 +4,7 @@
 
 
 using DiscUtils.Streams;
+using DiscUtils.Streams.Compatibility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,12 +42,12 @@ public class ExFatUpCaseTable
     public void Read(Stream upcaseTableStream)
     {
         _table.Clear();
-        var pairBytes = new byte[2];
+        Span<byte> pairBytes = stackalloc byte[2];
         var currentChar = '\0';
         var settingCurrentChar = false;
         for (; ; )
         {
-            if (upcaseTableStream.Read(pairBytes, 0, pairBytes.Length) == 0)
+            if (upcaseTableStream.Read(pairBytes) != 2)
             {
                 break;
             }
