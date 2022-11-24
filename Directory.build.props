@@ -10,7 +10,7 @@
     <LangVersion>Latest</LangVersion>
     <DebugType>portable</DebugType>
     <Deterministic>false</Deterministic>
-    <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
 
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../ExFat.snk</AssemblyOriginatorKeyFile>
