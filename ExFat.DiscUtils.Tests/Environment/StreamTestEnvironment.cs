@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -30,16 +29,16 @@ internal class StreamTestEnvironment : TestEnvironment
 
     private void ExtractVhdx(bool allowDebugKeep)
     {
-        VhdxPath = Path.Combine(Path.GetTempPath(), $"exFAT test (to be removed) {Guid.NewGuid():N}.vhdx");
+        vhdxPath = Path.Combine(Path.GetTempPath(), $"exFAT test (to be removed) {Guid.NewGuid():N}.vhdx");
 
         using var gzStream = GetType().Assembly.GetManifestResourceStream(GetType(), "exFAT.vhdx.gz");
         using var gzipStream = new GZipStream(gzStream, CompressionMode.Decompress);
         var fileOptions = allowDebugKeep ? 0 : FileOptions.DeleteOnClose;
-        var vhdxStream = File.Create(VhdxPath, 1 << 20, fileOptions);
+        var vhdxStream = File.Create(vhdxPath, 1 << 20, fileOptions);
         gzipStream.CopyTo(vhdxStream);
 
-        Disk = new Disk(vhdxStream, Ownership.Dispose);
-        var volume = VolumeManager.GetPhysicalVolumes(Disk)[1];
+        disk = new Disk(vhdxStream, Ownership.Dispose);
+        var volume = VolumeManager.GetPhysicalVolumes(disk)[1];
         PartitionStream = volume.Open();
     }
 }

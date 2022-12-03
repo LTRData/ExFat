@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Diagnostics;
 
@@ -14,7 +13,7 @@ namespace ExFat.Buffers;
 [DebuggerDisplay("{" + nameof(Value) + "}")]
 public readonly struct BufferUInt8 : IValueProvider<byte>
 {
-    private readonly Memory<byte> _buffer;
+    private readonly Memory<byte> buffer;
 
     /// <inheritdoc />
     /// <summary>
@@ -25,8 +24,8 @@ public readonly struct BufferUInt8 : IValueProvider<byte>
     /// </value>
     public byte Value
     {
-        get => _buffer.Span[0];
-        set => _buffer.Span[0] = value;
+        get => buffer.Span[0];
+        set => buffer.Span[0] = value;
     }
 
     /// <summary>
@@ -35,6 +34,6 @@ public readonly struct BufferUInt8 : IValueProvider<byte>
     /// <param name="buffer">The buffer.</param>
     public BufferUInt8(Memory<byte> buffer)
     {
-        _buffer = buffer.Slice(0, sizeof(byte));
+        this.buffer = buffer.Slice(0, sizeof(byte));
     }
 }

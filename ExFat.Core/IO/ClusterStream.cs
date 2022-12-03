@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using System.Threading;
@@ -232,6 +231,7 @@ public class ClusterStream : CompatibilityStream
             _clusterWriter.FreeCluster(extraCluster);
             _clusterWriter.SetNextCluster(extraCluster, Cluster.Free);
         }
+
         _clusterWriter.SetNextCluster(cluster, Cluster.Last);
 
         // now adjust
@@ -312,6 +312,7 @@ public class ClusterStream : CompatibilityStream
 
             _clusterWriter.SetNextCluster(previousCluster, newCluster);
         }
+
         _clusterWriter.SetNextCluster(newCluster, Cluster.Last);
         _currentCluster = newCluster;
         _currentClusterIndex = clusterIndexFromPosition;
@@ -458,6 +459,7 @@ public class ClusterStream : CompatibilityStream
             count -= toRead;
             totalRead += toRead;
         }
+
         return totalRead;
     }
 
@@ -522,6 +524,7 @@ public class ClusterStream : CompatibilityStream
             count -= toRead;
             totalRead += toRead;
         }
+
         return totalRead;
     }
 
@@ -566,6 +569,7 @@ public class ClusterStream : CompatibilityStream
             buffer = buffer.Slice(toRead);
             totalRead += toRead;
         }
+
         return totalRead;
     }
 
@@ -609,6 +613,7 @@ public class ClusterStream : CompatibilityStream
             buffer = buffer.Slice(toRead);
             totalRead += toRead;
         }
+
         return totalRead;
     }
 

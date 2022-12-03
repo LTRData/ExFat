@@ -11,7 +11,7 @@ namespace ExFat.Buffers;
 /// <seealso cref="IValueProvider{TValue}" />
 public class CacheValueProvider<TValue> : IValueProvider<TValue>
 {
-    private readonly IValueProvider<TValue> _valueProvider;
+    private readonly IValueProvider<TValue> valueProvider;
 
     private bool _valueSet;
     private TValue _value;
@@ -22,12 +22,13 @@ public class CacheValueProvider<TValue> : IValueProvider<TValue>
         {
             if (!_valueSet)
             {
-                _value = _valueProvider.Value;
+                _value = valueProvider.Value;
                 _valueSet = true;
             }
+
             return _value;
         }
-        set => _valueProvider.Value = _value = value;
+        set => valueProvider.Value = _value = value;
     }
 
     /// <summary>
@@ -36,6 +37,6 @@ public class CacheValueProvider<TValue> : IValueProvider<TValue>
     /// <param name="valueProvider">The value provider.</param>
     public CacheValueProvider(IValueProvider<TValue> valueProvider)
     {
-        _valueProvider = valueProvider;
+        this.valueProvider = valueProvider;
     }
 }

@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using ExFat.DiscUtils.Environment;
 using ExFat.Filesystem;
 using DiscUtils.Streams;
@@ -50,6 +49,7 @@ public class EntryFilesystemReadTests
         using (var stream = filesystem.OpenFile(file, FileAccess.Read))
         {
         }
+
         var access1 = file.LastAccessTime;
         Assert.True(access1 > access0);
         var file2 = filesystem.FindChild(filesystem.RootDirectory, DiskContent.LongContiguousFileName);

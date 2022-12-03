@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using DiscUtils.Streams;
 using DiscUtils.Streams.Compatibility;
 using System;
@@ -95,10 +94,12 @@ public class ExFatUpCaseTable
                 EndianUtilities.WriteBytesLittleEndian((ushort)(lc - current), buffer);
                 Write(stream, buffer, ref checksum);
             }
+
             EndianUtilities.WriteBytesLittleEndian(_table[lc], buffer);
             Write(stream, buffer, ref checksum);
             current = lc + 1;
         }
+
         return checksum;
     }
 

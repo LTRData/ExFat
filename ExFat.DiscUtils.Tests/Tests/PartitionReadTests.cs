@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using ExFat.DiscUtils.Environment;
 using ExFat.IO;
 using ExFat.Partition;
@@ -43,6 +42,7 @@ public class PartitionReadTests
             range = range.Reverse();
             forceSeek = true;
         }
+
         foreach (var offset in range)
         {
             if (forceSeek)
@@ -54,6 +54,7 @@ public class PartitionReadTests
             var v = EndianUtilities.ToUInt64LittleEndian(vb);
             Assert.Equal(v, getValueAtOffset((ulong)offset));
         }
+
         if (forward)
         {
             Assert.Equal(0, stream.Read(vb, 0, vb.Length));

@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,11 +15,11 @@ namespace ExFat.Buffers;
 [DebuggerDisplay("{" + nameof(Value) + "}")]
 public readonly struct BufferWideString : IValueProvider<string>
 {
-    private readonly Memory<byte> _buffer;
+    private readonly Memory<byte> buffer;
 
     private IEnumerable<char> GetChars()
     {
-        var all = _buffer;
+        var all = buffer;
         for (var index = 0; index < all.Length; index += 2)
         {
             yield return ToChar(all.Span[index], all.Span[index + 1]);
@@ -56,18 +55,18 @@ public readonly struct BufferWideString : IValueProvider<string>
         get => new(GetZeroChars().ToArray());
         set
         {
-            for (int byteIndex = 0, charIndex = 0; byteIndex < _buffer.Length; byteIndex += 2, charIndex++)
+            for (int byteIndex = 0, charIndex = 0; byteIndex < buffer.Length; byteIndex += 2, charIndex++)
             {
                 if (charIndex < value.Length)
                 {
                     var t = ToBytes(value[charIndex]);
-                    _buffer.Span[byteIndex] = t[0];
-                    _buffer.Span[byteIndex + 1] = t[1];
+                    buffer.Span[byteIndex] = t[0];
+                    buffer.Span[byteIndex + 1] = t[1];
                 }
                 else
                 {
-                    _buffer.Span[byteIndex] = 0;
-                    _buffer.Span[byteIndex + 1] = 0;
+                    buffer.Span[byteIndex] = 0;
+                    buffer.Span[byteIndex + 1] = 0;
                 }
             }
         }
@@ -80,6 +79,6 @@ public readonly struct BufferWideString : IValueProvider<string>
     /// <param name="charsLength">The length.</param>
     public BufferWideString(Memory<byte> buffer, int charsLength)
     {
-        _buffer = buffer.Slice(0, charsLength * 2);
+        this.buffer = buffer.Slice(0, charsLength * 2);
     }
 }

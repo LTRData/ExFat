@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -239,6 +238,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             ReadSectors(BootSector.FatOffsetSector.Value + fatPageIndex * SectorsPerFatPage, _fatPage, SectorsPerFatPage);
             _fatPageIndex = fatPageIndex;
         }
+
         return _fatPage;
     }
 
@@ -632,6 +632,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
             hash = (ushort)(hash.RotateRight() + (uc & 0xFF));
             hash = (ushort)(hash.RotateRight() + (uc >> 8));
         }
+
         return hash;
     }
 
@@ -701,6 +702,7 @@ public partial class ExFatPartition : IClusterWriter, IDisposable
                 _upCaseTable.SetDefault();
             }
         }
+
         return _upCaseTable;
     }
 

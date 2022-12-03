@@ -28,9 +28,21 @@
     <PackageId>LTRData.$(MSBuildProjectName)</PackageId>
     <Company>LTR Data</Company>
     <Authors>Olof Lagerkvist</Authors>
-    <PackageVersion>1.0.9</PackageVersion>
-	<PackageOutputPath>$(LocalNuGetPath)\$(Configuration)</PackageOutputPath>
+    <PackageVersion>1.0.10</PackageVersion>
+	<PackageOutputPath>$(LocalNuGetPath)</PackageOutputPath>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+
+    <PackageProjectUrl>https://github.com/LTRData/ExFat</PackageProjectUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Link="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>

@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using ExFat.IO;
@@ -69,6 +68,7 @@ public class ExFatAllocationBitmap
             _dataStream.Seek(0, SeekOrigin.Begin);
             _dataStream.Write(_bitmap, 0, _bitmap.Length);
         }
+
         _dataStream.Flush();
     }
 
@@ -175,6 +175,7 @@ public class ExFatAllocationBitmap
                 }
             }
         }
+
         return usedClusters;
     }
 
@@ -274,6 +275,7 @@ public class ExFatAllocationBitmap
                     return freeCluster;
                 }
             }
+
             ++cluster;
         }
         // nothing found

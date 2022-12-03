@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using DiscUtils.Streams;
 using System;
 using System.Diagnostics;

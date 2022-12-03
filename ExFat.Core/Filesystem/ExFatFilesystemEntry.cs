@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -17,7 +16,7 @@ namespace ExFat.Filesystem;
 [DebuggerDisplay("{" + nameof(DebugLiteral) + "}")]
 public class ExFatFilesystemEntry
 {
-    private readonly DataDescriptor _dataDescriptorOverride;
+    private readonly DataDescriptor dataDescriptorOverride;
     private FileExFatDirectoryEntry FileEntry => MetaEntry?.Primary as FileExFatDirectoryEntry;
     private ExFatFileAttributes? _attributesOverride;
     private string DebugLiteral => Name + (IsDirectory ? "/" : "");
@@ -56,11 +55,13 @@ public class ExFatFilesystemEntry
                 _attributesOverride = (ExFatFileAttributes)value;
                 return;
             }
+
             if (FileEntry != null)
             {
                 FileEntry.FileAttributes.Value = (ExFatFileAttributes)value;
                 return;
             }
+
             throw new IOException();
         }
     }
@@ -177,11 +178,11 @@ public class ExFatFilesystemEntry
     /// <value>
     /// The data descriptor.
     /// </value>
-    public DataDescriptor DataDescriptor => _dataDescriptorOverride ?? MetaEntry?.DataDescriptor;
+    public DataDescriptor DataDescriptor => dataDescriptorOverride ?? MetaEntry?.DataDescriptor;
 
     internal ExFatFilesystemEntry(DataDescriptor parentDataDescriptor, ExFatMetaDirectoryEntry metaEntry = null, DataDescriptor dataDescriptorOverride = null, ExFatFileAttributes? attributesOverride = null)
     {
-        _dataDescriptorOverride = dataDescriptorOverride;
+        this.dataDescriptorOverride = dataDescriptorOverride;
         ParentDataDescriptor = parentDataDescriptor;
         MetaEntry = metaEntry;
         _attributesOverride = attributesOverride;

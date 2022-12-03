@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System.Diagnostics;
 
 namespace ExFat.Buffers;
@@ -15,7 +14,7 @@ namespace ExFat.Buffers;
 [DebuggerDisplay("{" + nameof(Value) + "}")]
 public class EnumValueProvider<TEnum, TBacking> : IValueProvider<TEnum>
 {
-    private readonly IValueProvider<TBacking> _backingValueProvider;
+    private readonly IValueProvider<TBacking> backingValueProvider;
 
     /// <summary>
     /// Gets or sets the value.
@@ -26,8 +25,8 @@ public class EnumValueProvider<TEnum, TBacking> : IValueProvider<TEnum>
     public TEnum Value
     {
         // the casts are a bit dirty here, however they do the job
-        get => (TEnum)(object)_backingValueProvider.Value;
-        set => _backingValueProvider.Value = (TBacking)(object)value;
+        get => (TEnum)(object)backingValueProvider.Value;
+        set => backingValueProvider.Value = (TBacking)(object)value;
     }
 
     /// <summary>
@@ -36,6 +35,6 @@ public class EnumValueProvider<TEnum, TBacking> : IValueProvider<TEnum>
     /// <param name="backingValueProvider">The backing value provider.</param>
     public EnumValueProvider(IValueProvider<TBacking> backingValueProvider)
     {
-        _backingValueProvider = backingValueProvider;
+        this.backingValueProvider = backingValueProvider;
     }
 }

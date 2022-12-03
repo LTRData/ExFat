@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System.Reflection;
 using DiscUtils.Setup;
 

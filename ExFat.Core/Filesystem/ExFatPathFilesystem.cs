@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -83,6 +82,7 @@ public class ExFatPathFilesystem : IDisposable
                     _children.Remove(childName);
                     return null;
                 }
+
                 node._generation = _filesystem.GetNextGeneration();
                 return node;
             }
@@ -114,11 +114,13 @@ public class ExFatPathFilesystem : IDisposable
                 _children.Clear();
                 return;
             }
+
             if (Entry != null)
             {
                 _parent.RemoveChild(Entry.Name);
                 return;
             }
+
             var keyValue = _parent._children.FirstOrDefault(kv => kv.Value == this);
             if (keyValue.Value == this)
             {
@@ -443,6 +445,7 @@ public class ExFatPathFilesystem : IDisposable
                     throw new IOException();
                 }
             }
+
             _entryFilesystem.Delete(node.Entry);
             node.Remove();
         }
@@ -466,6 +469,7 @@ public class ExFatPathFilesystem : IDisposable
                     DeleteTree(childPath.Path);
                 }
             }
+
             Delete(literalPath);
         }
     }

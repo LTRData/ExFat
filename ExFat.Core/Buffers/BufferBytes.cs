@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +16,7 @@ namespace ExFat.Buffers;
 [DebuggerDisplay("{" + nameof(DebugLiteral) + "}")]
 public readonly struct BufferBytes : IEnumerable<byte>
 {
-    private readonly Memory<byte> _buffer;
+    private readonly Memory<byte> buffer;
 
     /// <summary>
     /// Gets or sets the <see cref="byte"/> at the specified index.
@@ -31,8 +30,8 @@ public readonly struct BufferBytes : IEnumerable<byte>
     /// </exception>
     public byte this[int index]
     {
-        get => _buffer.Span[index];
-        set => _buffer.Span[index] = value;
+        get => buffer.Span[index];
+        set => buffer.Span[index] = value;
     }
 
     private string DebugLiteral
@@ -40,7 +39,7 @@ public readonly struct BufferBytes : IEnumerable<byte>
         get
         {
             var s = string.Join(", ", this.Take(10).Select(b => $"0x{b:X2}"));
-            if (_buffer.Length > 10)
+            if (buffer.Length > 10)
             {
                 s += " ...";
             }
@@ -55,7 +54,7 @@ public readonly struct BufferBytes : IEnumerable<byte>
     /// <param name="buffer">The buffer.</param>
     public BufferBytes(Memory<byte> buffer)
     {
-        _buffer = buffer;
+        this.buffer = buffer;
     }
 
     /// <summary>
@@ -64,9 +63,9 @@ public readonly struct BufferBytes : IEnumerable<byte>
     /// <param name="bytes">The bytes.</param>
     public void Set(ReadOnlySpan<byte> bytes)
     {
-        for (var offset = 0; offset < _buffer.Length; offset++)
+        for (var offset = 0; offset < buffer.Length; offset++)
         {
-            _buffer.Span[offset] = bytes[offset];
+            buffer.Span[offset] = bytes[offset];
         }
     }
 
@@ -76,7 +75,7 @@ public readonly struct BufferBytes : IEnumerable<byte>
     /// <returns>
     /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
     /// </returns>
-    public IEnumerator<byte> GetEnumerator() => MemoryMarshal.ToEnumerable<byte>(_buffer).GetEnumerator();
+    public IEnumerator<byte> GetEnumerator() => MemoryMarshal.ToEnumerable<byte>(buffer).GetEnumerator();
 
     /// <summary>
     /// Returns an enumerator that iterates through a collection.

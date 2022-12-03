@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using ExFat.DiscUtils.Environment;
 using ExFat.Filesystem;
 using DiscUtils.Streams;
@@ -27,6 +26,7 @@ public class EntryFilesystemWriteTests
             s.Seek(0, SeekOrigin.End);
             s.WriteByte(123);
         }
+
         Assert.Equal((long)DiskContent.LongFileSize + 1, file.Length);
         using var s2 = filesystem.OpenFile(file, FileAccess.Read);
         s2.Seek(-1, SeekOrigin.End);
@@ -196,6 +196,7 @@ public class EntryFilesystemWriteTests
                         s.Write(b, 0, b.Length);
                     }
                 }
+
                 catalogCache.Add(fileName);
             }
         }

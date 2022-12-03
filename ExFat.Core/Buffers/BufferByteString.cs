@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,12 +17,12 @@ namespace ExFat.Buffers;
 [DebuggerDisplay("{" + nameof(Value) + "}")]
 public readonly struct BufferByteString : IValueProvider<string>
 {
-    private readonly Encoding _encoding;
-    private readonly Memory<byte> _buffer;
+    private readonly Encoding encoding;
+    private readonly Memory<byte> buffer;
 
     private IEnumerable<byte> GetZeroBytes()
     {
-        foreach (var b in MemoryMarshal.ToEnumerable<byte>(_buffer))
+        foreach (var b in MemoryMarshal.ToEnumerable<byte>(buffer))
         {
             if (b == 0)
             {
@@ -43,16 +42,16 @@ public readonly struct BufferByteString : IValueProvider<string>
     /// </value>
     public string Value
     {
-        get => _encoding.GetString(GetZeroBytes().ToArray());
+        get => encoding.GetString(GetZeroBytes().ToArray());
         set
         {
-            var stringBytes = _encoding.GetBytes(value);
+            var stringBytes = encoding.GetBytes(value);
             // first of all, inject bytes
-            _buffer.Set(stringBytes);
+            buffer.Set(stringBytes);
             // then pad
-            for (var index = stringBytes.Length; index < _buffer.Length; index++)
+            for (var index = stringBytes.Length; index < buffer.Length; index++)
             {
-                _buffer.Span[index] = 0;
+                buffer.Span[index] = 0;
             }
         }
     }
@@ -64,7 +63,7 @@ public readonly struct BufferByteString : IValueProvider<string>
     /// <param name="encoding">The encoding (defaults to ASCII).</param>
     public BufferByteString(Memory<byte> buffer, Encoding encoding = null)
     {
-        _buffer = buffer;
-        _encoding = encoding ?? Encoding.ASCII;
+        this.buffer = buffer;
+        this.encoding = encoding ?? Encoding.ASCII;
     }
 }

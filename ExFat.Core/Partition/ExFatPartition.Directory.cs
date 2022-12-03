@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System.Collections.Generic;
 using System.IO;
 using ExFat.Partition.Entries;
@@ -71,6 +70,7 @@ partial class ExFatPartition
                 entriesStack.Add(directoryEntry);
             }
         }
+
         if (entriesStack.Count > 0)
         {
             yield return new ExFatMetaDirectoryEntry(entriesStack);
@@ -117,6 +117,7 @@ partial class ExFatPartition
                         availableSlot = offset;
                         availableCount = 0;
                     }
+
                     if (++availableCount == entriesCount)
                     {
                         return availableSlot;
@@ -147,6 +148,7 @@ partial class ExFatPartition
 
             metaEntry.Write(directoryStream);
         }
+
         return r;
     }
 

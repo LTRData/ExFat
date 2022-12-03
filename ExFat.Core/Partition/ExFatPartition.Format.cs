@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using ExFat.Partition.Entries;
@@ -68,6 +67,7 @@ partial class ExFatPartition
             bootSectorBytes[sectorIndex * bytesPerSector + bytesPerSector - 2] = 0x55;
             bootSectorBytes[sectorIndex * bytesPerSector + bytesPerSector - 1] = 0xAA;
         }
+
         partition.BootSector = bootSector;
 
         // prepare FAT
@@ -85,6 +85,7 @@ partial class ExFatPartition
         {
             s.SetDataLength(bytesPerSector * sectorsPerCluster);
         }
+
         bootSector.RootDirectoryCluster.Value = directoryDataDescriptor.FirstCluster.ToUInt32();
 
         // boot sector is now complete
@@ -97,6 +98,7 @@ partial class ExFatPartition
             bootSectorBytes[offset + 2] = checksum[2];
             bootSectorBytes[offset + 3] = checksum[3];
         }
+
         partition.WriteSectors(0, bootSectorBytes, (int)bootSectors);
         partition.WriteSectors(bootSectors, bootSectorBytes, (int)bootSectors);
 
@@ -107,6 +109,7 @@ partial class ExFatPartition
             CreateUpCaseTable(partition, directoryStream);
             CreateVolumeLabel(directoryStream, volumeLabel);
         }
+
         partition.Flush();
         return partition;
     }

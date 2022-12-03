@@ -2,12 +2,12 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Diagnostics;
 using System.IO;
 
 namespace ExFat.Filesystem;
+
 /// <summary>
 /// Information about file system entry.
 /// High-level, related to <see cref="ExFatPathFilesystem"/>
@@ -15,8 +15,8 @@ namespace ExFat.Filesystem;
 [DebuggerDisplay("{" + nameof(Path) + "}")]
 public class ExFatEntryInformation
 {
-    private readonly ExFatEntryFilesystem _entryFilesystem;
-    private readonly ExFatFilesystemEntry _entry;
+    private readonly ExFatEntryFilesystem entryFilesystem;
+    private readonly ExFatFilesystemEntry entry;
 
     /// <summary>
     /// Gets the path.
@@ -34,10 +34,10 @@ public class ExFatEntryInformation
     /// </value>
     public FileAttributes Attributes
     {
-        get => _entry.Attributes;
+        get => entry.Attributes;
         set
         {
-            _entry.Attributes = value;
+            entry.Attributes = value;
             Update();
         }
     }
@@ -50,10 +50,10 @@ public class ExFatEntryInformation
     /// </value>
     public DateTime CreationTime
     {
-        get => _entry.CreationDateTimeOffset.LocalDateTime;
+        get => entry.CreationDateTimeOffset.LocalDateTime;
         set
         {
-            _entry.CreationDateTimeOffset = value.ToLocalTime();
+            entry.CreationDateTimeOffset = value.ToLocalTime();
             Update();
         }
     }
@@ -66,10 +66,10 @@ public class ExFatEntryInformation
     /// </value>
     public DateTime CreationTimeUtc
     {
-        get => _entry.CreationDateTimeOffset.UtcDateTime;
+        get => entry.CreationDateTimeOffset.UtcDateTime;
         set
         {
-            _entry.CreationDateTimeOffset = value.ToUniversalTime();
+            entry.CreationDateTimeOffset = value.ToUniversalTime();
             Update();
         }
     }
@@ -82,10 +82,10 @@ public class ExFatEntryInformation
     /// </value>
     public DateTime LastWriteTime
     {
-        get => _entry.LastWriteDateTimeOffset.LocalDateTime;
+        get => entry.LastWriteDateTimeOffset.LocalDateTime;
         set
         {
-            _entry.LastWriteDateTimeOffset = value.ToLocalTime();
+            entry.LastWriteDateTimeOffset = value.ToLocalTime();
             Update();
         }
     }
@@ -98,10 +98,10 @@ public class ExFatEntryInformation
     /// </value>
     public DateTime LastWriteTimeUtc
     {
-        get => _entry.LastWriteDateTimeOffset.UtcDateTime;
+        get => entry.LastWriteDateTimeOffset.UtcDateTime;
         set
         {
-            _entry.LastWriteDateTimeOffset = value.ToUniversalTime();
+            entry.LastWriteDateTimeOffset = value.ToUniversalTime();
             Update();
         }
     }
@@ -114,10 +114,10 @@ public class ExFatEntryInformation
     /// </value>
     public DateTime LastAccessTime
     {
-        get => _entry.LastAccessDateTimeOffset.LocalDateTime;
+        get => entry.LastAccessDateTimeOffset.LocalDateTime;
         set
         {
-            _entry.LastAccessDateTimeOffset = value.ToLocalTime();
+            entry.LastAccessDateTimeOffset = value.ToLocalTime();
             Update();
         }
     }
@@ -130,10 +130,10 @@ public class ExFatEntryInformation
     /// </value>
     public DateTime LastAccessTimeUtc
     {
-        get => _entry.LastAccessDateTimeOffset.UtcDateTime;
+        get => entry.LastAccessDateTimeOffset.UtcDateTime;
         set
         {
-            _entry.LastAccessDateTimeOffset = value.ToUniversalTime();
+            entry.LastAccessDateTimeOffset = value.ToUniversalTime();
             Update();
         }
     }
@@ -144,7 +144,7 @@ public class ExFatEntryInformation
     /// <value>
     /// The length.
     /// </value>
-    public long Length => _entry.Length;
+    public long Length => entry.Length;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExFatEntryInformation"/> class.
@@ -155,9 +155,9 @@ public class ExFatEntryInformation
     internal ExFatEntryInformation(ExFatEntryFilesystem entryFilesystem, ExFatFilesystemEntry entry, string cleanPath)
     {
         Path = cleanPath;
-        _entryFilesystem = entryFilesystem;
-        _entry = entry;
+        this.entryFilesystem = entryFilesystem;
+        this.entry = entry;
     }
 
-    private void Update() => _entryFilesystem.Update(_entry);
+    private void Update() => entryFilesystem.Update(entry);
 }

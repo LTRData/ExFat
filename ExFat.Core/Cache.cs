@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,20 +14,20 @@ namespace ExFat;
 /// <seealso cref="IDictionary{TKey, TValue}" />
 public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
 {
-    private readonly int _capacity;
-    private readonly IDictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
-    private readonly IList<TKey> _orderedKeys = new List<TKey>();
+    private readonly int capacity;
+    private readonly IDictionary<TKey, TValue> dictionary = new Dictionary<TKey, TValue>();
+    private readonly IList<TKey> orderedKeys = new List<TKey>();
 
     /// <inheritdoc />
     /// <summary>
     /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
     /// </summary>
-    public int Count => _dictionary.Count;
+    public int Count => dictionary.Count;
     /// <inheritdoc />
     /// <summary>
     /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
     /// </summary>
-    public bool IsReadOnly => _dictionary.IsReadOnly;
+    public bool IsReadOnly => dictionary.IsReadOnly;
 
     /// <inheritdoc />
     /// <summary>
@@ -43,13 +42,13 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     {
         get
         {
-            var value = _dictionary[key];
+            var value = dictionary[key];
             Touch(key);
             return value;
         }
         set
         {
-            _dictionary[key] = value;
+            dictionary[key] = value;
             Touch(key);
         }
     }
@@ -58,12 +57,12 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <summary>
     /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the keys of the <see cref="T:System.Collections.Generic.IDictionary`2" />.
     /// </summary>
-    public ICollection<TKey> Keys => _dictionary.Keys;
+    public ICollection<TKey> Keys => dictionary.Keys;
     /// <inheritdoc />
     /// <summary>
     /// Gets an <see cref="T:System.Collections.Generic.ICollection`1" /> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2" />.
     /// </summary>
-    public ICollection<TValue> Values => _dictionary.Values;
+    public ICollection<TValue> Values => dictionary.Values;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Cache{TKey, TValue}"/> class.
@@ -71,7 +70,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <param name="capacity">The capacity.</param>
     public Cache(int capacity)
     {
-        _capacity = capacity;
+        this.capacity = capacity;
     }
 
     /// <summary>
@@ -81,16 +80,16 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     private void Touch(TKey key)
     {
         // remove from anywhere
-        _orderedKeys.Remove(key);
+        orderedKeys.Remove(key);
         // place at end
-        _orderedKeys.Add(key);
+        orderedKeys.Add(key);
         // on capacity overflow
-        while (_orderedKeys.Count >= _capacity)
+        while (orderedKeys.Count >= capacity)
         {
             // oldest key is first
-            var lastKey = _orderedKeys[0];
-            _orderedKeys.RemoveAt(0);
-            _dictionary.Remove(lastKey);
+            var lastKey = orderedKeys[0];
+            orderedKeys.RemoveAt(0);
+            dictionary.Remove(lastKey);
         }
     }
 
@@ -101,7 +100,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
     /// </returns>
-    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _dictionary.GetEnumerator();
+    public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => dictionary.GetEnumerator();
 
     /// <inheritdoc />
     /// <summary>
@@ -119,7 +118,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
     public void Add(KeyValuePair<TKey, TValue> item)
     {
-        _dictionary.Add(item);
+        dictionary.Add(item);
         Touch(item.Key);
     }
 
@@ -129,8 +128,8 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// </summary>
     public void Clear()
     {
-        _dictionary.Clear();
-        _orderedKeys.Clear();
+        dictionary.Clear();
+        orderedKeys.Clear();
     }
 
     /// <inheritdoc />
@@ -141,7 +140,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.
     /// </returns>
-    public bool Contains(KeyValuePair<TKey, TValue> item) => _dictionary.Contains(item);
+    public bool Contains(KeyValuePair<TKey, TValue> item) => dictionary.Contains(item);
 
     /// <inheritdoc />
     /// <summary>
@@ -149,7 +148,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// </summary>
     /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
     /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-    public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => _dictionary.CopyTo(array, arrayIndex);
+    public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => dictionary.CopyTo(array, arrayIndex);
 
     /// <inheritdoc />
     /// <summary>
@@ -161,8 +160,8 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// </returns>
     public bool Remove(KeyValuePair<TKey, TValue> item)
     {
-        _dictionary.Remove(item);
-        return _orderedKeys.Remove(item.Key);
+        dictionary.Remove(item);
+        return orderedKeys.Remove(item.Key);
     }
 
     /// <inheritdoc />
@@ -173,7 +172,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <returns>
     /// true if the <see cref="T:System.Collections.Generic.IDictionary`2" /> contains an element with the key; otherwise, false.
     /// </returns>
-    public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
+    public bool ContainsKey(TKey key) => dictionary.ContainsKey(key);
 
     /// <inheritdoc />
     /// <summary>
@@ -183,7 +182,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// <param name="value">The object to use as the value of the element to add.</param>
     public void Add(TKey key, TValue value)
     {
-        _dictionary.Add(key, value);
+        dictionary.Add(key, value);
         Touch(key);
     }
 
@@ -197,8 +196,8 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// </returns>
     public bool Remove(TKey key)
     {
-        _dictionary.Remove(key);
-        return _orderedKeys.Remove(key);
+        dictionary.Remove(key);
+        return orderedKeys.Remove(key);
     }
 
     /// <inheritdoc />
@@ -212,7 +211,7 @@ public class Cache<TKey, TValue> : IDictionary<TKey, TValue>
     /// </returns>
     public bool TryGetValue(TKey key, out TValue value)
     {
-        if (!_dictionary.TryGetValue(key, out value))
+        if (!dictionary.TryGetValue(key, out value))
         {
             return false;
         }

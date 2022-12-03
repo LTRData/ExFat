@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -168,6 +167,7 @@ public class ExFatEntryFilesystem : IDisposable
                 }
             }
         }
+
         return null;
     }
 
@@ -302,6 +302,7 @@ public class ExFatEntryFilesystem : IDisposable
                 FileName = { Value = namePart }
             });
         }
+
         var metaEntry = new ExFatMetaDirectoryEntry(entries);
         var entry = new ExFatFilesystemEntry(parent.DataDescriptor, metaEntry);
         return entry;
@@ -349,6 +350,7 @@ public class ExFatEntryFilesystem : IDisposable
                 empty.Clear();
                 directoryStream.Write(empty);
             }
+
             UpdateEntry(parentDirectoryEntry, FileAccess.Write, updatedDataDescriptor);
             return directoryEntry;
         }
@@ -387,6 +389,7 @@ public class ExFatEntryFilesystem : IDisposable
                     DeleteTree(childEntry);
                 }
             }
+
             Delete(entry);
         }
     }

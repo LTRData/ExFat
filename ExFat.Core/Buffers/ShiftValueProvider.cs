@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 
 namespace ExFat.Buffers;
@@ -12,7 +11,7 @@ namespace ExFat.Buffers;
 /// <seealso cref="uint" />
 public class ShiftValueProvider : IValueProvider<uint>
 {
-    private readonly IValueProvider<byte> _shift;
+    private readonly IValueProvider<byte> shift;
 
     /// <summary>
     /// Gets or sets the value.
@@ -23,7 +22,7 @@ public class ShiftValueProvider : IValueProvider<uint>
     /// <exception cref="ArgumentException">value must be a power of 2</exception>
     public uint Value
     {
-        get => 1u << _shift.Value;
+        get => 1u << shift.Value;
         set
         {
             var log2 = Math.Log(value) / Math.Log(2);
@@ -33,7 +32,7 @@ public class ShiftValueProvider : IValueProvider<uint>
                 throw new ArgumentException("value must be a power of 2");
             }
 
-            _shift.Value = b;
+            shift.Value = b;
         }
     }
 
@@ -43,6 +42,6 @@ public class ShiftValueProvider : IValueProvider<uint>
     /// <param name="shift">The shift.</param>
     public ShiftValueProvider(IValueProvider<byte> shift)
     {
-        _shift = shift;
+        this.shift = shift;
     }
 }

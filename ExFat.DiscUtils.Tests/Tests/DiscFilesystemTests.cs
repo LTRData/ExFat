@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using ExFat.DiscUtils.Environment;
 using System.IO;
 using System.Linq;

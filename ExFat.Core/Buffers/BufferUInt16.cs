@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using DiscUtils.Streams;
 using System;
 using System.Diagnostics;
@@ -15,7 +14,7 @@ namespace ExFat.Buffers;
 [DebuggerDisplay("{" + nameof(Value) + "}")]
 public readonly struct BufferUInt16 : IValueProvider<ushort>
 {
-    private readonly Memory<byte> _buffer;
+    private readonly Memory<byte> buffer;
 
     /// <summary>
     /// Gets or sets the value.
@@ -25,8 +24,8 @@ public readonly struct BufferUInt16 : IValueProvider<ushort>
     /// </value>
     public ushort Value
     {
-        get => EndianUtilities.ToUInt16LittleEndian(_buffer.Span);
-        set => EndianUtilities.WriteBytesLittleEndian(value, _buffer.Span);
+        get => EndianUtilities.ToUInt16LittleEndian(buffer.Span);
+        set => EndianUtilities.WriteBytesLittleEndian(value, buffer.Span);
     }
 
     /// <summary>
@@ -35,6 +34,6 @@ public readonly struct BufferUInt16 : IValueProvider<ushort>
     /// <param name="buffer">The buffer.</param>
     public BufferUInt16(Memory<byte> buffer)
     {
-        _buffer = buffer.Slice(0, sizeof(ushort));
+        this.buffer = buffer.Slice(0, sizeof(ushort));
     }
 }

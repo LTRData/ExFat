@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using System.Linq;
@@ -14,8 +13,8 @@ using DiscUtils.Vhdx;
 namespace ExFat.DiscUtils.Environment;
 internal class TestEnvironment : IDisposable
 {
-    protected string VhdxPath;
-    protected Disk Disk;
+    protected string vhdxPath;
+    protected Disk disk;
 
     protected TestEnvironment()
     {
@@ -35,9 +34,9 @@ internal class TestEnvironment : IDisposable
 
     public virtual void Dispose()
     {
-        Disk?.Dispose();
+        disk?.Dispose();
         // a check when required
-        if (VhdxPath != null && File.Exists(VhdxPath))
+        if (vhdxPath != null && File.Exists(vhdxPath))
         {
             try
             {
@@ -63,7 +62,7 @@ internal class TestEnvironment : IDisposable
             }
             finally
             {
-                File.Delete(VhdxPath);
+                File.Delete(vhdxPath);
             }
         }
     }
@@ -71,7 +70,7 @@ internal class TestEnvironment : IDisposable
     private Tuple<bool, string> CheckDisk()
     {
         var previousDrives = DriveInfo.GetDrives();
-        RunDiskPart("attach", VhdxPath);
+        RunDiskPart("attach", vhdxPath);
         var newDrives = DriveInfo.GetDrives();
         var mountedDrive = newDrives.FirstOrDefault(d => previousDrives.All(p => p.Name != d.Name));
         var success = true;
@@ -82,7 +81,8 @@ internal class TestEnvironment : IDisposable
             success = result.Item1 == 0;
             checkResult = result.Item2;
         }
-        RunDiskPart("detach", VhdxPath);
+
+        RunDiskPart("detach", vhdxPath);
         return Tuple.Create(success, checkResult);
     }
 
@@ -94,6 +94,7 @@ internal class TestEnvironment : IDisposable
             scriptStream.WriteLine($"select vdisk file=\"{vdiskPath}\"");
             scriptStream.WriteLine($"{action} vdisk");
         }
+
         ProcessUtility.Run("diskpart", $"/s {scriptPath}");
         File.Delete(scriptPath);
     }

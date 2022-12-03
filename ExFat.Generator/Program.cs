@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using System.Linq;
@@ -12,6 +11,7 @@ using DiscUtils.Partitions;
 using DiscUtils.Streams;
 using DiscUtils.Vhdx;
 using System.Runtime.Versioning;
+using DiscUtils.Streams.Compatibility;
 
 namespace ExFat.Generator;
 public static class Program
@@ -49,7 +49,7 @@ public static class Program
         using var fs = ExFatFileSystem.Format(volume, new ExFatFormatOptions { SectorsPerCluster = (1u << clusterBits) / bytesPerSector }, label: label);
     }
 
-    public static void Main2(string[] args)
+    public static void Main2(string[] _)
     {
         File.Copy("Empty1.vhdx", "Empty.vhdx", true);
         using (var disk = new Disk("Empty.vhdx"))
@@ -70,7 +70,9 @@ public static class Program
         }
     }
 
+#if NETSTANDARD || NETCOREAPP
     [SupportedOSPlatform("windows")]
+#endif
     public static void Main111(string[] args)
     {
         const string drive = "X:";

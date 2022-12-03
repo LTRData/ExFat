@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -227,6 +226,7 @@ public partial class ExFatFileSystem : DiscFileSystem
             targetDirectory = GetDirectoryName(destinationName);
             targetName = GetFileName(destinationName);
         }
+
         _filesystem.Move(sourceName, targetDirectory, targetName);
     }
 
@@ -364,6 +364,7 @@ public partial class ExFatFileSystem : DiscFileSystem
         using (ExFatPathFilesystem.Format(partitionStream, options, label))
         {
         }
+
         return new ExFatFileSystem(partitionStream);
     }
 }

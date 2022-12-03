@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using ExFat.DiscUtils.Environment;
 using ExFat.IO;
 using ExFat.Partition;
@@ -29,6 +28,7 @@ public class PartitionWriteTests
                 overwrite.Write(buffer, 0, 8);
             }
         }
+
         using var read = partition.OpenDataStream(
             new DataDescriptor(dataDescriptor.FirstCluster, false, DiskContent.LongFileSize * 2,
                 DiskContent.LongFileSize * 2), FileAccess.Read);
@@ -40,6 +40,7 @@ public class PartitionWriteTests
             var expectedValue = getOffsetValue(offset);
             Assert.Equal(expectedValue, readValue);
         }
+
         Assert.Equal(0, read.Read(buffer, 0, buffer.Length));
     }
 
@@ -95,6 +96,7 @@ public class PartitionWriteTests
             var expectedValue = getOffsetValue(offset);
             Assert.Equal(expectedValue, readValue);
         }
+
         Assert.Equal(0, read.Read(buffer, 0, buffer.Length));
     }
 
@@ -140,6 +142,7 @@ public class PartitionWriteTests
         {
             stream.WriteByte(1);
         }
+
         using var s2 = partition.OpenDataStream(dataDescriptor, FileAccess.Read);
         Assert.Equal(1, s2.ReadByte());
         Assert.Equal(-1, s2.ReadByte());

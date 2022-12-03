@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using ExFat.IO;
 using System.Threading;
 using System.Threading.Tasks;

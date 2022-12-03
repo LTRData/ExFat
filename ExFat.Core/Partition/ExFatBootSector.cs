@@ -2,7 +2,6 @@
 // Released under MIT license
 // https://github.com/picrap/ExFat
 
-
 using System;
 using System.IO;
 using ExFat.Buffers;
@@ -232,6 +231,7 @@ public class ExFatBootSector
                 return false;
             }
         }
+
         return true;
     }
 

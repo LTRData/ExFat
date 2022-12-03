@@ -2,6 +2,12 @@
 
 An exFAT accessor library.
 
+## Fork
+
+This fork is LTRData.ExFat.
+
+This is a fork of ExFat.DiscUtils. The main goal of this fork is more efficient, safer and faster code at the cost of dropping support for some old versions of .NET Framework. It depends of LTRData.DiscUtils fork of DiscUtils instead of the upstream DiscUtils.DiscUtils, to get better performance in asynchronous calls and `Span<byte>`-based calls.
+
 ## Summary
 
 **ExFat** allows to manipulate an exFAT formatted partition (provided as a `System.IO.Stream`).
