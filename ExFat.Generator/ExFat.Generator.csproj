@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Company>picrap</Company>
     <Decription>Internal application to generate test disk</Decription>
     <Title>ExFat generator</Title>
