@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using DiscUtils.Streams;
 using DiscUtils.Streams.Compatibility;
 using ExFat.Partition;
+using LTRData.Extensions.Async;
 using Buffer = System.Buffer;
 
 namespace ExFat.IO;

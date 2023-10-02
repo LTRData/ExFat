@@ -12,7 +12,7 @@
     <Deterministic>false</Deterministic>
     <TargetFrameworks>net46;net48;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
 
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>../ExFat.snk</AssemblyOriginatorKeyFile>
     
     <Company>picrap</Company>
@@ -22,13 +22,12 @@
     <Culture></Culture>
 
     <Version>0.9.18</Version>
-    <FileVersion>0.9.18</FileVersion>
+    <PackageVersion>1.0.10</PackageVersion>
 
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
     <PackageId>LTRData.$(MSBuildProjectName)</PackageId>
     <Company>LTR Data</Company>
     <Authors>Olof Lagerkvist</Authors>
-    <PackageVersion>1.0.10</PackageVersion>
 	<PackageOutputPath>$(LocalNuGetPath)</PackageOutputPath>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -38,6 +37,8 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <FileVersion>$(Version)</FileVersion>
 
   </PropertyGroup>
 
