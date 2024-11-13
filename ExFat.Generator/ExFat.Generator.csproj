@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>ExFat.Generator</RootNamespace>
     <AssemblyName>ExFat.Generator</AssemblyName>
-    <TargetFrameworks>net7.0;net48;net46</TargetFrameworks>
+    <TargetFrameworks>net9.0;net48;net46</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>

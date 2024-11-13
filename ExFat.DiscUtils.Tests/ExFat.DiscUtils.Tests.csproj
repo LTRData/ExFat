@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>ExFat.DiscUtils</RootNamespace>
-    <TargetFrameworks>net7.0;net48;net46</TargetFrameworks>
+    <TargetFrameworks>net9.0;net48;net46</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
 

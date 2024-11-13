@@ -15,14 +15,20 @@
 
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework.CompareTo(`net461`))' &gt;= 0">
     <PackageReference Include="System.Memory" Version="*" />
+    <PackageReference Include="System.ValueTuple" Version="*" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework.CompareTo(`net461`))' &lt; 0">
+    <PackageReference Include="System.Memory" Version="4.5.*" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.*" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.*" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LTRData.DiscUtils.Streams" Version="*" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   
 </Project>
