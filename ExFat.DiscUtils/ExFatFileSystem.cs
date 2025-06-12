@@ -13,13 +13,14 @@ using DiscUtils.Streams;
 using ExFat.Partition;
 
 namespace ExFat.DiscUtils;
+
 public partial class ExFatFileSystem : DiscFileSystem
 {
     /// <summary>
     /// </summary>
     public const string Name = "Microsoft exFAT";
 
-    private readonly Stream _partitionStream;
+    private readonly Stream _rawStream;
     private readonly ExFatPathFilesystem _filesystem;
 
     /// <summary>
@@ -32,7 +33,7 @@ public partial class ExFatFileSystem : DiscFileSystem
     public override string FriendlyName => Name;
 
     /// <inheritdoc />
-    public override bool CanWrite => _partitionStream.CanWrite;
+    public override bool CanWrite => RawStream.CanWrite;
 
     /// <inheritdoc />
     public override long Size => _filesystem.TotalSpace;
@@ -42,6 +43,8 @@ public partial class ExFatFileSystem : DiscFileSystem
 
     /// <inheritdoc />
     public override long AvailableSpace => _filesystem.AvailableSpace;
+
+    public override Stream RawStream => _rawStream;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="T:ExFat.DiscUtils.ExFatFileSystem" /> class.
@@ -61,7 +64,7 @@ public partial class ExFatFileSystem : DiscFileSystem
             throw new InvalidOperationException("Given stream is not exFAT volume");
         }
 
-        _partitionStream = partitionStream;
+        _rawStream = partitionStream;
     }
 
     /// <inheritdoc />
@@ -184,7 +187,7 @@ public partial class ExFatFileSystem : DiscFileSystem
         return regex(fileName);
     }
 
-    private readonly ExFatEntryInformation[] _noEntry = Array.Empty<ExFatEntryInformation>();
+    private readonly ExFatEntryInformation[] _noEntry = [];
 
     private IEnumerable<ExFatEntryInformation> GetEntries(ExFatEntryInformation entryInformation, int depth)
     {
@@ -236,24 +239,14 @@ public partial class ExFatFileSystem : DiscFileSystem
     /// <inheritdoc />
     public override FileAttributes GetAttributes(string path)
     {
-        var information = _filesystem.GetInformation(path);
-        if (information == null)
-        {
-            throw new FileNotFoundException();
-        }
-
+        var information = _filesystem.GetInformation(path) ?? throw new FileNotFoundException();
         return information.Attributes;
     }
 
     /// <inheritdoc />
     public override void SetAttributes(string path, FileAttributes newValue)
     {
-        var information = _filesystem.GetInformation(path);
-        if (information == null)
-        {
-            throw new FileNotFoundException();
-        }
-
+        var information = _filesystem.GetInformation(path) ?? throw new FileNotFoundException();
         information.Attributes = newValue;
     }
 
@@ -342,12 +335,7 @@ public partial class ExFatFileSystem : DiscFileSystem
     /// <inheritdoc />
     public override long GetFileLength(string path)
     {
-        var information = _filesystem.GetInformation(path);
-        if (information == null)
-        {
-            throw new FileNotFoundException();
-        }
-
+        var information = _filesystem.GetInformation(path) ?? throw new FileNotFoundException();
         return information.Length;
     }
 

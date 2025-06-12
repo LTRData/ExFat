@@ -572,18 +572,8 @@ public class ExFatPathFilesystem : IDisposable
             var sourcePath = ParsePath(sourceLiteralPath);
             var targetDirectory = targetDirectoryLiteralPath == null ? sourcePath.GetParent() : ParsePath(targetDirectoryLiteralPath);
 
-            var sourceEntry = GetNode(sourcePath);
-            if (sourceEntry == null)
-            {
-                throw new FileNotFoundException();
-            }
-
-            var targetDirectoryEntry = GetNode(targetDirectory);
-            if (targetDirectoryEntry == null)
-            {
-                throw new FileNotFoundException();
-            }
-
+            var sourceEntry = GetNode(sourcePath) ?? throw new FileNotFoundException();
+            var targetDirectoryEntry = GetNode(targetDirectory) ?? throw new FileNotFoundException();
             _entryFilesystem.Move(sourceEntry.Entry, targetDirectoryEntry.Entry, targetName);
             sourceEntry.Remove();
             targetDirectoryEntry.Remove();
