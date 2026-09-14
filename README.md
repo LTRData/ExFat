@@ -1,84 +1,55 @@
-# ExFat
+# ExFat (deprecated)
 
-An exFAT accessor library.
+**This repository is no longer maintained.** The LTRData exFAT implementation has moved to [DiscUtils.ExFat in LTRData/DiscUtils](https://github.com/LTRData/DiscUtils/tree/LTRData.DiscUtils-initial/Library/DiscUtils.ExFat).
 
-## Fork
+Both projects were migrated in November 2025: [ExFat.DiscUtils](https://github.com/LTRData/DiscUtils/commit/5f1cc8ca7f25058b719ff94d013270551ab2d087) became `DiscUtils.ExFat`, and [ExFat.Core](https://github.com/LTRData/DiscUtils/commit/ce4c1f8dc9ab8437f0816ab79f678cfff1dc2bee) was incorporated into the same library under `DiscUtils.ExFat.Internal`. Subsequent development and fixes take place in the DiscUtils repository. Use that implementation for new development and migrate existing consumers away from the standalone packages here.
 
-This fork is LTRData.ExFat.
+## Replacement package
 
-This is a fork of ExFat.DiscUtils. The main goal of this fork is more efficient, safer and faster code at the cost of dropping support for some old versions of .NET Framework. It depends of LTRData.DiscUtils fork of DiscUtils instead of the upstream DiscUtils.DiscUtils, to get better performance in asynchronous calls and `Span<byte>`-based calls.
+Use [LTRData.DiscUtils.ExFat](https://www.nuget.org/packages/LTRData.DiscUtils.ExFat):
 
-## Summary
-
-**ExFat** allows to manipulate an exFAT formatted partition (provided as a `System.IO.Stream`).
-It comes with two packages:
-* The core package `ExFat.Core` available from [NuGet](https://www.nuget.org/packages/ExFat.Core), which allows simple exFAT management at three different levels (partition, entry and path).
-* The DiscUtils package `ExFat.DiscUtils` available from [NuGet](https://www.nuget.org/packages/ExFat.DiscUtils), which depends on [`DiscUtils`](https://www.nuget.org/packages/DiscUtils) package.
-
-Currently, `ExFat.Core` does what it says: files/directories manipulation at any level.
-DiscUtils support is on its way and should be released in the very next few days.
-
-`ExFat.Core` works at three levels:
-1. Lowest level: partition access. This allows to manipulate clusters, allocation bitmap, directory entries and clusterr streams.
-2. Middle level: entry access. Files/directories can be used to read/write content.
-3. High level: path access. This works as you would expect using file paths.
-
-`ExFat.DiscUtils` is also a high-level access (using paths) with implementation for [`DiscUtils`](https://github.com/DiscUtils/DiscUtils).
-
-Because it is still under development, you can see pending features state [here](https://github.com/picrap/ExFat/labels/feature).
-
-## Samples
-
-All examples assume you have a `Stream` containing an exFAT partition.
-```csharp
-// Access at partition-level. Most efficient, most dangerous.
-// Integrity is not guaranteed at this level, 
-// user needs to make all neceassary operations in right order.
-using(var partition = new ExFatPartition(partitionStream))
-{
-    // returns all entries (including bitmap, volume label, etc.) from root directory
-    var entries = partition.GetEntries(partition.RootDirectoryDataDescriptor);
-
-    // returns all files/directories meta entries
-    var metaEntries = partition.GetMetaEntries(partition.RootDirectoryDataDescriptor);
-
-    // assuming there is one, of course (but we're in a sample)
-    var someDirectory = metaEntries.First(e => e.IsDirectory);
-    var directoryMetaEntries = partition.GetMetaEntries(someDirectory.DataDescriptor);
-
-    var someFile = metaEntries.First(e => !e.IsDirectory);
-    using(var dataStream = partition.OpenDataStream(someFile.DataDescriptor, FileAccess.Read))
-    { }
-}
-```
-```csharp
-// Access at entry level. Quite fast, since user has to track entries.
-// Integrity is guaranteed. File attributes are not honored (maybe one day...)
-using(var entryFilesystem = new ExFatEntryFilesystem(partitionStream))
-{
-    var someFileEntry = entryFilesystem.FindChild(filesystem.RootDirectory, "someFile");
-    using(var fileStream = entryFilesystem.OpenFile(someFileEntry, FileAccess.Read)
-    { }
-
-    // finding one file in a directory requires two steps
-    var someDirectoryEntry = entryFilesystem.FindChild(filesystem.RootDirectory, "someDirectory");
-    var someChildFileEntry = entryFilesystem.FindChild(someDirectoryEntry, "someDirectory");
-}
-```
-```csharp
-// Access at path level. Uses a path cache to retrieve entries, 
-// so speed is not as good (but not that bad either)
-// since there is not drive, paths only specify the directory chain
-// (so "a\b\c" for example)
-using(var pathFilesystem = new ExFatPathFilesystem(partitionStream))
-{
-    var rootEntries = pathFilesystem.EnumerateEntries("\"); // "" works too for root
-    var childEntries = pathFilesystem.EnumerateEntries(@"\somedir"); // "somedir" works too
-    using(var s = pathFilesystem.Open(@"a\b\c", FileMode.Open, FileAccess.Read)
-    { }
-}
+```sh
+dotnet add package LTRData.DiscUtils.ExFat
 ```
 
-Current build status (for people who care... If you ever meet one): [![Build status](https://ci.appveyor.com/api/projects/status/k0jf58a0e5g2ue2h?svg=true
-)](https://ci.appveyor.com/project/picrap/exfat)
+See the [current package README](https://github.com/LTRData/DiscUtils/blob/LTRData.DiscUtils-initial/Library/DiscUtils.ExFat/README.md) for capabilities, examples and registration guidance, and the [DiscUtils repository](https://github.com/LTRData/DiscUtils) for framework targets and build instructions. Report issues with the maintained implementation in [LTRData/DiscUtils](https://github.com/LTRData/DiscUtils/issues).
 
+## Migration notes
+
+Replace references to `LTRData.ExFat.DiscUtils` and/or `LTRData.ExFat.Core` with `LTRData.DiscUtils.ExFat`. The replacement contains both the DiscUtils wrapper and the former core implementation.
+
+| Previous API or namespace | Location in the replacement |
+| --- | --- |
+| `ExFat.DiscUtils.ExFatFileSystem` | `DiscUtils.ExFat.ExFatFileSystem` |
+| `ExFat.DiscUtils.ExFatSetupHelper` | `DiscUtils.ExFat.ExFatSetupHelper` |
+| `ExFat.ExFatFormatOptions`, `ExFat.ExFatOptions` | `DiscUtils.ExFat.Internal` |
+| `ExFat.Filesystem` | `DiscUtils.ExFat.Internal.Filesystem` |
+| `ExFat.Partition` | `DiscUtils.ExFat.Internal.Partition` |
+
+For example, applications using the DiscUtils wrapper should change:
+
+```csharp
+using ExFat.DiscUtils;
+```
+
+to:
+
+```csharp
+using DiscUtils.ExFat;
+```
+
+The old standalone core APIs now reside under namespaces containing `Internal`. Review those usages against the current source and prefer the `ExFatFileSystem` API where it meets your needs. This is a source migration, not a drop-in assembly replacement; rebuild and test consumers against the current package.
+
+For filesystem discovery, current DiscUtils supports explicit registration:
+
+```csharp
+DiscUtils.ExFat.Formats.Register();
+```
+
+Direct construction of `ExFatFileSystem` does not require registration. Register other providers as needed when using generic disk opening; see the current package README linked above.
+
+## Historical source and attribution
+
+This repository retains the standalone libraries, tests and internal generator as historical source. The [previous README](https://github.com/LTRData/ExFat/blob/55893929d507d3249b636bd972f3160b5e13b33c/README.md) is available for reference; its package, build-status and development-status guidance is obsolete.
+
+The code originated in [picrap/ExFat](https://github.com/picrap/ExFat), written by Pascal Craponne, and was subsequently adapted in this LTRData fork. The [MIT license](https://github.com/LTRData/ExFat/blob/LTRData.ExFat-initial/LICENSE) and original attribution remain in place.
